@@ -1,5 +1,5 @@
 from flask import Flask, app, render_template
-
+from config import config
 
 
 app = Flask(__name__)
@@ -9,4 +9,5 @@ def inicio():
     return render_template('inicio.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)  
+    app.config.from_object(config["dev"])
+    app.run()
