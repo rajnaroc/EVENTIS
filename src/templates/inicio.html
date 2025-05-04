@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+
+
+{% block body %}
+        <!-- Categorías -->
+    <section class="max-w-6xl mx-auto px-6 py-10 ">
+        <h2 class="text-2xl font-semibold mb-4">Eventos destacados</h2>
+        <div class="flex flex-wrap justify-center gap-6">
+            <div class="flex flex-col items-center space-y-1 w-20">
+                <img src="" class="w-16 h-16 rounded-full border-2 border-blue-400" />
+                <span class="text-xs text-center">Música</span>
+            </div>
+            <div class="flex flex-col items-center space-y-1 w-20">
+                <img src="" class="w-16 h-16 rounded-full border-2 border-yellow-400" />
+                <span class="text-xs text-center">Historia</span>
+            </div>
+            <div class="flex flex-col items-center space-y-1 w-20">
+                <img src="" class="w-16 h-16 rounded-full border-2 border-pink-400" />
+                <span class="text-xs text-center">Arte</span>
+            </div>
+            <div class="flex flex-col items-center space-y-1 w-20">
+                <img src="" class="w-16 h-16 rounded-full border-2 border-purple-400" />
+                <span class="text-xs text-center">Religioso</span>
+            </div>
+            <div class="flex flex-col items-center space-y-1 w-20">
+                <img src="" class="w-16 h-16 rounded-full border-2 border-green-400" />
+                <span class="text-xs text-center">E-sports</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bienvenida -->
+    <section class="max-w-3xl mx-auto px-4 mb-10">
+        <div class="bg-gray-100 p-5 rounded-lg shadow-sm">
+            <h2 class="text-3xl sm:text-lg font-semibold mb-2">¡Bienvenidos a Eventis!</h2>
+            <p class="text-xl leading-relaxed">Aquí encontrarás todo lo que necesitas para organizar y gestionar eventos de forma sencilla y profesional. Puedes planificar fiestas, conciertos, reuniones, conferencias o cualquier otra actividad. Nos adaptamos a tus necesidades y estamos para ayudarte a convertir tus ideas en experiencias inolvidables.</p>
+        </div>
+    </section>
+
+    <!-- Carrusel -->
+    <section class="max-w-3xl mx-auto px-4 mb-12">
+        <h2 class="text-center text-xl sm:text-2xl font-semibold mb-6 uppercase tracking-wide">Imágenes de eventos</h2>
+        <div class="relative overflow-hidden rounded-xl shadow-lg">
+            <img src="" alt="Carrusel de imaganes">
+        </div>
+    </section>
+
+{% endblock %}
