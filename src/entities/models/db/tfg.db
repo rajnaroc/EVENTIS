@@ -1,0 +1,54 @@
+DROP DATABASE IF EXISTS bpg29qpszsnrjasj7qkn;
+
+CREATE DATABASE bpg29qpszsnrjasj7qkn;
+
+USE bpg29qpszsnrjasj7qkn;
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    contraseña VARCHAR(255),
+    saldo DECIMAL(10,2) DEFAULT 0,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fecha_nacimiento DATE
+);
+
+CREATE TABLE admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    contraseña VARCHAR(255)
+);
+
+
+CREATE TABLE categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100)
+);
+
+CREATE TABLE eventos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(200),
+    descripcion TEXT,
+    fecha DATETIME,
+    lugar VARCHAR(200),
+    precio DECIMAL(10,2), 
+    categoria_id INT,
+    admin_id INT,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id),
+    FOREIGN KEY (admin_id) REFERENCES admins(id)
+);
+
+
+CREATE TABLE entradas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    evento_id INT,
+    precio DECIMAL(10,2),
+    fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado ENUM('comprada', 'gratis') DEFAULT 'gratis',
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (evento_id) REFERENCES eventos(id)
+);
+
