@@ -7,17 +7,18 @@ USE bpg29qpszsnrjasj7qkn;
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
+    correo VARCHAR(100) UNIQUE,
     contraseña VARCHAR(255),
+     fecha_nacimiento DATE,
     saldo DECIMAL(10,2) DEFAULT 0,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    fecha_nacimiento DATE
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
 
 CREATE TABLE admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
-    email VARCHAR(100) UNIQUE,
+    correo VARCHAR(100) UNIQUE,
     contraseña VARCHAR(255)
 );
 
