@@ -1,9 +1,8 @@
-from re import U
-
 from flask import flash
 from .models.User import User
 
 class ModelUser:
+
     # funcion para revisar si tiene la sesion iniciada
     @classmethod
     def get_by_id(cls,db,id):
@@ -37,7 +36,7 @@ class ModelUser:
             
             print(cursor.fetchone())
 
-            if cursor.fetchone()!=True:
+            if cursor.fetchone():
                 flash("El correo ya está registrado.")
                 return False
 
@@ -89,3 +88,17 @@ class ModelUser:
             
         except Exception as e:
             print(e)
+    
+    # funcion para borrar el usuario de la base de datos
+    @classmethod
+    def delete_user(cls,db,id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("DELETE FROM usuarios WHERE id = %s", (id,))
+            db.connection.commit()
+            cur.close()
+            flash("Usuario eliminado correctamente.")   
+            return True
+        except Exception as e:
+            print(e)
+            return False
