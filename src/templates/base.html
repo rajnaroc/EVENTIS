@@ -19,10 +19,10 @@
             </div>    
         
         <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-            <a href="#" class="hover:text-blue-600 py-1 sm:py-0">Eventos</a>
-            <a href="#" class="hover:text-blue-600 py-1 sm:py-0">Contacto</a>
-            <a href="{{ url_for('iniciar_sesion' ) }}" class="hover:text-blue-600 py-1 sm:py-0">Iniciar sesión</a>
-            <a href="{{ url_for('register' ) }}" class="hover:text-blue-600 py-1 sm:py-0">Registrarte</a>
+            <a href="#" class="hover:text-blue-600 py-1 sm:py-0 transition-all">Eventos</a>
+            <a href="#" class="hover:text-blue-600 py-1 sm:py-0  transition-all">Contacto</a>
+            <a href="{{ url_for('iniciar_sesion' ) }}" class="hover:text-blue-600 py-1 sm:py-0  transition-all">Iniciar sesión</a>
+            <a href="{{ url_for('register' ) }}" class="hover:text-blue-600 py-1 sm:py-0  transition-all">Registrarte</a>
         </div>
         </nav>
     </header>
@@ -36,28 +36,38 @@
     {% block footer %}
     <!-- Footer -->
     <footer class="bg-gray-300 text-white py-8">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
-            <!-- Enlaces -->
-            <div class="flex text-black space-x-6 mb-4 sm:mb-0">
-                <a href="#" class="hover:text-blue-400 text-sm">Política de privacidad</a>
-                <a href="#" class="hover:text-blue-400 text-sm">Términos y condiciones</a>
-                <a href="#" class="hover:text-blue-400 text-sm">Soporte</a>
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+        
+            <!-- Información legal -->
+            <div>
+                <h3 class="text-lg text-black font-semibold mb-2">Legal</h3>
+                <ul class="space-y-1 text-sm text-black">
+                    <li><a href="/aviso-legal" class="hover:text-blue-600">Aviso legal</a></li>
+                    <li><a href="/politica-privacidad" class="hover:text-blue-600 transition-all">Política de privacidad</a></li>
+                    <li><a href="/terminos" class="hover:text-blue-600 transition-all">Términos y condiciones</a></li>
+                </ul>
             </div>
-    
+
             <!-- Redes sociales -->
-            <div class="flex space-x-4">
-                <a href="#" class="text-black hover:text-blue-500">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-                <a href="#" class="text-black hover:text-blue-500">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="#" class="text-black hover:text-blue-500">
-                    <i class="fa-brands fa-x-twitter"></i>
-                </a>
+            <div>
+                <h3 class="text-lg text-black font-semibold mb-2">Síguenos</h3>
+                <div class="flex space-x-4 text-black">
+                    <a href="https://twitter.com" target="_blank" class="hover:text-blue-600 transition-all">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="hover:text-blue-600 transition-all">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://facebook.com" target="_blank" class="hover:text-blue-600 transition-all ">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                </div>
             </div>
         </div>
-    </footer>    
+        
+        <!-- Créditos -->
+            <div class="mt-10 border-t border-gray-700 pt-4 text-center text-xl text-black">© 2025 Eventis. Todos los derechos reservados.</div>
+        </footer>   
     {% endblock %}
 </body>
 </html>
