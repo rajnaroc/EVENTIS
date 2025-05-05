@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Registro{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-cover bg-center relative" style="background-image: url('../static/img/login.png');">
+    <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+        <!-- Contenido centrado -->
+        <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
+            <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md shadow-lg">
+            
+            <!-- Botón Inicio -->
+            <a href="/" class="absolute top-6 left-6 bg-white text-black font-bold px-4 py-1 rounded shadow">Inicio</a>
+            
+            <h1 class="text-4xl font-bold text-center mb-8">Registrarse</h1>
+            
+            <form action="/register" method="POST" class="space-y-6">
+                <!-- Nombre -->
+                <div>
+                    <label class="block text-lg font-bold mb-1">Nombre</label>
+                    <input type="text" name="nombre" placeholder="Escribe tu Nombre" class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                </div>
+                
+                <!-- fecha de nacimiento -->
+                <div>
+                    <label class="block text-lg font-bold mb-1">Fecha de Nacimiento</label>
+                    <input type="date" name="fecha_nacimiento" class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-lg font-bold mb-1">Correo Electrónico</label>
+                    <input type="email" name="email" placeholder="Escribe tu Correo Eletronico" class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                </div>
+                
+                <!-- Contraseña -->
+                <div>
+                    <label class="block text-lg font-bold mb-1">Contraseña</label>
+                    <input type="password" name="password" placeholder="Escribe tu Contraseña" class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                </div>
+                
+                <!-- Registro -->
+                <div class="text-sm">
+                <span class="text-white">Tienes cuenta?</span>
+                    <a href="/login" class="text-blue-400 font-semibold hover:underline">Iniciar sesion</a>
+                </div>
+                <!-- Botón -->
+                <button type="submit"class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

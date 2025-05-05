@@ -11,6 +11,11 @@ def inicio():
 @app.route('/iniciarsesion', methods=['GET'])
 def iniciar_sesion():
     return render_template('iniciar_sesion.html')
+
+@app.route('/registrarse', methods=['GET'])
+def register():
+    return render_template('register.html')
+
 if __name__ == '__main__':
     app.config.from_object(config["dev"])
     app.run()
