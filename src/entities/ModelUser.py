@@ -1,3 +1,4 @@
+from re import U
 from .models.User import User
 
 class ModelUser:
@@ -67,15 +68,20 @@ class ModelUser:
             if data:
                 id = data[0]
                 nombre = data[1]
-                contraseña = data[2]
-                correo = data[3]
+                correo = data[2]
+                hashed_contraseña = data[3]
                 fecha_nacimiento = data[4]
-                valor = User.check_password(contraseña,user.contraseña)
+                saldo = data[5]
+
+                valor = User.check_password(hashed_contraseña,contraseña)
+                User.check_password(hashed_contraseña,contraseña)
+                print(valor)
                 if valor:
                     # Si la contraseña es correcta, crea una instancia de User y devuelve el objeto
-                    user = User(id,nombre,correo,None,fecha_nacimiento)
+                    user = User(id,nombre,correo,None,fecha_nacimiento,saldo)
 
                     return user
+                
                 return print("error password")
             
         except Exception as e:

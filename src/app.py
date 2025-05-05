@@ -1,8 +1,7 @@
-from json import load
-from webbrowser import get
 from flask import Flask, app, render_template, request
 from flask_login import LoginManager,login_user, login_required, logout_user, current_user
 from flask_mysqldb import MySQL
+
 # importaciones de los .py
 from config import config
 from forms import loginform, registerForm
@@ -13,6 +12,9 @@ app = Flask(__name__)
 db = MySQL(app)
 
 login_manager = LoginManager()
+
+login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -50,9 +52,9 @@ def register():
         print(nombre, correo, contraseña, fecha_nacimiento)
         print(ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento))
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
-            if ModelUser.sesion(db, correo, contraseña):
-                print("Usuario registrado")
-                return render_template('inicio.html')
+            print("Usuario registrado")
+            login_user(ModelUser.sesion(db, correo, contraseña))
+            return render_template('inicio.html')
         else:
             return render_template('register.html', register=register, error="El correo ya existe")
     if request.method == 'GET':
@@ -60,6 +62,12 @@ def register():
 
 def status_404(error):
     return render_template('404.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return render_template('inicio.html')
 
 if __name__ == '__main__':
     app.config.from_object(config["dev"])

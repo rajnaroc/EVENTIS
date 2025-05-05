@@ -4,16 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="/static/logo/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <!-- cdn awensome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-white text-gray-800 font-sans">
+    {% if current_user.is_authenticated %}
         <!-- Header -->
-        <!-- <header class="bg-gray-300 shadow">
+        <header class="bg-gray-300 shadow">
             <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-                <-- Logo -->
-                <!-- <div class="flex items-center space-x-2">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
                     <a href=" {{ url_for('inicio' ) }}"><img src="../static/logo/Eventis.png" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
                 </div>    
             
@@ -21,11 +23,12 @@
                 <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
                 <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
                 <a href="{{ url_for('iniciar_sesion' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil</a>
-                <a href="{{ url_for('register' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Cerrar sesion</a>
+                <a href="{{ url_for('logout' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Cerrar sesion</a>
             </div>
             </nav>
-        </header> -->
+        </header> 
         <!-- Fin del header -->
+    {% else %}
     {% block header %}
     <!-- Header -->
     <header class="bg-gray-300 shadow">
@@ -43,10 +46,9 @@
         </div>
         </nav>
     </header>
-    
     <!-- Fin del header -->
-
     {% endblock %}
+    {% endif %}
     {% block body %}
     
     {% endblock %}
