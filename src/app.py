@@ -8,6 +8,9 @@ app = Flask(__name__)
 def inicio():
     return render_template('inicio.html')
 
+@app.route('/iniciarsesion', methods=['GET'])
+def iniciar_sesion():
+    return render_template('iniciar_sesion.html')
 if __name__ == '__main__':
     app.config.from_object(config["dev"])
     app.run()
