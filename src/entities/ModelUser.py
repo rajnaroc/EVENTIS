@@ -23,6 +23,7 @@ class ModelUser:
             return None
         except Exception as e:
             print(e)
+    
     @classmethod
     def register(cls, db, nombre, correo, contraseña, fecha_nacimiento):
         try:
@@ -35,6 +36,30 @@ class ModelUser:
             cursor.close()
 
             return True
+        except Exception as e:
+            print(e)
+    
+    @classmethod
+    def sesion(cls,db,correo,contraseña):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT * FROM users WHERE correo = %s", (correo,))
+            data = cur.fetchone()
+
+            if data:
+                id = data[0]
+                nombre = data[1]
+                contraseña = data[2]
+                correo = data[3]
+                fecha_nacimiento = data[4]
+                valor = User.check_password(contraseña,user.contraseña)
+                if valor:
+                    # Si la contraseña es correcta, crea una instancia de User y devuelve el objeto
+                    user = User(id,nombre,correo,None,fecha_nacimiento)
+
+                    return user
+                return print("error password")
+            
         except Exception as e:
             print(e)
     
