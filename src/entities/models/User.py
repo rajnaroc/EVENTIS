@@ -11,8 +11,8 @@ class User(UserMixin):
 
     @classmethod
     def check_password(cls,segura_contraseña,contraseña):
-        check_password_hash(segura_contraseña,contraseña)
+        return check_password_hash(segura_contraseña,contraseña)
     
     @classmethod
     def hash_password(cls,contraseña):
-        generate_password_hash(contraseña)
+        return generate_password_hash(contraseña)

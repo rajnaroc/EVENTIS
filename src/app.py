@@ -1,13 +1,15 @@
+from json import load
+from webbrowser import get
 from flask import Flask, app, render_template, request
 from flask_login import LoginManager,login_user, login_required, logout_user, current_user
 from flask_mysqldb import MySQL
 # importaciones de los .py
 from config import config
 from forms import loginform, registerForm
-from entities import ModelUser
+from entities.ModelUser import ModelUser
 
 app = Flask(__name__)
-app.secret_key = "b47c300f604a119bbafd524c8a5e8e47"
+
 db = MySQL(app)
 
 login_manager = LoginManager()
@@ -41,15 +43,16 @@ def register():
     register = registerForm()
     
     if request.method == 'POST':
-        if register.validate_on_submit():
-            nombre = register.nombre.data
-            correo = register.correo.data
-            contraseña = register.contraseña.data
-            fecha_nacimiento = register.fecha_nacimiento.data
-            print(nombre, correo, contraseña, fecha_nacimiento)
+        nombre = register.nombre.data
+        correo = register.correo.data
+        contraseña = register.contraseña.data
+        fecha_nacimiento = register.fecha_nacimiento.data
+        print(nombre, correo, contraseña, fecha_nacimiento)
+        print(ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento))
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
-            print("Usuario registrado")
-            return render_template('inicio.html')
+            if ModelUser.sesion(db, correo, contraseña):
+                print("Usuario registrado")
+                return render_template('inicio.html')
         else:
             return render_template('register.html', register=register, error="El correo ya existe")
     if request.method == 'GET':

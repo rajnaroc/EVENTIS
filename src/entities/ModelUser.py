@@ -31,16 +31,19 @@ class ModelUser:
             # Verificar si el correo ya existe
             cursor = db.connection.cursor()
             cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
-            if cursor.fetchone():
+            
+            print(cursor.fetchone())
+            if cursor.fetchone()!=None:
                 print("Error: El correo ya está registrado.")
                 return False
 
             # Hashear la contraseña
             hashed_password = User.hash_password(contraseña)
-
+            
+            print(hashed_password)
             # Insertar el nuevo usuario
             cursor.execute(
-                "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_nacimiento, saldo, fecha_register) "
+                "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_nacimiento, saldo, fecha_registro) "
                 "VALUES (NULL, %s, %s, %s, %s, 0, NOW())",
                 (nombre, correo, hashed_password, fecha_nacimiento)
             )
@@ -50,7 +53,7 @@ class ModelUser:
 
             return True
         except Exception as e:
-            print
+            print(e)
             return False
     
     # funcion para iniciar sesion y verificar si el usuario existe
