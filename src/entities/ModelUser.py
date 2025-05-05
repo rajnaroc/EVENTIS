@@ -28,24 +28,37 @@ class ModelUser:
     @classmethod
     def register(cls, db, nombre, correo, contraseña, fecha_nacimiento):
         try:
-            User(nombre, correo, contraseña, fecha_nacimiento)
+            # Verificar si el correo ya existe
             cursor = db.connection.cursor()
-            hashed_password = User.hash_password(contraseña)  
-            cursor.execute("INSERT INTO users (id, nombre, correo, contraseña,fecha_nacimiento) VALUES (NULL, %s, %s, %s)", (nombre, correo, hashed_password,fecha_nacimiento))
+            cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
+            if cursor.fetchone():
+                print("Error: El correo ya está registrado.")
+                return False
+
+            # Hashear la contraseña
+            hashed_password = User.hash_password(contraseña)
+
+            # Insertar el nuevo usuario
+            cursor.execute(
+                "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_nacimiento, saldo, fecha_register) "
+                "VALUES (NULL, %s, %s, %s, %s, 0, NOW())",
+                (nombre, correo, hashed_password, fecha_nacimiento)
+            )
             
             db.connection.commit()
             cursor.close()
 
             return True
         except Exception as e:
-            print(e)
+            print
+            return False
     
     # funcion para iniciar sesion y verificar si el usuario existe
     @classmethod
     def sesion(cls,db,correo,contraseña):
         try:
             cur = db.connection.cursor()
-            cur.execute("SELECT * FROM users WHERE correo = %s", (correo,))
+            cur.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
             data = cur.fetchone()
 
             if data:
@@ -64,4 +77,3 @@ class ModelUser:
             
         except Exception as e:
             print(e)
-    

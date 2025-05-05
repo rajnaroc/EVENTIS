@@ -24,7 +24,7 @@ class registerForm(FlaskForm):
         Length(max=25),
         Email()
     ])
-    fecha_nacimiento = DateField('Fecha de nacimiento', format='%d-%m-%Y', validators=[DataRequired()])
+    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[DataRequired()])
     contraseña = PasswordField("Escribe tu Contraseña", validators=[
         DataRequired(),
         Length(min=6,max=12),

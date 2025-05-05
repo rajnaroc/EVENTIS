@@ -7,7 +7,9 @@ from forms import loginform, registerForm
 from entities import ModelUser
 
 app = Flask(__name__)
+app.secret_key = "b47c300f604a119bbafd524c8a5e8e47"
 db = MySQL(app)
+
 login_manager = LoginManager()
 
 @login_manager.user_loader
@@ -18,18 +20,40 @@ def load_user(id):
 def inicio():
     return render_template('inicio.html')
 
-@app.route('/iniciarsesion', methods=['GET'])
+@app.route('/iniciarsesion', methods=['GET', 'POST'])
 def iniciar_sesion():
     login = loginform()
     if request.method == 'POST':
-        pass
+        correo = request.form['correo']
+        contraseña = request.form['contraseña']
+        user = ModelUser.sesion(db, correo, contraseña)
+        if user:
+            login_user(user)
+            return render_template('inicio.html')
+        else:
+            return render_template('iniciar_sesion.html', login=login, error="Usuario o contraseña incorrectos")
+    
     if request.method == "GET":
         return render_template('iniciar_sesion.html', login=login)
 
-@app.route('/registrarse', methods=['GET'])
+@app.route('/registrarse', methods=['GET', 'POST'])
 def register():
     register = registerForm()
-    return render_template('register.html', register=register)
+    
+    if request.method == 'POST':
+        if register.validate_on_submit():
+            nombre = register.nombre.data
+            correo = register.correo.data
+            contraseña = register.contraseña.data
+            fecha_nacimiento = register.fecha_nacimiento.data
+            print(nombre, correo, contraseña, fecha_nacimiento)
+        if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
+            print("Usuario registrado")
+            return render_template('inicio.html')
+        else:
+            return render_template('register.html', register=register, error="El correo ya existe")
+    if request.method == 'GET':
+        return render_template('register.html', register=register)
 
 def status_404(error):
     return render_template('404.html')
