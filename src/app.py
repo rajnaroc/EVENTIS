@@ -1,4 +1,4 @@
-from flask import Flask, app, render_template, request
+from flask import Flask, app, flash, render_template, request
 from flask_login import LoginManager,login_user, login_required, logout_user, current_user
 from flask_mysqldb import MySQL
 
@@ -49,10 +49,8 @@ def register():
         correo = register.correo.data
         contraseña = register.contraseña.data
         fecha_nacimiento = register.fecha_nacimiento.data
-        print(nombre, correo, contraseña, fecha_nacimiento)
-        print(ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento))
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
-            print("Usuario registrado")
+            flash("Usuario registrado correctamente.")
             login_user(ModelUser.sesion(db, correo, contraseña))
             return render_template('inicio.html')
         else:
@@ -63,8 +61,7 @@ def register():
 def status_404(error):
     return render_template('404.html')
 
-@app.route('/logout')
-@login_required
+@app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
     return render_template('inicio.html')

@@ -1,4 +1,6 @@
 from re import U
+
+from flask import flash
 from .models.User import User
 
 class ModelUser:
@@ -34,8 +36,9 @@ class ModelUser:
             cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
             
             print(cursor.fetchone())
-            if cursor.fetchone()!=None:
-                print("Error: El correo ya está registrado.")
+
+            if cursor.fetchone()!=True:
+                flash("El correo ya está registrado.")
                 return False
 
             # Hashear la contraseña
@@ -82,7 +85,7 @@ class ModelUser:
 
                     return user
                 
-                return print("error password")
+                return flash("error password")
             
         except Exception as e:
             print(e)
