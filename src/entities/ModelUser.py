@@ -24,6 +24,7 @@ class ModelUser:
         except Exception as e:
             print(e)
     
+    # funcion para registrar un nuevo usuario y verificar si el correo ya existe
     @classmethod
     def register(cls, db, nombre, correo, contraseña, fecha_nacimiento):
         try:
@@ -39,6 +40,7 @@ class ModelUser:
         except Exception as e:
             print(e)
     
+    # funcion para iniciar sesion y verificar si el usuario existe
     @classmethod
     def sesion(cls,db,correo,contraseña):
         try:
