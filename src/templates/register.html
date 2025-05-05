@@ -4,51 +4,52 @@
 {% block body %}
 <div class="min-h-screen bg-cover bg-center relative" style="background-image: url('../static/img/register.png');">
     <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-        <!-- Contenido centrado -->
-        <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
-            <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md shadow-lg">
+    <!-- Contenido centrado -->
+    <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg">
+        
+        <!-- Botón Inicio -->
+        <a href="/" class="absolute top-6 left-6 bg-white text-black font-bold px-4 py-1 rounded shadow">Inicio</a>
+        
+        <h1 class="text-4xl font-bold text-center mb-8">Registrarse</h1>
+        
+        <form action="/register" method="POST" class="space-y-6">
+            <!-- Nombre -->
+            <div>
+                {{ register.nombre.label(class="block text-lg font-bold mb-1") }}
+                {{ register.nombre(placeholder="Escribe tu Nombre", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+            </div>
             
-            <!-- Botón Inicio -->
-            <a href="/" class="absolute top-6 left-6 bg-white text-black font-bold px-4 py-1 rounded shadow">Inicio</a>
-            
-            <h1 class="text-4xl font-bold text-center mb-8">Registrarse</h1>
-            
-            <form action="/register" method="POST" class="space-y-6">
-                <!-- Nombre -->
-                <div>
-                    {{ register.nombre.label( class="block text-lg font-bold mb-1") }}
-                    {{ register.nombre(placeholder="Escribe tu Nombre", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>
-                
-                <!-- fecha de nacimiento -->
-                <div>
-                    {{ register.fecha_nacimiento.label( class="block text-lg font-bold mb-1") }}
-                    {{ register.fecha_nacimiento(class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>
+            <!-- Fecha de nacimiento -->
+            <div>
+                {{ register.fecha_nacimiento.label(class="block text-lg font-bold mb-1") }}
+                {{ register.fecha_nacimiento(class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+            </div>
 
-                <!-- Email -->
-                <div>
-                    {{ register.correo.label( class="block text-lg font-bold mb-1") }}
-                    {{ register.correo(placeholder="Escribe tu Correo Eletronico", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>
-                
-                <!-- Contraseña -->
-                <div>
-                    {{ register.contraseña.label( class="block text-lg font-bold mb-1") }}
-                    {{ register.contraseña(placeholder="Escribe tu contraseña", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>
-                
-                <!-- Registro -->
-                <div class="text-sm">
-                <span class="text-white">Tienes cuenta?</span>
-                    <a href="/login" class="text-blue-400 font-semibold hover:underline">Iniciar sesion</a>
-                </div>
-                
-                <!-- Botón -->
-                {{ register.enviar(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition") }}
+            <!-- Email -->
+            <div>
+                {{ register.correo.label(class="block text-lg font-bold mb-1") }}
+                {{ register.correo(placeholder="Escribe tu Correo Electrónico", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+            </div>
+            
+            <!-- Contraseña -->
+            <div>
+                {{ register.contraseña.label(class="block text-lg font-bold mb-1") }}
+                {{ register.contraseña(placeholder="Escribe tu contraseña", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+            </div>
+            
+            <!-- Registro -->
+            <div class="text-sm">
+                <span class="text-white">¿Tienes cuenta?</span>
+                <a href="{{ url_for('iniciar_sesion' ) }}" class="text-blue-400 font-semibold hover:underline">Iniciar sesión</a>
+            </div>
+            
+            <!-- Botón -->
+            {{ register.enviar(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition") }}
     
-            </form>
-        </div>
+        </form>
     </div>
 </div>
+</div>
+
 {% endblock %}

@@ -6,7 +6,7 @@
   <div class="absolute inset-0 bg-black bg-opacity-60"></div>
   <!-- Contenido centrado -->
   <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
-    <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md shadow-lg">
+    <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg">
       
       <!-- Botón Inicio -->
       <a href="/" class="absolute top-6 left-6 bg-white text-black font-bold px-4 py-1 rounded shadow">Inicio</a>
@@ -30,7 +30,7 @@
         <!-- Registro -->
         <div class="text-sm">
           <span class="text-white">No tienes cuenta?</span>
-          <a href="/registro" class="text-blue-400 font-semibold hover:underline">Regístrate</a>
+          <a href="{{ url_for('register' ) }}" class="text-blue-400 font-semibold hover:underline">Regístrate</a>
         </div>
         <!-- Botón -->
         {{ login.enviar(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition") }}
@@ -38,5 +38,6 @@
       </form>  
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
