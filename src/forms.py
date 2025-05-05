@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField,StringField,EmailField,PasswordField
+from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField
 from wtforms.validators import DataRequired,Length,Email,EqualTo
 
 class loginform(FlaskForm):
@@ -24,6 +24,7 @@ class registerForm(FlaskForm):
         Length(max=25),
         Email()
     ])
+    fecha_nacimiento = DateField('Fecha de nacimiento', format='%d-%m-%Y', validators=[DataRequired()])
     contraseña = PasswordField("Escribe tu Contraseña", validators=[
         DataRequired(),
         Length(min=6,max=12),

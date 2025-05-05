@@ -1,5 +1,4 @@
-from math import log
-from flask import Flask, app, render_template
+from flask import Flask, app, render_template, request
 from config import config
 from forms import loginform, registerForm
 
@@ -12,7 +11,10 @@ def inicio():
 @app.route('/iniciarsesion', methods=['GET'])
 def iniciar_sesion():
     login = loginform()
-    return render_template('iniciar_sesion.html', login=login)
+    if request.method == 'POST':
+        pass
+    if request.method == "GET":
+        return render_template('iniciar_sesion.html', login=login)
 
 @app.route('/registrarse', methods=['GET'])
 def register():
