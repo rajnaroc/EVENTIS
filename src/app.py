@@ -11,9 +11,7 @@ app = Flask(__name__)
 
 db = MySQL(app)
 
-login_manager = LoginManager()
-
-login_manager.init_app(app)
+login_manager = LoginManager(app)
 
 
 # funcion para verificar si el usuario tiene la sesion iniciada
@@ -67,10 +65,10 @@ def register():
 @app.route('/perfil', methods=['GET','POST'], )
 @login_required
 def perfil():
-    form=perfilform()
+    form=perfilform(obj=current_user)
 
     if request.method == "GET":
-            return render_template('perfil.html', user=current_user, form=form)
+            return render_template('perfil.html',   form=form, user=current_user)
     
     if request.method == "POST":
         nombre = request.form['nombre']

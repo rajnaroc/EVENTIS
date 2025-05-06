@@ -18,8 +18,9 @@ class ModelUser:
                 correo = data[2]
                 contraseña = None
                 fecha_nacimiento = data[4]
-                
-                user = User(id,nombre,correo,contraseña,fecha_nacimiento)
+                saldo = data[5]
+                # Crear una instancia de User y devolverla
+                user = User(id,nombre,correo,contraseña,fecha_nacimiento,saldo)
 
                 return user
             return None

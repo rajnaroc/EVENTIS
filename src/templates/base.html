@@ -9,7 +9,7 @@
     <!-- cdn awensome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body class="bg-white text-gray-800 font-sans">
+<body class="bg-white min-h-screen text-gray-800 font-sans">
     {% if current_user.is_authenticated %}
         <!-- Header -->
         <header class="bg-gray-300 shadow">
@@ -54,7 +54,7 @@
     {% endblock %}
     {% block footer %}
     <!-- Footer -->
-    <footer class="bg-gray-300 text-white py-8">
+    <footer class=" bg-gray-300 text-white py-8">
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
         
             <!-- Información legal -->
