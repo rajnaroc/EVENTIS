@@ -63,13 +63,14 @@ def register():
 
 # funcion para mostrar el perfil y editarlo
 @app.route('/perfil', methods=['GET','POST'], )
-@login_required
 def perfil():
     form=perfilform(obj=current_user)
 
     if request.method == "GET":
+        if current_user.is_authenticated:
             return render_template('perfil.html',   form=form, user=current_user)
-    
+        else:
+            return redirect(url_for('iniciar_sesion'))
     if request.method == "POST":
         nombre = request.form['nombre']
         correo = request.form['correo']
@@ -77,8 +78,7 @@ def perfil():
         fecha_nacimiento = request.form['fecha_nacimiento']
 
 # funcion para actualizar el perfil
-@app.route('/perfil/editar', methods=['GET', 'POST'])
-@login_required 
+@app.route('/perfil/editar', methods=['GET', 'POST']) 
 def editar_perfil():
     user = ModelUser.get_by_id(db, current_user.id)
     if request.method == 'POST':
@@ -112,7 +112,22 @@ def eliminar_cuenta():
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
-    return render_template('inicio.html')
+    return redirect(url_for('inicio'))
+
+# Ruta para mostrar el Aviso Legal
+@app.route('/aviso-legal')
+def aviso_legal():
+    return render_template('aviso_legal.html')
+
+# Ruta para mostrar la Política de Privacidad
+@app.route('/politica-privacidad')
+def politica_privacidad():
+    return render_template('politica_privacidad.html')
+
+# Ruta para mostrar la Política de Cookies
+@app.route('/terminoscondiciones')
+def terminos_condiciones():
+    return render_template('terminos_condiciones.html')
 
 # funcion para mostrar el error 404
 def status_404(error):
