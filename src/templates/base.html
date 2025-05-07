@@ -21,7 +21,7 @@
             
                 <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
                     <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
-                    <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
+                    <a href="{{ url_for('contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
                     <div class="relative">
                         <!-- Botón Perfil -->
                         <a href="#" onclick="document.getElementById('perfilDropdown').classList.toggle('hidden'); return false;" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil<br>({{ current_user.saldo }} €)</a>
@@ -49,7 +49,7 @@
         
         <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
             <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
-            <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
+            <a href="{{ url_for('contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
             <a href="{{ url_for('iniciar_sesion' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Iniciar sesión</a>
             <a href="{{ url_for('register' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Registrarte</a>
         </div>

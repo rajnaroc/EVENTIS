@@ -4,7 +4,7 @@ from flask_mysqldb import MySQL
 
 # importaciones de los .py
 from config import config
-from forms import loginform, registerForm, perfilform
+from forms import loginform, registerForm, perfilform,contactoform
 from entities.ModelUser import ModelUser
 
 app = Flask(__name__)
@@ -39,7 +39,10 @@ def iniciar_sesion():
             return render_template('iniciar_sesion.html', login=login, error="Usuario o contraseña incorrectos")
     
     if request.method == "GET":
-        return render_template('iniciar_sesion.html', login=login)
+        if current_user.is_authenticated:
+            return redirect(url_for('inicio'))
+        else:
+            return render_template('iniciar_sesion.html', login=login)
 
 # funcion para registrar un nuevo usuario
 @app.route('/registrarse', methods=['GET', 'POST'])
@@ -58,7 +61,10 @@ def register():
         else:
             return render_template('register.html', register=register)
     if request.method == 'GET':
-        return render_template('register.html', register=register)
+        if current_user.is_authenticated:
+            return redirect(url_for('inicio'))
+        else:
+            return render_template('register.html', register=register)
 
 
 # funcion para mostrar el perfil y editarlo
@@ -106,6 +112,7 @@ def eliminar_cuenta():
             flash("Perfil eliminado correctamente.")
             return redirect(url_for('inicio.html'))
 
+# funcion para mostrar el historial 
 @app.route('/historial', methods=['GET'])
 def historial_compras():
     if current_user.is_authenticated:
@@ -113,6 +120,25 @@ def historial_compras():
         return render_template('historial_compras.html', compra=compra)
     else:
         return redirect(url_for('iniciar_sesion'))
+
+# funcion para mostrar el contacto
+@app.route('/contacto', methods=['GET', 'POST'])
+def contacto():
+    form = contactoform()
+
+    if request.method == 'GET':
+        if current_user.is_authenticated:
+            return render_template('contacto.html', form=form)
+        else:
+            return redirect(url_for('iniciar_sesion'))
+        
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        mensaje = request.form['mensaje']
+        if ModelUser.contacto(db,current_user.id, nombre, correo, mensaje):
+            flash("Mensaje enviado correctamente.")
+            return render_template('contacto.html', form=form)
 
 # funcion para cerrar sesion
 @app.route('/logout', methods=['GET'])

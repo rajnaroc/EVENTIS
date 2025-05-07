@@ -105,6 +105,24 @@ class ModelUser:
         except Exception as e:
             print(e)
 
+    @classmethod
+    def contacto(cls,db,usuario_id, nombre, correo, mensaje):
+        try:
+            cur = db.connection.cursor()
+            cur.execute(
+                "INSERT INTO mensajes_contacto (id, usuario_id, nombre, correo, mensaje) "
+                "VALUES (NULL, %s, %s, %s, %s)",
+                (usuario_id,nombre, correo, mensaje)
+            )
+            db.connection.commit()
+            cur.close()
+            flash("Mensaje enviado correctamente.")
+
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    
     # funcion para borrar el usuario de la base de datos
     @classmethod
     def delete_user(cls,db,id):

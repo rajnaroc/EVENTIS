@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField
+from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField
 from wtforms.validators import DataRequired,Length,Email,EqualTo
 
 # forms para el login 
@@ -26,7 +26,9 @@ class registerForm(FlaskForm):
         Length(max=25),
         Email()
     ])
-    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[DataRequired()])
+    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[
+        DataRequired()
+        ])
     contraseña = PasswordField("Escribe tu Contraseña", validators=[
         DataRequired(),
         Length(min=6,max=12),
@@ -49,7 +51,9 @@ class perfilform(FlaskForm):
         Length(max=25),
         Email()
     ])
-    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[DataRequired()])
+    fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[
+        DataRequired()
+        ])
     contraseña = PasswordField("Escribe tu Contraseña", validators=[
         DataRequired(),
         Length(min=6,max=12),
@@ -60,3 +64,19 @@ class perfilform(FlaskForm):
         Length(min=6, max=12)
     ])
     enviar = SubmitField("Register")
+
+class contactoform(FlaskForm):
+    nombre = StringField("Escribe tu nombre", validators=[
+        DataRequired(),
+        Length(min=4)
+    ])
+    correo = EmailField("Escribe tu correo", validators=[
+        DataRequired(),
+        Length(max=25),
+        Email()
+    ])
+    mensaje = TextAreaField("Motivo del asunto", validators=[
+        DataRequired(),
+        Length(min=4)
+    ])
+    enviar = SubmitField("Enviar")
