@@ -96,17 +96,23 @@ def editar_perfil():
     return render_template('editar_perfil.html', user=user)
 
 # funcion para eliminar el perfil
-@app.route('/perfil/eliminar', methods=['GET'])
-@login_required
+@app.route('/perfil/eliminar', methods=['POST', 'GET'])
 def eliminar_cuenta():
     user = ModelUser.get_by_id(db, current_user.id)
     if request.method == 'POST':
-        ModelUser.delete_user(db, user.id)
-        logout_user()
-        flash("Perfil eliminado correctamente.")
-        return render_template('inicio.html')
-    
-    return render_template('eliminar_perfil.html', user=user)
+        if current_user.is_authenticated:
+            ModelUser.delete_user(db, user.id)
+            logout_user()
+            flash("Perfil eliminado correctamente.")
+            return redirect(url_for('inicio.html'))
+
+@app.route('/historial', methods=['GET'])
+def historial_compras():
+    if current_user.is_authenticated:
+        compra = ModelUser.historial_compras(db, current_user.id)
+        return render_template('historial_compras.html', compra=compra)
+    else:
+        return redirect(url_for('iniciar_sesion'))
 
 # funcion para cerrar sesion
 @app.route('/logout', methods=['GET'])

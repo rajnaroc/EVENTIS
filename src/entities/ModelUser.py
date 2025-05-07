@@ -90,6 +90,21 @@ class ModelUser:
         except Exception as e:
             print(e)
     
+    # funcion para ver el historial de compras del usuario
+    @classmethod
+    def historial_compras(cls,db,id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT * FROM compras WHERE usuario_id = %s", (id,))
+            data = cur.fetchall()
+
+            if data:
+                return data
+            
+            return None
+        except Exception as e:
+            print(e)
+
     # funcion para borrar el usuario de la base de datos
     @classmethod
     def delete_user(cls,db,id):
@@ -103,3 +118,5 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+        
+    
