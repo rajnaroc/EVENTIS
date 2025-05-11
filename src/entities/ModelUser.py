@@ -122,7 +122,34 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
-    
+        
+    # funcion para ver los mensajes del usuario
+    @classmethod
+    def mensajes(cls,db):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT * FROM mensajes_contacto")
+            data = cur.fetchall()
+            print(data)
+            return data
+            
+        except Exception as e:
+            print(e)
+
+    # funcion para eleminar el mensaje de contacto
+    @classmethod
+    def delete_mensaje(cls,db,id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("DELETE FROM mensajes_contacto WHERE id = %s", (id,))
+            db.connection.commit()
+            cur.close()
+            flash("Mensaje eliminado correctamente.")   
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
     # funcion para borrar el usuario de la base de datos
     @classmethod
     def delete_user(cls,db,id):

@@ -101,6 +101,27 @@ def editar_perfil():
     
     return render_template('editar_perfil.html', user=user)
 
+# funcion para ver los mensajes del usuario
+@app.route('/perfil/mensajes', methods=['GET'])
+def mensajes():
+    if current_user.is_authenticated:
+        mensajes = ModelUser.mensajes(db)
+        return render_template('admin_mensajes.html', mensajes=mensajes)
+    else:
+        return redirect(url_for('iniciar_sesion'))
+    
+
+# funcion para eliminar el mensaje de contacto
+@app.route('/eliminar/<int:id>', methods=['POST', 'GET'])
+def eliminar_mensaje(id):
+    if current_user.is_authenticated:
+        ModelUser.delete_mensaje(db, id)
+        flash("Mensaje eliminado correctamente.")
+        return redirect(url_for('mensajes'))
+    else:
+        return redirect(url_for('iniciar_sesion'))
+
+
 # funcion para eliminar el perfil
 @app.route('/perfil/eliminar', methods=['POST', 'GET'])
 def eliminar_cuenta():
