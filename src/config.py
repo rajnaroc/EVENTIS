@@ -9,6 +9,10 @@ class ProductConfig(Config):
     MYSQL_USER=os.getenv("MYSQL_USER")
     MYSQL_PASSWORD=os.getenv("MYSQL_PASSWORD")
     MYSQL_DB=os.getenv("MYSQL_DB")
+    EMAIL_USER=os.getenv("EMAIL_USER")
+    EMAIL_PASSWORD=os.getenv("EMAIL_PASSWORD")
+    EMAIL_HOST=os.getenv("EMAIL_HOST")
+    EMAIL_PORT=os.getenv("EMAIL_PORT")
 
 class DevelopConfig(Config):
     DEBUG=True
@@ -16,7 +20,10 @@ class DevelopConfig(Config):
     MYSQL_USER=os.getenv("MYSQL_USER")
     MYSQL_PASSWORD=os.getenv("MYSQL_PASSWORD")
     MYSQL_DB=os.getenv("MYSQL_DB")
-
+    EMAIL_USER=os.getenv("EMAIL_USER")
+    EMAIL_PASSWORD=os.getenv("EMAIL_PASSWORD")
+    EMAIL_HOST=os.getenv("EMAIL_HOST")
+    EMAIL_PORT=os.getenv("EMAIL_PORT")
 config = {
     "dev" : DevelopConfig,
     "produ" : ProductConfig

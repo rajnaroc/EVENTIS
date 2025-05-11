@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField
 from wtforms.validators import DataRequired,Length,Email,EqualTo
-
 # forms para el login 
 class loginform(FlaskForm):
     correo = EmailField("Escribe tu correo", validators=[
@@ -38,6 +37,7 @@ class registerForm(FlaskForm):
         DataRequired(),
         Length(min=6, max=12)
     ])
+    
     enviar = SubmitField("Register")
 
 # forms para editar el perfil de un usuario
@@ -65,6 +65,7 @@ class perfilform(FlaskForm):
     ])
     enviar = SubmitField("Register")
 
+# forms para el contacto
 class contactoform(FlaskForm):
     nombre = StringField("Escribe tu nombre", validators=[
         DataRequired(),
@@ -80,3 +81,4 @@ class contactoform(FlaskForm):
         Length(min=4)
     ])
     enviar = SubmitField("Enviar")
+

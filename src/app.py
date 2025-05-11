@@ -1,7 +1,7 @@
 from flask import Flask, app, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager,login_user, login_required, logout_user, current_user
 from flask_mysqldb import MySQL
-
+from utils.email_sender import enviar_correo, plantilla_bienvenida
 # importaciones de los .py
 from config import config
 from forms import loginform, registerForm, perfilform,contactoform
@@ -56,6 +56,9 @@ def register():
         fecha_nacimiento = register.fecha_nacimiento.data
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
             flash("Usuario registrado correctamente.")
+            # Enviar correo de bienvenida
+            contenido_html = plantilla_bienvenida(nombre)
+            enviar_correo(correo, "Bienvenido a Eventis", contenido_html)
             login_user(ModelUser.sesion(db, correo, contraseña))
             return render_template('inicio.html')
         else:
