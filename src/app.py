@@ -7,6 +7,7 @@ from config import config
 from forms import loginform, registerForm, perfilform,contactoform
 from entities.ModelUser import ModelUser
 
+
 app = Flask(__name__)
 
 db = MySQL(app)
