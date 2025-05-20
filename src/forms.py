@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField
-from wtforms.validators import DataRequired,Length,Email,EqualTo
+from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,DecimalField,IntegerField,SelectField,DateTimeLocalField
+from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange
 # forms para el login 
 class loginform(FlaskForm):
     correo = EmailField("Escribe tu correo", validators=[
@@ -82,3 +82,29 @@ class contactoform(FlaskForm):
     ])
     enviar = SubmitField("Enviar")
 
+class crearEventoForm(FlaskForm):
+    titulo = StringField('Título', validators=[
+        DataRequired(), Length(max=200)
+        ])
+    descripcion = TextAreaField('Descripción', validators=[
+        DataRequired()
+        ])
+    fecha = DateTimeLocalField('Fecha y hora', format='%Y-%m-%dT%H:%M', validators=[
+        DataRequired()
+        ])
+    lugar = StringField('Lugar', validators=[
+        DataRequired(), Length(max=200)
+        ])
+    imagen = StringField('URL de la imagen', validators=[
+        DataRequired(), Length(max=255)
+        ])
+    categoria = SelectField('Categoría', coerce=int, validators=[
+        DataRequired()
+        ])
+    precio = DecimalField('Precio (€)', validators=[
+        DataRequired(), NumberRange(min=0)
+        ])
+    aforo = IntegerField('Aforo máximo', validators=[
+        DataRequired(), NumberRange(min=1)
+        ])
+    submit = SubmitField('Crear evento')

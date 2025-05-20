@@ -24,11 +24,12 @@ class DevelopConfig(Config):
     MYSQL_DB=os.getenv("MYSQL_DB")
     JWT_SECRET = os.getenv("JWT_SECRET_KEY")
     MAIL_SERVER = os.getenv("MAIL_SERVER")
-    MAIL_PORT = os.getenv("MAIL_PORT")
+    MAIL_PORT = int(os.getenv("MAIL_PORT"))
     MAIL_USE_TLS = os.getenv("MAIL_USE_TLS")
+    MAIL_USE_SSL = os.getenv("MAIL_USE_SSL")
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-    
+
 config = {
     "dev" : DevelopConfig,
     "produ" : ProductConfig

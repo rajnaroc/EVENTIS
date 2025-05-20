@@ -1,19 +1,18 @@
+import re
 from flask import Flask, app, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager,login_user, login_required, logout_user, current_user
 from flask_mysqldb import MySQL
 from utils.email_sender import enviar_correo, plantilla_bienvenida
 # importaciones de los .py
 from config import config
-from forms import loginform, registerForm, perfilform,contactoform
+from forms import loginform, registerForm, perfilform,contactoform,crearEventoForm
 from entities.ModelUser import ModelUser
-
 
 app = Flask(__name__)
 
 db = MySQL(app)
 
 login_manager = LoginManager(app)
-
 
 # funcion para verificar si el usuario tiene la sesion iniciada
 @login_manager.user_loader
@@ -51,10 +50,11 @@ def register():
     register = registerForm()
     
     if request.method == 'POST':
-        nombre = register.nombre.data
-        correo = register.correo.data
-        contraseña = register.contraseña.data
-        fecha_nacimiento = register.fecha_nacimiento.data
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        contraseña = request.form['contraseña']
+        fecha_nacimiento = request.form['fecha_nacimiento']
+
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
             flash("Usuario registrado correctamente.")
             # Enviar correo de bienvenida
@@ -90,7 +90,9 @@ def perfil():
 # funcion para actualizar el perfil
 @app.route('/perfil/editar', methods=['GET', 'POST']) 
 def editar_perfil():
+    
     user = ModelUser.get_by_id(db, current_user.id)
+    
     if request.method == 'POST':
         nombre = request.form['nombre']
         correo = request.form['correo']
@@ -105,10 +107,29 @@ def editar_perfil():
     
     return render_template('editar_perfil.html', user=user)
 
+@app.route('/admin/crear_evento', methods=['GET', 'POST'])
+def crear_evento():
+    form = crearEventoForm
+    if request.method == 'POST':
+        titulo = request.form['titulo']
+        descripcion = request.form['descripcion']
+        fecha = request.form['fecha']
+        hora = request.form['hora']
+        lugar = request.form['lugar']
+        imagen = request.form['imagen']
+        # Guardar el evento en la base de datos
+        ModelUser.crear_evento(db, titulo, descripcion, fecha, hora, lugar, imagen)
+        flash('Evento creado correctamente')
+        return redirect(url_for('crear_evento'))
+    if request.method == 'GET':
+        return render_template('admin_crear_evento.html', form=form)
+
+
+
 # funcion para ver los mensajes del usuario
 @app.route('/perfil/mensajes', methods=['GET'])
 def mensajes():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
         mensajes = ModelUser.mensajes(db)
         return render_template('admin_mensajes.html', mensajes=mensajes)
     else:
@@ -118,7 +139,7 @@ def mensajes():
 # funcion para eliminar el mensaje de contacto
 @app.route('/eliminar/<int:id>', methods=['POST', 'GET'])
 def eliminar_mensaje(id):
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
         ModelUser.delete_mensaje(db, id)
         flash("Mensaje eliminado correctamente.")
         return redirect(url_for('mensajes'))
@@ -163,7 +184,7 @@ def contacto():
         mensaje = request.form['mensaje']
         if ModelUser.contacto(db,current_user.id, nombre, correo, mensaje):
             flash("Mensaje enviado correctamente.")
-            return render_template('contacto.html', form=form)
+            return redirect(url_for('contacto'))
 
 # funcion para cerrar sesion
 @app.route('/logout', methods=['GET'])
@@ -189,6 +210,7 @@ def terminos_condiciones():
 # funcion para mostrar el error 404
 def status_404(error):
     return render_template('404.html')
+
 
 if __name__ == '__main__':
     app.config.from_object(config["dev"])

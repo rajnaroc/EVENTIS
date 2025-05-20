@@ -164,4 +164,19 @@ class ModelUser:
             print(e)
             return False
         
-    
+    @classmethod
+    def crear_evento(cls,db,id,titulo,descripcion,fecha,lugar,precio,aforo,categoria_id,admin_id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute(
+                "INSERT INTO eventos (id, titulo, descripcion, fecha, lugar, precio, aforo, categoria_id,admin_id) "
+                "VALUES (NULL, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s)",
+                (id,titulo,descripcion,fecha,lugar,precio,aforo,categoria_id,admin_id)
+            )
+            db.connection.commit()
+            cur.close()
+            flash("Evento creado correctamente.")   
+            return True
+        except Exception as e:
+            print(e)
+            return False
