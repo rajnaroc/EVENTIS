@@ -58,8 +58,6 @@ def register():
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
             flash("Usuario registrado correctamente.")
             # Enviar correo de bienvenida
-            contenido_html = plantilla_bienvenida(nombre)
-            enviar_correo(correo, "Bienvenido a Eventis", contenido_html)
             login_user(ModelUser.sesion(db, correo, contraseña))
             return render_template('inicio.html')
         else:
@@ -106,24 +104,6 @@ def editar_perfil():
             flash("Error al actualizar el perfil.")
     
     return render_template('editar_perfil.html', user=user)
-
-@app.route('/admin/crear_evento', methods=['GET', 'POST'])
-def crear_evento():
-    form = crearEventoForm
-    if request.method == 'POST':
-        titulo = request.form['titulo']
-        descripcion = request.form['descripcion']
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        lugar = request.form['lugar']
-        imagen = request.form['imagen']
-        # Guardar el evento en la base de datos
-        ModelUser.crear_evento(db, titulo, descripcion, fecha, hora, lugar, imagen)
-        flash('Evento creado correctamente')
-        return redirect(url_for('crear_evento'))
-    if request.method == 'GET':
-        return render_template('admin_crear_evento.html', form=form)
-
 
 
 # funcion para ver los mensajes del usuario
@@ -185,6 +165,45 @@ def contacto():
         if ModelUser.contacto(db,current_user.id, nombre, correo, mensaje):
             flash("Mensaje enviado correctamente.")
             return redirect(url_for('contacto'))
+
+# funcion para mostrar el evento
+@app.route('/eventos/admin', methods=['GET', 'POST'])
+def eventos_admin():
+    eventos = crearEventoForm()
+    if request.method == 'GET':
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            return render_template('crear_eventos.html', form=eventos)
+        else:
+            return redirect(url_for('inicio'))
+    if request.method == 'POST':
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            titulo = request.form['titulo']
+            descripcion = request.form['descripcion']
+            fecha = request.form['fecha']
+            lugar = request.form['lugar']
+            precio = request.form['precio']
+            categoria = request.form['categoria']
+            aforo = request.form['aforo']
+            ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo)
+            return redirect(url_for('eventos_admin'))
+        else:
+            return redirect(url_for('inicio'))
+        
+# funcion para mostrar el evento
+@app.route('/eventos', methods=['GET'])
+def evento():
+    if current_user.is_authenticated:
+        eventos = ModelUser.eventos(db)
+        categorias = {
+            1: 'Concierto',
+            2: 'Teatro',
+            3: 'Deporte',
+            4: 'Cine',
+            5: 'Otros'
+        }
+        return render_template('eventos.html', eventos=eventos, categorias=categorias)
+    else:
+        return redirect(url_for('iniciar_sesion'))
 
 # funcion para cerrar sesion
 @app.route('/logout', methods=['GET'])

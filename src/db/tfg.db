@@ -15,18 +15,6 @@ CREATE TABLE usuarios (
 
 );
 
-CREATE TABLE admins (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    correo VARCHAR(100) UNIQUE,
-    contraseña VARCHAR(255)
-);
-
-CREATE TABLE categorias (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100)
-);
-
 CREATE TABLE eventos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(200),
@@ -34,10 +22,7 @@ CREATE TABLE eventos (
     fecha DATETIME,
     lugar VARCHAR(200),
     precio DECIMAL(10,2), 
-    categoria_id INT,
-    admin_id INT,
-    FOREIGN KEY (categoria_id) REFERENCES categorias(id),
-    FOREIGN KEY (admin_id) REFERENCES admins(id)
+    categoria VARCHAR(100)
 );
 
 
@@ -74,4 +59,11 @@ CREATE TABLE mensajes_contacto (
     mensaje TEXT,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+CREATE TABLE fotos_evento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    evento_id INT,
+    ruta VARCHAR(255),
+    FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
 );

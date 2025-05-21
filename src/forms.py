@@ -1,5 +1,6 @@
+from re import S
 from flask_wtf import FlaskForm
-from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,DecimalField,IntegerField,SelectField,DateTimeLocalField
+from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,DecimalField,IntegerField,SelectField,DateTimeField,MultipleFileField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange
 # forms para el login 
 class loginform(FlaskForm):
@@ -89,22 +90,32 @@ class crearEventoForm(FlaskForm):
     descripcion = TextAreaField('Descripción', validators=[
         DataRequired()
         ])
-    fecha = DateTimeLocalField('Fecha y hora', format='%Y-%m-%dT%H:%M', validators=[
-        DataRequired()
+    fecha = DateField('Fecha del evento',format='%d-%m-%Y', validators=[
+        DataRequired(
+            
+        )])
+    hora = StringField('Hora', validators=[
+        DataRequired(), Length(max=5)
         ])
     lugar = StringField('Lugar', validators=[
         DataRequired(), Length(max=200)
         ])
-    imagen = StringField('URL de la imagen', validators=[
-        DataRequired(), Length(max=255)
-        ])
-    categoria = SelectField('Categoría', coerce=int, validators=[
-        DataRequired()
+    categoria = SelectField('Categoría', choices=[
+        (0, 'Selecciona una categoría'),
+            (1, 'Concierto'),
+            (2, 'Teatro'),
+            (3, 'Deporte'),
+            (4, 'Cine'),
+            (5, 'Otros')
         ])
     precio = DecimalField('Precio (€)', validators=[
         DataRequired(), NumberRange(min=0)
         ])
     aforo = IntegerField('Aforo máximo', validators=[
         DataRequired(), NumberRange(min=1)
+        ])
+    fotos = MultipleFileField('Fotos', validators=[
+        DataRequired(),
+        Length(max=5, message="Se permiten un máximo de 5 fotos")
         ])
     submit = SubmitField('Crear evento')

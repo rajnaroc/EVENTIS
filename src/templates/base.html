@@ -9,7 +9,7 @@
     <!-- cdn awensome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-<body class="bg-white min-h-screen text-gray-800 font-sans">
+<body class="bg-white min-h-screen flex flex-col text-gray-800 font-sans">
     {% if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com" %}
     <!-- Header -->
         <header class="bg-gray-300 shadow">
@@ -20,7 +20,7 @@
                 </div>    
             
                 <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-                    <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
+                    <a href="{{ url_for('evento' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
                     <a href="{{ url_for('contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
                     <div class="relative">
                         <!-- Botón Perfil -->
@@ -31,7 +31,7 @@
                             <a href="{{ url_for('historial_compras' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historial de compras</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Editar cuenta</a>
                             <a href="{{ url_for('mensajes' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mensajes</a>
-                            <a href="{{ url_for('crear_evento' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eventos</a>
+                            <a href="{{ url_for('eventos_admin' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eventos</a>
                         </div>
                     </div>
                     <a href="{{ url_for('logout' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Cerrar sesion</a>
@@ -49,7 +49,7 @@
                 </div>    
             
                 <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-                    <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
+                    <a href="{{ url_for('evento' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
                     <a href="{{ url_for('contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
                     <div class="relative">
                         <!-- Botón Perfil -->
@@ -77,7 +77,7 @@
             </div>    
         
         <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-            <a href="#" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
+            <a href="{{ url_for('evento' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
             <a href="{{ url_for('contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
             <a href="{{ url_for('iniciar_sesion' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Iniciar sesión</a>
             <a href="{{ url_for('register' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Registrarte</a>
@@ -88,6 +88,9 @@
     {% endblock %}
     {% endif %}
     {% block body %}
+    <div class="flex-1">
+
+    </div>
     <!-- Contenido principal -->
     {% endblock %}
     {% block footer %}

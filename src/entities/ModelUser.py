@@ -165,13 +165,13 @@ class ModelUser:
             return False
         
     @classmethod
-    def crear_evento(cls,db,id,titulo,descripcion,fecha,lugar,precio,aforo,categoria_id,admin_id):
+    def crear_eventos(cls,db,titulo,descripcion,fecha,lugar,precio,categoria,aforo):
         try:
             cur = db.connection.cursor()
             cur.execute(
-                "INSERT INTO eventos (id, titulo, descripcion, fecha, lugar, precio, aforo, categoria_id,admin_id) "
-                "VALUES (NULL, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s)",
-                (id,titulo,descripcion,fecha,lugar,precio,aforo,categoria_id,admin_id)
+                "INSERT INTO eventos (titulo, descripcion, fecha, lugar,precio,categoria,aforo) "
+                "VALUES (%s, %s, %s, %s, %s, %s,%s)",
+                (titulo,descripcion,fecha,lugar,precio,categoria,aforo)
             )
             db.connection.commit()
             cur.close()
@@ -180,3 +180,15 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+    # funcion para ver los eventos
+    @classmethod
+    def eventos(cls,db):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT * FROM eventos")
+            data = cur.fetchall()
+            print(data)
+            return data
+            
+        except Exception as e:
+            print(e)
