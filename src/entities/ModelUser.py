@@ -192,3 +192,43 @@ class ModelUser:
             
         except Exception as e:
             print(e)
+    # funcion para borrar el evento de la base de datos
+    @classmethod
+    def delete_evento(cls,db,id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("DELETE FROM eventos WHERE id = %s", (id,))
+            db.connection.commit()
+            cur.close()
+            flash("Evento eliminado correctamente.")   
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    # funcion para ver un unico evento
+    @classmethod
+    def evento_solo(cls, db, id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT titulo,descripcion,fecha,lugar,precio,categoria,aforo FROM eventos WHERE id = %s", (id,))
+            data = cur.fetchone() 
+            
+            return data 
+        except Exception as e:
+            print(e)
+            return None
+    # funcion para comprobar si el usuario esta registrado ya
+    @classmethod
+    def exists(cls, db, correo):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
+            data = cur.fetchone()
+            
+            if data:
+                return True
+            
+            return False
+        except Exception as e:
+            print(e)
+            return False

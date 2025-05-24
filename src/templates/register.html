@@ -4,9 +4,9 @@
 {% block body %}
 <div class="min-h-screen bg-cover bg-center relative" style="background-image: url('../static/img/register.png');">
     <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-    <!-- Contenido centrado -->
-    <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
-        <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg">
+    
+    <div class="relative z-10 flex items-center justify-center min-h-screen px-4 py-16">  
+        <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg my-8">
         
         <!-- Botón Inicio -->
         <a href="/" class="absolute top-6 left-6 bg-white text-black font-bold px-4 py-1 rounded shadow">Inicio</a>
@@ -17,7 +17,7 @@
             {{ register.hidden_tag() }}
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <div class="bg-red-500 text-white p-4 rounded-md mb-4">
+                    <div class="bg-green-400 text-white p-4 rounded-md mb-4">
                         {% for message in messages %}
                             <p>{{ message }}</p>
                         {% endfor %}
@@ -54,13 +54,13 @@
             </div>
             
             <!-- Registro -->
-            <div class="text-sm">
+            <div class="text-sm mt-6">  <!-- Añadido mt-6 -->
                 <span class="text-white">¿Tienes cuenta?</span>
                 <a href="{{ url_for('iniciar_sesion' ) }}" class="text-blue-400 font-semibold hover:underline">Iniciar sesión</a>
             </div>
             
             <!-- Botón -->
-            {{ register.enviar(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition") }}
+            {{ register.enviar(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition mt-6") }}  <!-- Añadido mt-6 -->
     
         </form>
     </div>

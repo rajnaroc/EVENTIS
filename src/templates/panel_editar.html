@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Panel editar{% endblock %}
+
+{% block body %}
+<section class="py-20 bg-white min-h-screen">
+    <form method="POST" class="max-w-xl mx-auto space-y-6 p-6 bg-black bg-opacity-80 rounded-xl shadow-lg">
+        {{ form.hidden_tag() }}
+
+        <h2 class="text-3xl text-white font-bold text-center">Crear Evento</h2>
+
+        <div>
+            {{ form.titulo.label(class="block text-white text-sm font-medium") }}
+            {{ form.titulo(class="w-full p-2 border rounded") }}
+        </div>
+
+        <div>
+            {{ form.descripcion.label(class="block text-white text-sm font-medium") }}
+            {{ form.descripcion(class="w-full p-2 border rounded") }}
+        </div>
+
+        <div>
+            {{ form.fecha.label(class="block text-white text-sm font-medium") }}
+            {{ form.fecha(class="w-full p-2 border rounded") }}
+        </div>
+
+        <div>
+            {{ form.lugar.label(class="block text-white text-sm font-medium") }}
+            {{ form.lugar(class="w-full p-2 border rounded") }}
+        </div>
+        <div>
+            {{ form.hora.label(class="block text-white text-sm font-medium") }}
+            {{ form.hora(class="w-full p-2 border rounded") }}
+        </div>
+        <div>
+            {{ form.categoria.label(class="block text-white text-sm font-medium") }}
+            {{ form.categoria(class="w-full p-2 border rounded") }}
+        </div>
+        <div>
+            {{ form.aforo.label(class="block text-white text-sm font-medium") }}
+            {{ form.aforo(class="w-full p-2 border rounded") }}
+        </div>
+        <div>
+            {{ form.precio.label(class="block text-white text-sm font-medium") }}
+            {{ form.precio(class="w-full p-2 border rounded") }}
+        </div>
+
+
+        
+        <div>
+            {{ form.submit(class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700") }}
+        </div>
+    </form>
+    <form action="/subir_fotos" method="POST">
+        {{ form.fotos.label(class="block text-white text-sm font-medium") }}
+        {{ form.fotos(class="w-full text-white p-2 border rounded") }}
+        {{ form.submit_fotos(class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700") }}
+    
+    </form>
+</section>
+{% endblock %}

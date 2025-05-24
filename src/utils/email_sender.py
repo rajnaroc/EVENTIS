@@ -1,23 +1,23 @@
-import smtplib
-from email.message import EmailMessage
+import os
 
-# Función para enviar un correo electrónico
-def enviar_correo(destinatario, asunto, contenido_html):
-    remitente = ""
-    contraseña = ""
+def enviar_correo_bienvenida(Message,mail,destinatario, cuerpo):
+    asunto = "¡Bienvenido a Eventis!"
+    
+    msg = Message(
+        subject=asunto,
+        sender=os.getenv("MAIL_USERNAME"),
+        recipients=[destinatario],
+        html=cuerpo
+    )
 
-    mensaje = EmailMessage()
-    mensaje["From"] = remitente
-    mensaje["To"] = destinatario
-    mensaje["Subject"] = asunto
-
-    # Establecer el contenido HTML
-    mensaje.set_content("Tu cliente de correo no soporta HTML.")
-    mensaje.add_alternative(contenido_html, subtype="html")
-
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(remitente, contraseña)
-        smtp.send_message(mensaje)
+    
+    try:
+        mail.send(msg)
+        return True
+    
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+        return False
 
 
 # Plantilla de correo de bienvenida
@@ -29,7 +29,6 @@ def plantilla_bienvenida(nombre):
             <tr>
                 <td align="center" style="padding: 20px 0;">
                     <!-- Logo de la empresa -->
-                    <img src="https://tudominio.com/static/logo-eventis.png" alt="Eventis" width="150" style="border-radius: 10px;">
                 </td>
             </tr>
             <tr>
@@ -41,12 +40,6 @@ def plantilla_bienvenida(nombre):
                     <p style="font-size: 16px; color: #e0e0e0;">
                         Gracias por confiar en nosotros para gestionar y disfrutar de tus momentos especiales.
                     </p>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align: center; padding: 20px;">
-                    <!-- Imagen de bienvenida -->
-                    <img src="https://tudominio.com/static/bienvenida.jpg" alt="Bienvenido" width="100%" style="max-width: 500px; border-radius: 8px;">
                 </td>
             </tr>
             <tr>

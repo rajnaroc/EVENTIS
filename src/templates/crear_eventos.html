@@ -2,58 +2,90 @@
 {% block title %}Crear Eventos{% endblock %}
 
 {% block body %}
-<section class="py-20 bg-white min-h-screen">
-    <form method="POST" enctype="multipart/form-data" class="max-w-xl mx-auto space-y-6 p-6 bg-black rounded-xl shadow-lg">
-        {{ form.hidden_tag() }}
+<section class="py-12 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4">
+        <form method="POST" enctype="multipart/form-data" class="space-y-6 p-8 bg-gray-800 rounded-xl shadow-2xl">
+            {{ form.hidden_tag() }}
 
-        <h2 class="text-3xl text-white font-bold text-center">Crear Evento</h2>
+            <h2 class="text-3xl text-white font-bold text-center mb-8">Crear Nuevo Evento</h2>
 
-        <div>
-            {{ form.titulo.label(class="block text-white text-sm font-medium") }}
-            {{ form.titulo(class="w-full p-2 border rounded") }}
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Columna Izquierda -->
+                <div class="space-y-6">
+                    <!-- Título -->
+                    <div>
+                        {{ form.titulo.label(class="block text-white text-lg font-medium mb-2") }}
+                        {{ form.titulo(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: Concierto de Jazz en Vivo") }}
+                    </div>
 
-        <div>
-            {{ form.descripcion.label(class="block text-white text-sm font-medium") }}
-            {{ form.descripcion(class="w-full p-2 border rounded") }}
-        </div>
+                    <!-- Descripción -->
+                    <div>
+                        {{ form.descripcion.label(class="block text-white text-lg font-medium mb-2") }}
+                        {{ form.descripcion(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32 resize-none", placeholder="Describa el evento en detalle...") }}
+                    </div>
+                    <!-- Fecha y Hora -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            {{ form.fecha.label(class="block text-white text-lg font-medium mb-2") }}
+                            {{ form.fecha(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
+                        </div>
+                        <div>
+                            {{ form.hora.label(class="block text-white text-lg font-medium mb-2") }}
+                            {{ form.hora(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <!-- Lugar -->
+                    <div>
+                        {{ form.lugar.label(class="block text-white text-lg font-medium mb-2") }}
+                        {{ form.lugar(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: Teatro Principal, Calle Mayor 10") }}
+                    </div>
 
-        <div>
-            {{ form.fecha.label(class="block text-white text-sm font-medium") }}
-            {{ form.fecha(class="w-full p-2 border rounded") }}
-        </div>
+                    <!-- Categoría -->
+                    <div>
+                        {{ form.categoria.label(class="block text-white text-lg font-medium mb-2") }}
+                        {{ form.categoria(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
+                    </div>
 
-        <div>
-            {{ form.lugar.label(class="block text-white text-sm font-medium") }}
-            {{ form.lugar(class="w-full p-2 border rounded") }}
-        </div>
-        <div>
-            {{ form.hora.label(class="block text-white text-sm font-medium") }}
-            {{ form.hora(class="w-full p-2 border rounded") }}
-        </div>
-        <div>
-            {{ form.categoria.label(class="block text-white text-sm font-medium") }}
-            {{ form.categoria(class="w-full p-2 border rounded") }}
-        </div>
+                    <!-- Precio y Aforo -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            {{ form.precio.label(class="block text-white text-lg font-medium mb-2") }}
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-400">$</span>
+                                {{ form.precio(class="w-full pl-8 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="0.00") }}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form.aforo.label(class="block text-white text-lg font-medium mb-2") }}
+                            {{ form.aforo(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: 100") }}
+                        </div>
+                    </div>
 
-        <div>
-            {{ form.precio.label(class="block text-white text-sm font-medium") }}
-            {{ form.precio(class="w-full p-2 border rounded") }}
-        </div>
+                    <!-- Fotos -->
+                    <div class="pt-4">
+                        {{ form.fotos.label(class="block text-white text-lg font-medium mb-2") }}
+                        <div class="flex items-center justify-center w-full">
+                            <label class="flex flex-col w-full h-32 border-2 border-dashed border-gray-600 hover:border-blue-500 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600">
+                                <div class="flex flex-col items-center justify-center pt-7">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <p class="pt-1 text-sm text-gray-400">Sube imágenes del evento</p>
+                                </div>
+                                {{ form.fotos(class="opacity-0 absolute") }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div>
-            {{ form.aforo.label(class="block text-white text-sm font-medium") }}
-            {{ form.aforo(class="w-full p-2 border rounded") }}
-        </div>
-
-        <div>
-            {{ form.fotos.label(class="block text-white text-sm font-medium") }}
-            {{ form.fotos(class="w-full text-white p-2 border rounded") }}
-        </div>
-
-        <div>
-            {{ form.submit(class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700") }}
-        </div>
-    </form>
+            <!-- Botón de Submit -->
+            <div class="pt-6">
+                {{ form.submit(class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200") }}
+            </div>
+        </form>
+    </div>
 </section>
 {% endblock %}

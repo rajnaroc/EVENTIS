@@ -1,16 +1,23 @@
-import re
+from calendar import c
+from flask_mail import Mail, Message
 from flask import Flask, app, flash, redirect, render_template, request, url_for
-from flask_login import LoginManager,login_user, login_required, logout_user, current_user
+from flask_login import LoginManager,login_user, logout_user, current_user
 from flask_mysqldb import MySQL
-from utils.email_sender import enviar_correo, plantilla_bienvenida
 # importaciones de los .py
 from config import config
 from forms import loginform, registerForm, perfilform,contactoform,crearEventoForm
 from entities.ModelUser import ModelUser
+from utils.email_sender import enviar_correo_bienvenida, plantilla_bienvenida
 
 app = Flask(__name__)
 
+app.config.from_object(config['dev']) 
+
+
 db = MySQL(app)
+
+mail = Mail(app)
+
 
 login_manager = LoginManager(app)
 
@@ -54,9 +61,13 @@ def register():
         correo = request.form['correo']
         contraseña = request.form['contraseña']
         fecha_nacimiento = request.form['fecha_nacimiento']
-
+        # Verificar si el correo ya está registrado
+        if ModelUser.exists(db, correo):
+            flash("El correo ya está registrado. Por favor, inicia sesión o utiliza otro correo.")
+            return render_template('register.html', register=register)
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
-            flash("Usuario registrado correctamente.")
+            flash("Registrado correctamente")
+            enviar_correo_bienvenida(Message, mail, correo, plantilla_bienvenida(nombre))
             # Enviar correo de bienvenida
             login_user(ModelUser.sesion(db, correo, contraseña))
             return render_template('inicio.html')
@@ -205,6 +216,48 @@ def evento():
     else:
         return redirect(url_for('iniciar_sesion'))
 
+# funcion para enseñar eventos
+@app.route('/eventos/editar', methods=['GET', 'POST'])
+def editar_eventos():
+    if request.method == 'GET':
+        
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            categorias = {
+                1: 'Concierto',
+                2: 'Teatro',
+                3: 'Deporte',
+                4: 'Cine',
+                5: 'Otros'
+            }
+            eventos = ModelUser.eventos(db)
+            return render_template('editar_eventos.html', eventos=eventos, categorias=categorias)
+
+@app.route('/editar_evento/<int:id>', methods=['GET', 'POST'])
+def editar_evento(id):
+    if request.method == 'GET':
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            eventos = ModelUser.evento_solo(db, id)
+            columnas = ['titulo', 'descripcion', 'fecha', 'hora', 'lugar', 'precio', 'categoria', 'aforo']
+            print(eventos)
+            valores = zip(columnas, eventos)
+            evento = crearEventoForm(data=valores)
+            categorias = {
+                1: 'Concierto',
+                2: 'Teatro',
+                3: 'Deporte',
+                4: 'Cine',
+                5: 'Otros'
+            }
+            return render_template('panel_editar.html', form=evento, categorias=categorias)
+
+#function para eliminar el evento
+@app.route('/eliminar_evento/<int:id>', methods=['POST', 'GET'])
+def eliminar_evento(id):
+    if current_user.is_authenticated and current_user.correo ==  "aaroncm611@gmail.com":
+        ModelUser.delete_evento(db, id)
+        flash("Evento eliminado correctamente.")
+        return redirect(url_for('editar_eventos'))
+
 # funcion para cerrar sesion
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -232,6 +285,5 @@ def status_404(error):
 
 
 if __name__ == '__main__':
-    app.config.from_object(config["dev"])
     app.register_error_handler(404, status_404)
     app.run()
