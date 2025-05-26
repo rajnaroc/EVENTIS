@@ -3,25 +3,58 @@
 {% block title %}Contactar con nosotros{% endblock %}
 
 {% block body %}
-<div class="max-w-4xl mx-auto mt-10 bg-black p-6 rounded shadow">
-    <h1 class="text-2xl text-white font-bold mb-4">Contactar con nosotros</h1>
-    
-    <form action="/contacto" method="POST">
-        {{ form.hidden_tag() }}
-        <div class="mb-4">
-            {{ form.nombre.label(class="block text-sm font-medium text-white") }}
-            {{ form.nombre(class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder="Escribe tu nombre") }}
-        </div>
+<div class="min-h-screen bg-gradient-to-b bg-black bg-opacity-60 to-black py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="bg-gray-800 bg-opacity-95 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-700">
+            <!-- Encabezado con icono -->
+            <div class="text-center mb-8">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-500 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold text-white mb-2">Contáctanos</h1>
+                <p class="text-gray-400">¿Tienes alguna pregunta? Escríbenos y te responderemos pronto.</p>
+            </div>
 
-        <div class="mb-4">
-            {{ form.correo.label(class="block text-sm font-medium text-white") }}
-            {{ form.correo(class="mt-1 p-2 w-full border border-gray-300 rounded-md", placeholder="Escribe tu correo electrónico") }}
+            <form action="/contacto" method="POST" class="space-y-6">
+                {{ form.hidden_tag() }}
+                
+                <!-- Campo Nombre -->
+                <div>
+                    {{ form.nombre.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        {{ form.nombre(class="block w-full py-3 px-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition duration-200", placeholder="Tu nombre completo") }}
+                    </div>
+                </div>
+
+                <!-- Campo Correo -->
+                <div>
+                    {{ form.correo.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        {{ form.correo(class="block w-full py-3 pl-10 pr-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition duration-200", placeholder="tucorreo@ejemplo.com") }}
+                    </div>
+                </div>
+
+                <!-- Campo Mensaje -->
+                <div>
+                    {{ form.mensaje.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                    <div class="mt-1">
+                        {{ form.mensaje(rows="5", class="block w-full py-3 px-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-none transition duration-200", placeholder="Escribe tu mensaje aquí...") }}
+                    </div>
+                </div>
+
+                <!-- Botón de enviar -->
+                <div class="pt-2">
+                    {{ form.enviar(class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 transform hover:-translate-y-0.5") }}
+                </div>
+            </form>
         </div>
-        <div class="mb-4">
-            {{ form.mensaje.label(class="block text-sm font-medium text-white") }}
-            {{ form.mensaje(class="mt-1 p-2 w-full border resize-none border-gray-300 rounded-md", placeholder="Escribe tu mensaje") }}
-        </div>
-        {{ form.enviar(class="w-full bg-blue-600 text-white font-bold py-2 rounded-md shadow hover:bg-blue-700 transition") }}
-    </form>
+    </div>
 </div>
 {% endblock %}

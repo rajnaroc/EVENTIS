@@ -1,43 +1,63 @@
 {% extends 'base.html' %}
 {% block title %}Términos y Condiciones | Eventis{% endblock %}
 {% block body %}
-<div class="min-h-screen bg-cover bg-center relative" style="background-image: url('../static/img/terms-bg.jpg');">
+<div class="min-h-screen bg-cover bg-center relative">
     <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-    <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
-        <div class="bg-black bg-opacity-60 text-white p-10 rounded-xl w-full max-w-4xl shadow-lg space-y-6">
-            <h1 class="text-4xl font-bold text-center mb-8">Términos y Condiciones de Eventis</h1>
-            <div class="space-y-4">
-                <h2 class="text-2xl font-semibold">1. Aceptación de los Términos</h2>
-                <p>Al acceder y utilizar los servicios de Eventis, aceptas estar sujeto a los siguientes términos y condiciones. Si no estás de acuerdo con estos términos, no utilices nuestros servicios.</p>
+    <div class="relative z-10 flex items-center justify-center min-h-screen px-4 py-16"> <!-- Añadido py-16 -->
+        <div class="bg-black bg-opacity-60 text-white p-10 rounded-xl w-full max-w-4xl shadow-lg space-y-6 my-8"> <!-- Añadido my-8 -->
+            <h1 class="text-4xl font-bold text-center mb-10">Términos y Condiciones de Eventis</h1> <!-- Aumentado mb-8 a mb-10 -->
+            <div class="space-y-8"> <!-- Aumentado space-y-4 a space-y-8 -->
+                <section class="space-y-4"> <!-- Añadido espacio interno -->
+                    <h2 class="text-2xl font-semibold">1. Aceptación de los Términos</h2>
+                    <p class="leading-relaxed">Al acceder y utilizar los servicios de Eventis, aceptas estar sujeto a los siguientes términos y condiciones. Si no estás de acuerdo con estos términos, no utilices nuestros servicios.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">2. Definiciones</h2>
-                <p>Para los efectos de este acuerdo, se entiende por "Usuario" a cualquier persona que acceda o utilice los servicios de Eventis.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">2. Definiciones</h2>
+                    <p class="leading-relaxed">Para los efectos de este acuerdo, se entiende por "Usuario" a cualquier persona que acceda o utilice los servicios de Eventis.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">3. Uso del Servicio</h2>
-                <p>El usuario se compromete a usar nuestros servicios de forma legal y ética, respetando los derechos de propiedad intelectual, los derechos de los demás usuarios, y las leyes aplicables.</p>
-                <p>No se permite el uso de nuestros servicios para actividades ilegales o fraudulentas, incluyendo, pero no limitado a, la distribución de contenido dañino, virus o software malicioso.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">3. Uso del Servicio</h2>
+                    <p class="leading-relaxed">El usuario se compromete a usar nuestros servicios de forma legal y ética, respetando los derechos de propiedad intelectual, los derechos de los demás usuarios, y las leyes aplicables.</p>
+                    <p class="leading-relaxed">No se permite el uso de nuestros servicios para actividades ilegales o fraudulentas, incluyendo, pero no limitado a, la distribución de contenido dañino, virus o software malicioso.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">4. Registro de Cuenta</h2>
-                <p>Para utilizar algunos de nuestros servicios, puede ser necesario que el usuario se registre y cree una cuenta. El usuario se compromete a proporcionar información precisa y veraz al momento de registrarse, y a actualizar sus datos cuando sea necesario.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">4. Registro de Cuenta</h2>
+                    <p class="leading-relaxed">Para utilizar algunos de nuestros servicios, puede ser necesario que el usuario se registre y cree una cuenta. El usuario se compromete a proporcionar información precisa y veráz al momento de registrarse, y a actualizar sus datos cuando sea necesario.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">5. Precios y Pagos</h2>
-                <p>Los servicios de Eventis pueden tener costos asociados, los cuales serán claramente indicados antes de realizar cualquier compra. Los pagos se realizarán a través de los métodos habilitados en el sitio web, como tarjetas de crédito o sistemas de pago como Stripe.</p>
-                <p>Eventis se reserva el derecho de modificar los precios de los servicios en cualquier momento, notificando a los usuarios sobre los cambios con antelación.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">5. Precios y Pagos</h2>
+                    <p class="leading-relaxed">Los servicios de Eventis pueden tener costos asociados, los cuales serán claramente indicados antes de realizar cualquier compra. Los pagos se realizarán a través de los métodos habilitados en el sitio web, como tarjetas de crédito o sistemas de pago como Stripe.</p>
+                    <p class="leading-relaxed">Eventis se reserva el derecho de modificar los precios de los servicios en cualquier momento, notificando a los usuarios sobre los cambios con antelación.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">6. Propiedad Intelectual</h2>
-                <p>Todo el contenido disponible en el sitio web, como textos, imágenes, logotipos, gráficos, y software, está protegido por derechos de propiedad intelectual de Eventis o sus licenciatarios. El usuario no podrá copiar, distribuir ni modificar este contenido sin la debida autorización.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">6. Propiedad Intelectual</h2>
+                    <p class="leading-relaxed">Todo el contenido disponible en el sitio web, como textos, imágenes, logotipos, gráficos, y software, está protegido por derechos de propiedad intelectual de Eventis o sus licenciatarios. El usuario no podrá copiar, distribuir ni modificar este contenido sin la debida autorización.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">7. Protección de Datos Personales</h2>
-                <p>Eventis se compromete a proteger la privacidad de los usuarios y a tratar sus datos personales de acuerdo con la legislación vigente sobre protección de datos. Para más detalles, consulta nuestra Política de Privacidad.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">7. Protección de Datos Personales</h2>
+                    <p class="leading-relaxed">Eventis se compromete a proteger la privacidad de los usuarios y a tratar sus datos personales de acuerdo con la legislación vigente sobre protección de datos. Para más detalles, consulta nuestra Política de Privacidad.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">8. Responsabilidad</h2>
-                <p>Eventis no será responsable de los daños directos o indirectos que puedan surgir del uso de nuestros servicios, incluyendo la interrupción de servicios, pérdida de datos o cualquier otro daño.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">8. Responsabilidad</h2>
+                    <p class="leading-relaxed">Eventis no será responsable de los daños directos o indirectos que puedan surgir del uso de nuestros servicios, incluyendo la interrupción de servicios, pérdida de datos o cualquier otro daño.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">9. Modificación de los Términos</h2>
-                <p>Eventis se reserva el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios serán publicados en este sitio web y entrarán en vigencia inmediatamente después de su publicación. Te recomendamos revisar periódicamente los Términos y Condiciones.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">9. Modificación de los Términos</h2>
+                    <p class="leading-relaxed">Eventis se reserva el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios serán publicados en este sitio web y entrarán en vigencia inmediatamente después de su publicación. Te recomendamos revisar periódicamente los Términos y Condiciones.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">10. Ley Aplicable</h2>
-                <p>Estos Términos y Condiciones están regidos por la legislación española. Cualquier disputa relacionada con el uso de nuestros servicios será resuelta en los tribunales competentes de Valencia, España.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">10. Ley Aplicable</h2>
+                    <p class="leading-relaxed">Estos Términos y Condiciones están regidos por la legislación española. Cualquier disputa relacionada con el uso de nuestros servicios será resuelta en los tribunales competentes de Valencia, España.</p>
+                </section>
             </div>
         </div>
     </div>

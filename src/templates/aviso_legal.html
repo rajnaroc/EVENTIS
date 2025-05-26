@@ -1,28 +1,73 @@
 {% extends 'base.html' %}
 {% block title %}Aviso Legal{% endblock %}
 {% block body %}
-<div class="min-h-screen bg-cover bg-center relative" style="background-image: url('../static/img/legal-bg.jpg');">
+<div class="min-h-screen bg-cover bg-center relative">
     <div class="absolute inset-0 bg-black bg-opacity-60"></div>
-    <div class="relative z-10 flex items-center justify-center min-h-screen px-4">
-        <div class="bg-black bg-opacity-60 text-white p-10 rounded-xl w-full max-w-4xl shadow-lg space-y-6">
-            <h1 class="text-4xl font-bold text-center mb-8">Aviso Legal de Eventis</h1>
-            <div class="space-y-4">
-                <h2 class="text-2xl font-semibold">1. Información General</h2>
-                <p>Eventis es una empresa dedicada a la organización y gestión de eventos. Estamos comprometidos con la privacidad y la protección de los datos personales de nuestros usuarios.</p>
+    <div class="relative z-10 flex items-center justify-center min-h-screen px-4 py-16">
+        <div class="bg-black bg-opacity-60 text-white p-10 rounded-xl w-full max-w-4xl shadow-lg space-y-6 my-8">
+            <h1 class="text-4xl font-bold text-center mb-10">Aviso Legal de Eventis</h1>
+            <div class="space-y-8">
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">1. Información General</h2>
+                    <p class="leading-relaxed">Eventis es una empresa dedicada a la organización y gestión de eventos. Estamos comprometidos con la privacidad y la protección de los datos personales de nuestros usuarios.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">2. Datos del Responsable</h2>
-                <p>Responsable: Eventis, S.A.</p>
-                <p>Domicilio: Calle Ficticia, 123, Ciudad, España</p>
-                <p>Correo electrónico: contacto@eventis.com</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">2. Datos del Responsable</h2>
+                    <ul class="space-y-2 leading-relaxed">
+                        <li><strong>Responsable:</strong> Eventis, S.A.</li>
+                        <li><strong>Domicilio:</strong> Calle Ficticia, 123, Ciudad, España</li>
+                        <li><strong>Correo electrónico:</strong> contacto@eventis.com</li>
+                        <li><strong>Registro Mercantil:</strong> Inscrita en el Registro Mercantil de Valencia, Tomo 12345/li>
+                        <li><strong>CIF:</strong> A12345678</li>
+                    </ul>
+                </section>
 
-                <h2 class="text-2xl font-semibold">3. Protección de Datos Personales</h2>
-                <p>Los datos personales proporcionados serán tratados de acuerdo con la legislación vigente en materia de protección de datos personales. Para más detalles, consulta nuestra Política de Privacidad.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">3. Protección de Datos Personales</h2>
+                    <p class="leading-relaxed">Los datos personales proporcionados serán tratados de acuerdo con la legislación vigente en materia de protección de datos personales. Para más detalles, consulta nuestra <a href="{{ url_for('politica_privacidad') }}" class="text-blue-400 hover:text-blue-300 underline">Política de Privacidad</a>.</p>
+                    <p class="leading-relaxed">Puedes ejercer tus derechos ARCO (Acceso, Rectificación, Cancelación y Oposición) enviando un correo electrónico a protecciondedatos@eventis.com.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">4. Propiedad Intelectual</h2>
-                <p>Todo el contenido disponible en el sitio web de Eventis, incluyendo texto, gráficos, logotipos y demás material, está protegido por derechos de propiedad intelectual. No está permitido reproducir, distribuir ni modificar sin la autorización expresa de Eventis.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">4. Propiedad Intelectual</h2>
+                    <p class="leading-relaxed">Todo el contenido disponible en el sitio web de Eventis, incluyendo texto, gráficos, logotipos, imágenes, código fuente y demás material, está protegido por derechos de propiedad intelectual e industrial.</p>
+                    <p class="leading-relaxed">Queda expresamente prohibida la reproducción, distribución, comunicación pública y transformación total o parcial de los contenidos del sitio web sin la autorización expresa por escrito de Eventis.</p>
+                </section>
 
-                <h2 class="text-2xl font-semibold">5. Condiciones de Uso</h2>
-                <p>El uso de nuestro sitio web está sujeto a los términos y condiciones descritos en este Aviso Legal. Si no estás de acuerdo con estos términos, te rogamos que no utilices nuestros servicios.</p>
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">5. Condiciones de Uso</h2>
+                    <p class="leading-relaxed">El uso de nuestro sitio web está sujeto a los términos y condiciones descritos en este Aviso Legal y en nuestros <a href="{{ url_for('terminos_condiciones') }}" class="text-blue-400 hover:text-blue-300 underline">Términos y Condiciones</a>.</p>
+                    <p class="leading-relaxed">Se prohíbe expresamente:</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4 leading-relaxed">
+                        <li>Usar el sitio web con fines ilegales o contrarios a la buena fe</li>
+                        <li>Realizar actividades que puedan dañar los sistemas de Eventis o de terceros</li>
+                        <li>Publicar contenido difamatorio, obsceno o discriminatorio</li>
+                        <li>Utilizar mecanismos de scraping o extracción automática de datos</li>
+                    </ul>
+                </section>
+
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">6. Limitación de Responsabilidad</h2>
+                    <p class="leading-relaxed">Eventis no se hace responsable de:</p>
+                    <ul class="list-disc list-inside space-y-2 pl-4 leading-relaxed">
+                        <li>Errores u omisiones en los contenidos</li>
+                        <li>Daños derivados del uso no autorizado de terceros</li>
+                        <li>Problemas técnicos fuera de nuestro control</li>
+                        <li>Enlaces a sitios web externos que no gestionamos</li>
+                    </ul>
+                </section>
+
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">7. Legislación Aplicable</h2>
+                    <p class="leading-relaxed">Este Aviso Legal se rige por la legislación española. Para cualquier controversia que pudiera surgir, las partes se someten a los Juzgados y Tribunales de Valencia, con renuncia expresa a cualquier otro fuero que pudiera corresponderles.</p>
+                </section>
+
+                <section class="space-y-4">
+                    <h2 class="text-2xl font-semibold">8. Modificaciones</h2>
+                    <p class="leading-relaxed">Eventis se reserva el derecho a modificar este Aviso Legal en cualquier momento. Las modificaciones entrarán en vigor desde su publicación en el sitio web.</p>
+                    <p class="leading-relaxed text-sm text-gray-300">Última actualización: 15 de junio de 2023</p>
+                </section>
             </div>
         </div>
     </div>
