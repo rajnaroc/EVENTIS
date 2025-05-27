@@ -315,6 +315,8 @@ def editar_evento(id):
             categoria = request.form['categoria']
             aforo = request.form['aforo']
             imagenes = request.files.getlist('fotos')
+            hora_inicio = request.form['hora_inicio']
+            hora_fin = request.form['hora_fin']
             
             urls_imagenes = []
             
@@ -331,7 +333,7 @@ def editar_evento(id):
                     except Exception as e:
                         print(f"Error al subir imagen: {e}")
 
-            evento_id = ModelUser.editar_evento( db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo)
+            evento_id = ModelUser.editar_evento( db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin)
             
             # Guardar cada imagen en la tabla imagenes_evento
             for url in urls_imagenes:
@@ -342,11 +344,12 @@ def editar_evento(id):
         else:
             return redirect(url_for('inicio'))
 
-@app.route('/evento/<int:evento_id>')
-def detalle_evento(evento_id):
+# pagina para ver la informacion general de evento
+@app.route('/evento/<int:id>')
+def detalle_evento(id):
     if current_user.is_authenticated:
-        evento = ModelUser.obtener_evento_detalle(db,evento_id)
-        foto = ModelUser.obtener_fotos_evento(db, evento_id)
+        evento = ModelUser.obtener_evento_detalle(db,id)
+        foto = ModelUser.obtener_fotos_evento(db, id)
         categorias = {
             1: 'Concierto',
             2: 'Teatro',

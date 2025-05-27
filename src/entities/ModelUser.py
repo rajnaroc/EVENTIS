@@ -282,10 +282,10 @@ class ModelUser:
 
     # obtener las fotos de un evento por id
     @classmethod
-    def obtener_fotos_evento(cls, db, evento_id):
+    def obtener_fotos_evento(cls, db, id):
         try:
             cur = db.connection.cursor()
-            cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (evento_id,))
+            cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (id,))
             fotos = cur.fetchall()
             
             return fotos
@@ -314,7 +314,7 @@ class ModelUser:
         try:
             cur = db.connection.cursor()
             cur.execute(
-                "UPDATE eventos SET titulo = %s, descripcion = %s, fecha = %s, lugar = %s, precio = %s, categoria = %s, aforo = %s hora_inicio = %s,hora_fin = %s WHERE id = %s",
+                "UPDATE eventos SET titulo = %s, descripcion = %s, fecha = %s, lugar = %s, precio = %s, categoria = %s, aforo = %s, hora_inicio = %s, hora_fin = %s WHERE id = %s",
                 (titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin, id)
             )
             db.connection.commit()
