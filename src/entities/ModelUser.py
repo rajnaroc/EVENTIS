@@ -288,7 +288,7 @@ class ModelUser:
             cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (id,))
             fotos = cur.fetchall()
             
-            return fotos
+            return [foto[0] for foto in fotos]
             
         except Exception as e:
             print(e)

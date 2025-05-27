@@ -27,18 +27,21 @@
             </div>
         </div>
 
-        <!-- Carrusel sencillo -->
         <div class="relative w-full max-w-4xl mx-auto mb-10">
-            <div id="carousel" class="overflow-hidden rounded-xl shadow-xl h-64 md:h-96">
+            <div id="carousel" class="relative overflow-hidden rounded-xl shadow-xl h-64 md:h-96">
                 {% for img in foto %}
-                <img src="{{ img[0] }}" alt="Foto del evento" class=" rounded w-full h-full object-cover absolute inset-0 transition-opacity duration-700 ease-in-out {% if not loop.first %}opacity-0{% endif %}" />
+                <img src="{{ img }}" alt="Foto del evento"
+                    class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out {% if not loop.first %}opacity-0{% endif %}">
                 {% endfor %}
             </div>
+
             <!-- botones -->
-            <button id="prevBtn" aria-label="Anterior" class="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
+            <button id="prevBtn" aria-label="Anterior"
+                class="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
                 &#10094;
             </button>
-            <button id="nextBtn" aria-label="Siguiente" class="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
+            <button id="nextBtn" aria-label="Siguiente"
+                class="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
                 &#10095;
             </button>
         </div>
@@ -266,6 +269,27 @@
     });
 
     updateDisplay();
+
+    // carrusel
+    const images = document.querySelectorAll('.carousel-img');
+    let current = 0;
+
+    function showImage(index) {
+        images.forEach((img, i) => {
+            img.classList.toggle('opacity-0', i !== index);
+        });
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        current = (current - 1 + images.length) % images.length;
+        showImage(current);
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        current = (current + 1) % images.length;
+        showImage(current);
+    });
+
 
 </script>
 {% endblock %}

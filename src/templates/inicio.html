@@ -61,7 +61,8 @@
 
 <script>
     const carrusel = document.getElementById("carrusel");
-    const total = { imagenes};
+    const total = {{ imagenes|length }};
+
     let indice = 0;
 
     function mover(dir) {
