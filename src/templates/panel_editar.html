@@ -31,8 +31,12 @@
                             {{ form.fecha(class="w-full p-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
                         </div>
                         <div>
-                            {{ form.hora.label(class="block text-white text-lg font-medium mb-2") }}
-                            {{ form.hora(class="w-full p-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej:00:00") }}
+                            {{ form.hora_inicio.label(class="block text-white text-lg font-medium mb-2") }}
+                            {{ form.hora_inicio(class="w-full p-3 border border-gray-600 rounded-lg  focus:ring-2 focus:ring-blue-500 focus:border-transparent",placeholder="Ej:00:00") }}
+                        </div>
+                        <div>
+                            {{ form.hora_fin.label(class="block text-white text-lg font-medium mb-2") }}
+                            {{ form.hora_fin(class="w-full p-3 border border-gray-600 rounded-lg  focus:ring-2 focus:ring-blue-500 focus:border-transparent",placeholder="Ej:00:00") }}
                         </div>
                     </div>
                 </div>

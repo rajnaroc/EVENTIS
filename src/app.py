@@ -1,9 +1,12 @@
+import datetime
 from flask_mail import Mail, Message
 from flask import Flask, app, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager,login_user, logout_user, current_user
 from flask_mysqldb import MySQL
 import cloudinary
 import cloudinary.uploader
+from datetime import datetime
+
 # importaciones de los .py
 from config import config
 from forms import loginform, registerForm, perfilform,contactoform,crearEventoForm
@@ -202,6 +205,8 @@ def eventos_admin():
             precio = request.form['precio']
             categoria = request.form['categoria']
             aforo = request.form['aforo']
+            hora_inicio = request.form['hora_inicio']
+            hora_fin = request.form['hora_fin']
             
             imagenes = request.files.getlist('fotos')
             
@@ -220,7 +225,7 @@ def eventos_admin():
                     except Exception as e:
                         print(f"Error al subir imagen: {e}")
 
-            evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo)
+            evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
             
             # Guardar cada imagen en la tabla imagenes_evento
             cursor = db.connection.cursor()
@@ -272,11 +277,8 @@ def editar_eventos():
 def editar_evento(id):
     if request.method == 'GET':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
-            eventos = ModelUser.evento_solo(db, id)
-            columnas = ['titulo', 'descripcion', 'fecha', 'hora', 'lugar', 'precio', 'categoria', 'aforo']
-            print(eventos)
+            evento = ModelUser.evento_solo(db, id)
             fotos = ModelUser.obtener_fotos_evento(db, id)
-            valores = zip(columnas, eventos)
             categorias = {
                 1: 'Concierto',
                 2: 'Teatro',
@@ -284,9 +286,25 @@ def editar_evento(id):
                 4: 'Cine',
                 5: 'Otros'
             }
-            evento = crearEventoForm(data=valores)
+            fecha = evento[2]
+            if isinstance(fecha, str):
+                fecha = datetime.strptime(fecha, '%d-%m-%Y').date()
+
+            evento = crearEventoForm(data={
+                'titulo': evento[0],
+                'descripcion': evento[1],
+                'fecha': fecha,
+                'lugar': evento[3],
+                'precio': evento[4],
+                'categoria': evento[5],  
+                'aforo': evento[6],      
+                'hora_inicio': evento[7],
+                'hora_fin': evento[8],
+            })
+
 
             return render_template('panel_editar.html', form=evento, categorias=categorias, fotos=fotos)
+    
     if request.method == 'POST':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
             titulo = request.form['titulo']

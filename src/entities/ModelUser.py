@@ -166,13 +166,13 @@ class ModelUser:
         
     # funcion para crear un evento    
     @classmethod
-    def crear_eventos(cls,db,titulo,descripcion,fecha,lugar,precio,categoria,aforo):
+    def crear_eventos(cls,db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin):
         try:
             cur = db.connection.cursor()
             cur.execute(
-                "INSERT INTO eventos (titulo, descripcion, fecha, lugar,precio,categoria,aforo) "
-                "VALUES (%s, %s, %s, %s, %s, %s,%s)",
-                (titulo,descripcion,fecha,lugar,precio,categoria,aforo)
+                "INSERT INTO eventos (titulo, descripcion, fecha, lugar,precio,categoria,aforo,hora_inicio,hora_fin) "
+                "VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s)",
+                (titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
             )
             db.connection.commit()
             evento_id = cur.lastrowid
@@ -215,7 +215,9 @@ class ModelUser:
     def evento_solo(cls, db, id):
         try:
             cur = db.connection.cursor()
-            cur.execute("SELECT titulo,descripcion,fecha,lugar,precio,categoria,aforo FROM eventos WHERE id = %s", (id,))
+            cur.execute(" SELECT titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin FROM eventos WHERE id = %s", (id,))
+
+
             data = cur.fetchone() 
             
             return data 
@@ -257,12 +259,12 @@ class ModelUser:
         
     # funcion para ver los eventos con sus fotos
     @classmethod
-    def eventos(cls,db):
+    def eventos(cls, db):
         try:
             cur = db.connection.cursor()
             cur.execute("""
                 SELECT 
-                    e.id, e.titulo, e.descripcion, e.fecha, e.lugar, e.precio, e.aforo, e.categoria,
+                    e.id, e.titulo, e.descripcion, e.fecha, e.lugar, e.precio, e.aforo, e.categoria, DATE_FORMAT(e.hora_inicio, '%H:%i') AS hora_inicio,DATE_FORMAT(e.hora_fin, '%H:%i') AS hora_fin,
                     (
                         SELECT ruta 
                         FROM fotos_evento f 
@@ -273,13 +275,11 @@ class ModelUser:
                 FROM eventos e
             """)
             eventos = cur.fetchall()
-            
-            if eventos:
-                return eventos
-            
+            return eventos
         except Exception as e:
             print(e)
             return None
+
     # obtener las fotos de un evento por id
     @classmethod
     def obtener_fotos_evento(cls, db, evento_id):
@@ -310,12 +310,12 @@ class ModelUser:
             return []
     # funcion para editar un evento
     @classmethod
-    def editar_evento(cls, db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo):
+    def editar_evento(cls, db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo, hora_inicio,hora_fin):
         try:
             cur = db.connection.cursor()
             cur.execute(
-                "UPDATE eventos SET titulo = %s, descripcion = %s, fecha = %s, lugar = %s, precio = %s, categoria = %s, aforo = %s WHERE id = %s",
-                (titulo, descripcion, fecha, lugar, precio, categoria, aforo, id)
+                "UPDATE eventos SET titulo = %s, descripcion = %s, fecha = %s, lugar = %s, precio = %s, categoria = %s, aforo = %s hora_inicio = %s,hora_fin = %s WHERE id = %s",
+                (titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin, id)
             )
             db.connection.commit()
             cur.close()

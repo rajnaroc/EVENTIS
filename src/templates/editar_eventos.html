@@ -18,6 +18,8 @@
                     <p class="text-sm text-gray-600">Ubicación: <span class="font-medium">{{ evento.4 }}</span></p>
                     <p class="text-sm text-gray-600">Precio: <span class="font-medium">{{ evento.5 }}</span></p>
                     <p class="text-lg text-blue-600 font-bold">Aforo: {{ evento.6 }}</p>
+                    <p class="text-lg text-blue-600 font-bold">Hora Inicio {{evento.8}} a Hora Fin {{evento.9}}</p>
+                    {{evento}} 
                     <span class="inline-block mt-3 text-xs bg-gray-800 text-white px-3 py-1 rounded-full">
                         {{ categorias.get(evento[7]|int, 'General') }}
                     </span>
