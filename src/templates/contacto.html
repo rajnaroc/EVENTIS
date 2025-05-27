@@ -3,9 +3,9 @@
 {% block title %}Contactar con nosotros{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gradient-to-b bg-black bg-opacity-60 to-black py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-2xl mx-auto">
-        <div class="bg-gray-800 bg-opacity-95 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-700">
+<div class="min-h-screen bg-gradient-to-b relative bg-cover bg-black bg-opacity-60 bg-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto ">
+        <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg">
             <!-- Encabezado con icono -->
             <div class="text-center mb-8">
                 <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-500 mb-4">
@@ -22,30 +22,30 @@
                 
                 <!-- Campo Nombre -->
                 <div>
-                    {{ form.nombre.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                    {{ form.nombre.label(class="block text-sm font-medium text-white mb-1") }}
                     <div class="mt-1 relative rounded-md shadow-sm">
-                        {{ form.nombre(class="block w-full py-3 px-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition duration-200", placeholder="Tu nombre completo") }}
+                        {{ form.nombre(class="block w-full py-3 px-4 border border-gray-600 rounded-lg text-black placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition duration-200", placeholder="Tu nombre completo") }}
                     </div>
                 </div>
 
                 <!-- Campo Correo -->
                 <div>
-                    {{ form.correo.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                    {{ form.correo.label(class="block text-sm font-medium text-white mb-1") }}
                     <div class="mt-1 relative rounded-md shadow-sm">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                         </div>
-                        {{ form.correo(class="block w-full py-3 pl-10 pr-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition duration-200", placeholder="tucorreo@ejemplo.com") }}
+                        {{ form.correo(class="block w-full py-3 pl-10 pr-4 border-gray-600 rounded-lg text-black placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition duration-200", placeholder="tucorreo@ejemplo.com") }}
                     </div>
                 </div>
 
                 <!-- Campo Mensaje -->
                 <div>
-                    {{ form.mensaje.label(class="block text-sm font-medium text-gray-300 mb-1") }}
+                    {{ form.mensaje.label(class="block text-sm font-medium text-white mb-1") }}
                     <div class="mt-1">
-                        {{ form.mensaje(rows="5", class="block w-full py-3 px-4 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-none transition duration-200", placeholder="Escribe tu mensaje aquí...") }}
+                        {{ form.mensaje(rows="5", class="block w-full py-3 px-4 border-gray-600 rounded-lg text-black placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none resize-none transition duration-200", placeholder="Escribe tu mensaje aquí...") }}
                     </div>
                 </div>
 

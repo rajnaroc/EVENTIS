@@ -1,8 +1,9 @@
-from calendar import c
 from flask_mail import Mail, Message
 from flask import Flask, app, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager,login_user, logout_user, current_user
 from flask_mysqldb import MySQL
+import cloudinary
+import cloudinary.uploader
 # importaciones de los .py
 from config import config
 from forms import loginform, registerForm, perfilform,contactoform,crearEventoForm
@@ -29,7 +30,13 @@ def load_user(id):
 # funcion para mostrar la pagina de inicio
 @app.route('/', methods=['GET'])
 def inicio():
-    return render_template('inicio.html')
+    cursor = db.connection.cursor()
+    cursor.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
+    imagenes = [fila[0] for fila in cursor.fetchall()]
+    cursor.close()
+    return render_template('inicio.html',imagenes=imagenes)
+
+
 
 # funcion para iniciar sesion
 @app.route('/iniciarsesion', methods=['GET', 'POST'])
@@ -195,12 +202,39 @@ def eventos_admin():
             precio = request.form['precio']
             categoria = request.form['categoria']
             aforo = request.form['aforo']
-            ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo)
+            
+            imagenes = request.files.getlist('fotos')
+            
+            urls_imagenes = []
+            
+            for imagen in imagenes:
+                if imagen.filename != '':
+                    try:
+                        # Subir a Cloudinary
+                        resultado = cloudinary.uploader.upload(
+                            imagen,
+                            folder="eventos/",
+                            resource_type="image"
+                        )
+                        urls_imagenes.append(resultado['secure_url'])
+                    except Exception as e:
+                        print(f"Error al subir imagen: {e}")
+
+            evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo)
+            
+            # Guardar cada imagen en la tabla imagenes_evento
+            cursor = db.connection.cursor()
+            for url in urls_imagenes:
+                cursor.execute("INSERT INTO fotos_evento (id_evento, ruta) VALUES (%s, %s)", (evento_id, url))
+            db.connection.commit()
+            cursor.close()
+
+
             return redirect(url_for('eventos_admin'))
         else:
             return redirect(url_for('inicio'))
         
-# funcion para mostrar el evento
+# funcion para mostrar el eventos
 @app.route('/eventos', methods=['GET'])
 def evento():
     if current_user.is_authenticated:
@@ -212,6 +246,7 @@ def evento():
             4: 'Cine',
             5: 'Otros'
         }
+        print(eventos)
         return render_template('eventos.html', eventos=eventos, categorias=categorias)
     else:
         return redirect(url_for('iniciar_sesion'))
@@ -232,6 +267,7 @@ def editar_eventos():
             eventos = ModelUser.eventos(db)
             return render_template('editar_eventos.html', eventos=eventos, categorias=categorias)
 
+# funcion para editar el evento que quieras tu
 @app.route('/editar_evento/<int:id>', methods=['GET', 'POST'])
 def editar_evento(id):
     if request.method == 'GET':
@@ -239,8 +275,8 @@ def editar_evento(id):
             eventos = ModelUser.evento_solo(db, id)
             columnas = ['titulo', 'descripcion', 'fecha', 'hora', 'lugar', 'precio', 'categoria', 'aforo']
             print(eventos)
+            fotos = ModelUser.obtener_fotos_evento(db, id)
             valores = zip(columnas, eventos)
-            evento = crearEventoForm(data=valores)
             categorias = {
                 1: 'Concierto',
                 2: 'Teatro',
@@ -248,7 +284,64 @@ def editar_evento(id):
                 4: 'Cine',
                 5: 'Otros'
             }
-            return render_template('panel_editar.html', form=evento, categorias=categorias)
+            evento = crearEventoForm(data=valores)
+
+            return render_template('panel_editar.html', form=evento, categorias=categorias, fotos=fotos)
+    if request.method == 'POST':
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            titulo = request.form['titulo']
+            descripcion = request.form['descripcion']
+            fecha = request.form['fecha']
+            lugar = request.form['lugar']
+            precio = request.form['precio']
+            categoria = request.form['categoria']
+            aforo = request.form['aforo']
+            imagenes = request.files.getlist('fotos')
+            
+            urls_imagenes = []
+            
+            for imagen in imagenes:
+                if imagen.filename != '':
+                    try:
+                        # Subir a Cloudinary
+                        resultado = cloudinary.uploader.upload(
+                            imagen,
+                            folder="eventos/",
+                            resource_type="image"
+                        )
+                        urls_imagenes.append(resultado['secure_url'])
+                    except Exception as e:
+                        print(f"Error al subir imagen: {e}")
+
+            evento_id = ModelUser.editar_evento( db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo)
+            
+            # Guardar cada imagen en la tabla imagenes_evento
+            for url in urls_imagenes:
+                ModelUser.editar_fotos_evento(db, evento_id, url)
+            flash("Evento editado correctamente.")
+
+            return redirect(url_for('eventos_admin'))
+        else:
+            return redirect(url_for('inicio'))
+
+@app.route('/evento/<int:evento_id>')
+def detalle_evento(evento_id):
+    if current_user.is_authenticated:
+        evento = ModelUser.obtener_evento_detalle(db,evento_id)
+        foto = ModelUser.obtener_fotos_evento(db, evento_id)
+        categorias = {
+            1: 'Concierto',
+            2: 'Teatro',
+            3: 'Deporte',
+            4: 'Cine',
+            5: 'Otros'
+        }
+        if not evento:
+            status_404(404)
+        return render_template("evento.html", evento=evento, foto=foto, categorias=categorias)
+    
+    else:
+        return redirect(url_for('iniciar_sesion'))
 
 #function para eliminar el evento
 @app.route('/eliminar_evento/<int:id>', methods=['POST', 'GET'])

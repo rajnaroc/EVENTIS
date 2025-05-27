@@ -91,9 +91,8 @@ class crearEventoForm(FlaskForm):
         DataRequired()
         ])
     fecha = DateField('Fecha del evento',format='%d-%m-%Y', validators=[
-        DataRequired(
-            
-        )])
+        DataRequired()
+        ])
     hora = StringField('Hora', validators=[
         DataRequired(), Length(max=5)
         ])
@@ -116,7 +115,7 @@ class crearEventoForm(FlaskForm):
         ])
     fotos = MultipleFileField('Fotos', validators=[
         DataRequired(),
-        Length(max=5, message="Se permiten un máximo de 5 fotos")
+        Length(max=5, message="Se permiten un máximo de 10 fotos")
         ])
     submit = SubmitField('Crear evento')
-    submit_fotos = SubmitField('Subir fotos')
+    submit_editar = SubmitField('Editar evento')

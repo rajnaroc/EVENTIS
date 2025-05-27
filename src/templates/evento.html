@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% block title %}{{ evento[1] }} - Eventos{% endblock %}
+
+{% block body %}
+<div class="bg-gray-50 text-gray-800 font-sans">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header del evento -->
+        <div class="mb-8 text-center">
+            <span class="inline-block px-3 py-1 text-sm font-semibold bg-blue-100 text-blue-800 rounded-full mb-4">{{ evento[5] }}</span>
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 text-gray-900">{{ evento[1] }}</h1>
+            <div class="flex justify-center items-center space-x-4 text-gray-600">
+                <span class="flex items-center">
+                    <!-- icono calendario -->
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    {{ evento[3] }}
+                </span>
+                <span class="flex items-center">
+                    <!-- icono ubicación -->
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    {{ evento[4] }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Carrusel sencillo -->
+        <div class="relative w-full max-w-4xl mx-auto mb-10">
+            <div id="carousel" class="overflow-hidden rounded-xl shadow-xl h-64 md:h-96">
+                {% for img in foto %}
+                <img src="{{ img[0] }}" alt="Foto del evento" class=" rounded w-full h-full object-cover absolute inset-0 transition-opacity duration-700 ease-in-out {% if not loop.first %}opacity-0{% endif %}" />
+                {% endfor %}
+            </div>
+            <!-- botones -->
+            <button id="prevBtn" aria-label="Anterior" class="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
+                &#10094;
+            </button>
+            <button id="nextBtn" aria-label="Siguiente" class="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
+                &#10095;
+            </button>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Descripción -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">Descripción del Evento</h2>
+                    <div class="prose max-w-none text-gray-700">
+                        {{ evento[2] }}
+                    </div>
+                </div>
+        <!-- Selector de entradas -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">Selecciona tus entradas</h3>
+            
+            <div class="flex items-center justify-between mb-4 p-4 bg-gray-50 rounded-lg shadow-sm">
+                <div>
+                    <h4 class="font-medium text-gray-800">Entrada General</h4>
+                    <p class="text-gray-600">
+                        {% if evento[5] > 0 %}
+                            {{ "%.2f"|format(evento[5]) }} € cada una
+                        {% else %}
+                            Entrada gratuita
+                        {% endif %}
+                    </p>
+                </div>
+                
+                <div class="flex items-center">
+                    <button aria-label="Disminuir entradas" onclick="decrementTickets()" class="w-10 h-10 bg-gray-200 rounded-l-lg flex items-center justify-center hover:bg-gray-300 transition">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                        </svg>
+                    </button>
+                    <input 
+                        type="number" 
+                        id="ticketCount" 
+                        value="1" 
+                        min="1" 
+                        max="{{ evento[7] }}" 
+                        class="w-16 h-10 text-center border-t border-b border-gray-300 bg-white text-gray-700 focus:outline-none" 
+                        aria-label="Número de entradas"
+                    >
+                    <button aria-label="Aumentar entradas" onclick="incrementTickets()" class="w-10 h-10 bg-gray-200 rounded-r-lg flex items-center justify-center hover:bg-gray-300 transition">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resumen del pedido -->
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">Entradas x <span id="displayCount">1</span>:</span>
+                    <span class="font-medium" id="subtotal">
+                        {% if evento[5] > 0 %}
+                            {{ "%.2f"|format(evento[5]) }} €
+                        {% else %}
+                            Gratis
+                        {% endif %}
+                    </span>
+                </div>
+                {% if evento[5] > 0 %}
+                <div class="flex justify-between font-bold text-lg text-gray-800 border-t pt-2">
+                    <span>Total:</span>
+                    <span id="total">{{ "%.2f"|format(evento[5]) }} €</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Botón de compra/participación -->
+            <button id="checkoutButton" 
+                    class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center justify-center">
+                {% if evento[5] > 0 %}
+                    Comprar entradas
+                {% else %}
+                    Confirmar participación
+                {% endif %}
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </button>
+
+            <!-- Mensaje de disponibilidad -->
+            <p class="text-sm text-gray-500 mt-3 text-center">
+                Quedan <span class="font-medium">{{ evento[7] }}</span> plazas disponibles
+            </p>
+        </div>
+
+
+                <!-- Detalles adicionales -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b-2 border-blue-100 pb-3">Detalles del Evento</h2>
+                    
+                    <div class="space-y-4">
+                        <!-- Detalle 1 - Fecha y Hora -->
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Fecha y Hora</h3>
+                                <p class="text-gray-600">{{ evento[3].strftime('%d/%m/%Y') }} a las {{ evento[3].strftime('%H:%M') }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalle 2 - Lugar -->
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Ubicación</h3>
+                                <p class="text-gray-600">{{ evento[4] }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalle 3 - Precio -->
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Precio</h3>
+                                <p class="text-gray-600">
+                                    {% if evento[5] > 0 %}
+                                        {{ "%.2f"|format(evento[5]) }} €
+                                    {% else %}
+                                        Entrada gratuita
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalle 4 - Aforo -->
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Aforo</h3>
+                                <p class="text-gray-600">{{ evento[7] }} personas</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalle 5 - Categoría -->
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-500 mt-1 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                            </svg>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Categoría</h3>
+                                <p class="text-gray-600">{{categorias.get(evento[7]|int, 'General')}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mapa -->
+             <div class="bg-white rounded-xl shadow-md p-6 mb-6"> 
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">Ubicación</h2> 
+                <div class="rounded-lg overflow-hidden"> 
+                    <iframe class="w-full h-64" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q={{ evento.4 | urlencode }}&output=embed"> 
+                    </iframe> 
+                </div> 
+                <div class="mt-4"> 
+                    <p class="text-gray-700">{{ evento.4 }}</p> 
+                    <button class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200"> Cómo llegar </button> 
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Precio y disponibilidad sacados del template Jinja
+
+    let ticketCount = 1;
+    
+    const ticketPrice = {{ evento[5] if evento[5] > 0 else 0 }};
+    const maxTickets = {{ evento[7] }};
+
+    function updateDisplay() {
+        const subtotal = ticketCount * ticketPrice;
+        document.getElementById('displayCount').textContent = ticketCount;
+        document.getElementById('subtotal').textContent = subtotal > 0 ? subtotal.toFixed(2) + ' €' : 'Gratis';
+        const totalElem = document.getElementById('total');
+        if(totalElem) {
+            totalElem.textContent = subtotal > 0 ? subtotal.toFixed(2) + ' €' : 'Gratis';
+        }
+    }
+
+    function incrementTickets() {
+        if (ticketCount < maxTickets) {
+            ticketCount++;
+            document.getElementById('ticketCount').value = ticketCount;
+            updateDisplay();
+        }
+    }
+
+    function decrementTickets() {
+        if (ticketCount > 1) {
+            ticketCount--;
+            document.getElementById('ticketCount').value = ticketCount;
+            updateDisplay();
+        }
+    }
+
+    document.getElementById('ticketCount').addEventListener('change', function() {
+        let value = parseInt(this.value);
+        if (isNaN(value) || value < 1) value = 1;
+        if (value > maxTickets) value = maxTickets;
+        ticketCount = value;
+        this.value = value;
+        updateDisplay();
+    });
+
+    document.getElementById('checkoutButton').addEventListener('click', function() {
+        alert(`Has seleccionado ${ticketCount} entrada(s). Redirigiendo al proceso de pago...`);
+        // Aquí puedes redirigir al proceso de compra real
+        // window.location.href = `/checkout?evento_id={{ evento[0] }}&cantidad=${ticketCount}`;
+    });
+
+    updateDisplay();
+
+</script>
+{% endblock %}

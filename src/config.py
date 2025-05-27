@@ -16,6 +16,10 @@ class ProductConfig(Config):
     MAIL_USE_SSL = os.getenv("MAIL_USE_SSL", "False") == "True"
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    CLOUDINARY_CLOUD_NAME=os.getenv("CLOUDINARY_CLOUD_NAME")
+    CLOUDINARY_API_KEY=os.getenv("CLOUDINARY_API_KEY")
+    CLOUDINARY_API_SECRET=os.getenv("CLOUDINARY_API_SECRET")
+    
 
 class DevelopConfig(Config):
     DEBUG=True
@@ -30,6 +34,9 @@ class DevelopConfig(Config):
     MAIL_USE_SSL = os.getenv("MAIL_USE_SSL", "False") == "True"
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    CLOUDINARY_CLOUD_NAME=os.getenv("CLOUDINARY_CLOUD_NAME")
+    CLOUDINARY_API_KEY=os.getenv("CLOUDINARY_API_KEY")
+    CLOUDINARY_API_SECRET=os.getenv("CLOUDINARY_API_SECRET")
 
 config = {
     "dev" : DevelopConfig,

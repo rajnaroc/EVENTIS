@@ -2,9 +2,9 @@
 {% block title %}Crear Eventos{% endblock %}
 
 {% block body %}
-<section class="py-12 min-h-screen">
+<section class="py-12 min-h-screen relative bg-cover bg-black bg-opacity-60">
     <div class="max-w-4xl mx-auto px-4">
-        <form method="POST" enctype="multipart/form-data" class="space-y-6 p-8 bg-gray-800 rounded-xl shadow-2xl">
+        <form method="POST" enctype="multipart/form-data" class="space-y-6 p-8 bg-black bg-opacity-60 rounded-xl shadow-2xl" multiple>
             {{ form.hidden_tag() }}
 
             <h2 class="text-3xl text-white font-bold text-center mb-8">Crear Nuevo Evento</h2>
@@ -15,37 +15,40 @@
                     <!-- Título -->
                     <div>
                         {{ form.titulo.label(class="block text-white text-lg font-medium mb-2") }}
-                        {{ form.titulo(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: Concierto de Jazz en Vivo") }}
+                        {{ form.titulo(class="w-full p-3 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: Concierto de Jazz en Vivo") }}
                     </div>
 
                     <!-- Descripción -->
                     <div>
                         {{ form.descripcion.label(class="block text-white text-lg font-medium mb-2") }}
-                        {{ form.descripcion(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32 resize-none", placeholder="Describa el evento en detalle...") }}
+                        {{ form.descripcion(class="w-full p-3 border border-gray-600 rounded-lg placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32 resize-none", placeholder="Describa el evento en detalle...") }}
                     </div>
+                    
                     <!-- Fecha y Hora -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             {{ form.fecha.label(class="block text-white text-lg font-medium mb-2") }}
-                            {{ form.fecha(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
+                            {{ form.fecha(class="w-full p-3 border border-gray-600 rounded-lg  focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
                         </div>
                         <div>
                             {{ form.hora.label(class="block text-white text-lg font-medium mb-2") }}
-                            {{ form.hora(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
+                            {{ form.hora(class="w-full p-3 border border-gray-600 rounded-lg  focus:ring-2 focus:ring-blue-500 focus:border-transparent",placeholder="Ej:00:00") }}
                         </div>
                     </div>
                 </div>
+                
+                <!-- Columna Derecha -->
                 <div class="space-y-6">
                     <!-- Lugar -->
                     <div>
                         {{ form.lugar.label(class="block text-white text-lg font-medium mb-2") }}
-                        {{ form.lugar(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: Teatro Principal, Calle Mayor 10") }}
+                        {{ form.lugar(class="w-full p-3  border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: Teatro Principal, Calle Mayor 10") }}
                     </div>
 
                     <!-- Categoría -->
                     <div>
                         {{ form.categoria.label(class="block text-white text-lg font-medium mb-2") }}
-                        {{ form.categoria(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
+                        {{ form.categoria(class="w-full p-3  border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
                     </div>
 
                     <!-- Precio y Aforo -->
@@ -53,13 +56,13 @@
                         <div>
                             {{ form.precio.label(class="block text-white text-lg font-medium mb-2") }}
                             <div class="relative">
-                                <span class="absolute left-3 top-3 text-gray-400">$</span>
-                                {{ form.precio(class="w-full pl-8 p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="0.00") }}
+                                <span class="absolute left-3 top-3 text-gray-400">€</span>
+                                {{ form.precio(class="w-full pl-8 p-3 border border-gray-600 rounded-lg placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="0.00") }}
                             </div>
                         </div>
                         <div>
                             {{ form.aforo.label(class="block text-white text-lg font-medium mb-2") }}
-                            {{ form.aforo(class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: 100") }}
+                            {{ form.aforo(class="w-full p-3 border border-gray-600 rounded-lg placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent", placeholder="Ej: 100") }}
                         </div>
                     </div>
 
@@ -67,15 +70,26 @@
                     <div class="pt-4">
                         {{ form.fotos.label(class="block text-white text-lg font-medium mb-2") }}
                         <div class="flex items-center justify-center w-full">
-                            <label class="flex flex-col w-full h-32 border-2 border-dashed border-gray-600 hover:border-blue-500 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600">
+                            <label class="flex flex-col w-full h-32 border-2 border-dashed hover:border-blue-500 rounded-lg cursor-pointer bg-white hover:bg-gray-600 hover:transition-all">
                                 <div class="flex flex-col items-center justify-center pt-7">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <p class="pt-1 text-sm text-gray-400">Sube imágenes del evento</p>
+                                    <p class="pt-1 text-sm text-gray-400">Haz clic para seleccionar o arrastra imágenes</p>
+                                    <p class="text-xs text-gray-500">(Máx. 10 imágenes)</p>
                                 </div>
-                                {{ form.fotos(class="opacity-0 absolute") }}
+                                {{ form.fotos(class="opacity-0 absolute", id="file-input", multiple="multiple", accept="image/*") }}
                             </label>
+                        </div>
+                        
+                        <!-- Vista previa de imágenes mejorada -->
+                        <div id="image-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <!-- Las imágenes seleccionadas aparecerán aquí dinámicamente -->
+                        </div>
+
+                        <!-- Contador de imágenes -->
+                        <div id="image-counter" class="text-sm text-gray-400 mt-2 hidden">
+                            <span id="selected-count">0</span> de <span id="max-count">10</span> imágenes seleccionadas
                         </div>
                     </div>
                 </div>
@@ -88,4 +102,149 @@
         </form>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+        
+        const fileInput = document.getElementById('file-input'); // Input de archivos oculto
+        const imagePreview = document.getElementById('image-preview'); // Contenedor de vistas previas
+        const imageCounter = document.getElementById('image-counter'); // Contador de imágenes
+        const selectedCount = document.getElementById('selected-count'); // Número de imágenes seleccionadas
+        const maxCount = document.getElementById('max-count'); // Límite máximo de imágenes
+        const MAX_FILES = 10; // Máximo número de imágenes permitidas
+        let filesArray = []; // Array para almacenar los archivos seleccionados
+
+    // Manejar la selección de archivos
+    fileInput.addEventListener('change', function(e) {
+        handleFiles(e.target.files);
+    });
+
+    // Manejar arrastrar y soltar
+    const dropArea = fileInput.parentElement;
+        
+    // Efecto visual al arrastrar sobre el área
+    dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('border-blue-500', 'bg-gray-600');
+    });
+
+    // Restaurar estilos al salir del área
+    dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('border-blue-500', 'bg-gray-600');
+    });
+
+    // Manejar archivos soltados
+    dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('border-blue-500', 'bg-gray-600');
+        if (e.dataTransfer.files.length) {
+            handleFiles(e.dataTransfer.files);
+        }
+    });
+
+function handleFiles(newFiles) {
+    // Verificar límite de archivos
+    if (filesArray.length + newFiles.length > MAX_FILES) {
+        alert(`Solo puedes subir un máximo de ${MAX_FILES} imágenes`);
+        return;
+    }
+
+    // Filtrar y agregar nuevos archivos
+    for (let i = 0; i < newFiles.length; i++) {
+        if (filesArray.length >= MAX_FILES) break;
+        if (newFiles[i].type.match('image.*')) {
+            filesArray.push(newFiles[i]);
+        }
+    }
+
+    updateFileInput(); // Actualizar input de archivos
+    
+    generatePreviews(); // Generar vistas previas
+    
+    updateCounter(); // Actualizar contador
+}
+    // Actualizar el input de archivos con los archivos seleccionados
+    function updateFileInput() {
+        const dataTransfer = new DataTransfer();
+        filesArray.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+    }
+    
+    
+    function generatePreviews() {
+        imagePreview.innerHTML = ''; // Limpiar contenedor
+        
+        if (filesArray.length === 0) {
+            imageCounter.classList.add('hidden');
+            return;
+        }
+
+    imageCounter.classList.remove('hidden');
+    
+    // Crear vista previa para cada imagen
+    filesArray.forEach((file, index) => {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'relative group';
+            
+            // Crear elemento de imagen
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'h-32 w-full object-cover rounded-lg border border-gray-600';
+            img.alt = `Vista previa ${index + 1}`;
+            
+            // Botón para eliminar
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200';
+            deleteBtn.innerHTML = '&times;';
+            deleteBtn.title = 'Eliminar imagen';
+            
+            // Evento para eliminar imagen
+            deleteBtn.addEventListener('click', () => {
+                filesArray.splice(index, 1);
+                updateFileInput();
+                generatePreviews();
+                updateCounter();
+            });
+            
+            previewContainer.appendChild(img);
+            previewContainer.appendChild(deleteBtn);
+            imagePreview.appendChild(previewContainer);
+        };
+        
+        reader.readAsDataURL(file);
+    });
+}
+
+    function updateCounter() {
+        selectedCount.textContent = filesArray.length;
+        
+        // Cambiar color si se acerca al límite
+        if (filesArray.length >= MAX_FILES) {
+            selectedCount.classList.add('text-red-400');
+        } else {
+            selectedCount.classList.remove('text-red-400');
+        }
+    }
+});
+</script>
+
+<style>
+    .group:hover img {
+        transform: scale(1.02);
+        transition: transform 0.2s ease;
+    }
+    
+    #image-preview {
+        min-height: 100px;
+    }
+    
+    /* Efecto al arrastrar sobre el área */
+    .border-dashed.border-blue-500 {
+        border-style: solid !important;
+    }
+</style>
 {% endblock %}

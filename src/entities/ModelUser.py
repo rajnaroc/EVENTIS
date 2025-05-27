@@ -164,6 +164,7 @@ class ModelUser:
             print(e)
             return False
         
+    # funcion para crear un evento    
     @classmethod
     def crear_eventos(cls,db,titulo,descripcion,fecha,lugar,precio,categoria,aforo):
         try:
@@ -174,12 +175,14 @@ class ModelUser:
                 (titulo,descripcion,fecha,lugar,precio,categoria,aforo)
             )
             db.connection.commit()
-            cur.close()
+            evento_id = cur.lastrowid
             flash("Evento creado correctamente.")   
-            return True
+            cur.close()
+            return evento_id
         except Exception as e:
             print(e)
             return False
+    
     # funcion para ver los eventos
     @classmethod
     def eventos(cls,db):
@@ -192,6 +195,7 @@ class ModelUser:
             
         except Exception as e:
             print(e)
+    
     # funcion para borrar el evento de la base de datos
     @classmethod
     def delete_evento(cls,db,id):
@@ -205,6 +209,7 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+    
     # funcion para ver un unico evento
     @classmethod
     def evento_solo(cls, db, id):
@@ -217,6 +222,7 @@ class ModelUser:
         except Exception as e:
             print(e)
             return None
+    
     # funcion para comprobar si el usuario esta registrado ya
     @classmethod
     def exists(cls, db, correo):
@@ -229,6 +235,114 @@ class ModelUser:
                 return True
             
             return False
+        except Exception as e:
+            print(e)
+            return False
+    
+    # funcion para ver evento por id
+    @classmethod
+    def obtener_evento_detalle(cls, db, id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT * FROM eventos WHERE id = %s", (id,))
+            data = cur.fetchone()
+            
+            if data:
+                return data
+            
+            return None
+        except Exception as e:
+            print(e)
+            return None
+        
+    # funcion para ver los eventos con sus fotos
+    @classmethod
+    def eventos(cls,db):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("""
+                SELECT 
+                    e.id, e.titulo, e.descripcion, e.fecha, e.lugar, e.precio, e.aforo, e.categoria,
+                    (
+                        SELECT ruta 
+                        FROM fotos_evento f 
+                        WHERE f.id_evento = e.id 
+                        ORDER BY f.id ASC 
+                        LIMIT 1
+                    ) AS imagen
+                FROM eventos e
+            """)
+            eventos = cur.fetchall()
+            
+            if eventos:
+                return eventos
+            
+        except Exception as e:
+            print(e)
+            return None
+    # obtener las fotos de un evento por id
+    @classmethod
+    def obtener_fotos_evento(cls, db, evento_id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (evento_id,))
+            fotos = cur.fetchall()
+            
+            return fotos
+            
+        except Exception as e:
+            print(e)
+            return None
+        
+    # carrusel del inicio de imagenes
+    @classmethod
+    def carrusel_img(cls,db):
+        try:
+            cursor = db.connection.cursor()
+            
+            cursor.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
+            
+            imagenes = [fila[0] for fila in cursor.fetchall()]
+            
+            return imagenes
+        except Exception as e:
+            print(e)
+            return []
+    # funcion para editar un evento
+    @classmethod
+    def editar_evento(cls, db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo):
+        try:
+            cur = db.connection.cursor()
+            cur.execute(
+                "UPDATE eventos SET titulo = %s, descripcion = %s, fecha = %s, lugar = %s, precio = %s, categoria = %s, aforo = %s WHERE id = %s",
+                (titulo, descripcion, fecha, lugar, precio, categoria, aforo, id)
+            )
+            db.connection.commit()
+            cur.close()
+            flash("Evento editado correctamente.")
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    # funcion para editar fotos de un evento
+    @classmethod
+    def editar_fotos_evento(cls, db, evento_id, fotos):
+        try:
+            cur = db.connection.cursor()
+            # Eliminar fotos existentes
+            cur.execute("DELETE FROM fotos_evento WHERE id_evento = %s", (evento_id,))
+            
+            # Insertar nuevas fotos
+            for foto in fotos:
+                cur.execute(
+                    "INSERT INTO fotos_evento (id_evento, ruta) VALUES (%s, %s)",
+                    (evento_id, foto)
+                )
+            
+            db.connection.commit()
+            cur.close()
+            flash("Fotos del evento actualizadas correctamente.")
+            return True
         except Exception as e:
             print(e)
             return False
