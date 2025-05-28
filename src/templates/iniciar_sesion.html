@@ -30,7 +30,7 @@
         <!-- Registro -->
         <div class="text-sm">
           <span class="text-white">No tienes cuenta?</span>
-          <a href="{{ url_for('register' ) }}" class="text-blue-400 font-semibold hover:underline">Regístrate</a>
+          <a href="{{ url_for('auth.register' ) }}" class="text-blue-400 font-semibold hover:underline">Regístrate</a>
         </div>
         <!-- Botón -->
         {{ login.enviar(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition") }}

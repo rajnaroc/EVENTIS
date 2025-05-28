@@ -2,7 +2,7 @@ from datetime import datetime, date
 
 
 # filtro para poner el tiempo bien
-def format_time(td):
+def format_hora(td):
     total_seconds = int(td.total_seconds())
     hours = total_seconds // 3600
     minutes = (total_seconds % 3600) // 60

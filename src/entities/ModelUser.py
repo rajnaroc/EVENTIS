@@ -259,7 +259,7 @@ class ModelUser:
         
     # funcion para ver los eventos con sus fotos
     @classmethod
-    def eventos(cls, db):
+    def evento(cls, db):
         try:
             cur = db.connection.cursor()
             cur.execute("""
