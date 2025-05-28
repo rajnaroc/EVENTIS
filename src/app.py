@@ -11,9 +11,15 @@ from datetime import datetime
 from config import config
 from forms import loginform, registerForm, perfilform,contactoform,crearEventoForm
 from entities.ModelUser import ModelUser
-from utils.email_sender import enviar_correo_bienvenida, plantilla_bienvenida
+from utils.email_sender import enviar_correo_bienvenida, plantilla_bienvenida,generar_y_enviar_entrada_qr
+from filtros import format_time,format_fecha
 
 app = Flask(__name__)
+
+# filtro para usar en html y enseñas los datos bien
+app.jinja_env.filters['format_time'] = format_time
+app.jinja_env.filters['format_fecha'] = format_fecha
+
 
 app.config.from_object(config['dev']) 
 
@@ -164,6 +170,7 @@ def eliminar_cuenta():
 def historial_compras():
     if current_user.is_authenticated:
         compra = ModelUser.historial_compras(db, current_user.id)
+        print(compra)
         return render_template('historial_compras.html', compra=compra)
     else:
         return redirect(url_for('iniciar_sesion'))
@@ -363,6 +370,33 @@ def detalle_evento(id):
     
     else:
         return redirect(url_for('iniciar_sesion'))
+    
+@app.route('/comprar/<int:evento_id>/<int:cantidad>', methods=['GET'])
+def comprar_entrada(evento_id,cantidad):
+    if not current_user.is_authenticated:
+        return redirect(url_for('iniciar_sesion'))
+
+    for _ in range(cantidad):
+        exito = generar_y_enviar_entrada_qr(
+            usuario_email=current_user.correo,
+            usuario_id=current_user.id,
+            evento_id=evento_id, 
+            precio=0.00,  
+            estado='gratis',  # o 'comprada'
+            db=db,
+            mail=mail,
+            Message=Message
+        )
+
+    if exito:
+        flash("Entrada generada y enviada por correo", "success")
+    else:
+        flash("Error al generar la entrada", "danger")
+
+    return redirect(url_for('detalle_evento', id=evento_id))
+
+
+
 
 #function para eliminar el evento
 @app.route('/eliminar_evento/<int:id>', methods=['POST', 'GET'])
@@ -396,6 +430,7 @@ def terminos_condiciones():
 # funcion para mostrar el error 404
 def status_404(error):
     return render_template('404.html')
+
 
 
 if __name__ == '__main__':

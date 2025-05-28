@@ -346,3 +346,26 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+    @classmethod
+    def historial_compras(cls,db,usuario_id):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("""
+                SELECT 
+                    e.id AS entrada_id,e.usuario_id,e.evento_id,e.precio,e.fecha_compra,e.estado,
+                    ev.titulo,ev.descripcion,ev.fecha AS fecha_evento,ev.hora_inicio,ev.hora_fin,ev.lugar,ev.categoria
+                FROM entradas e
+                JOIN eventos ev ON e.evento_id = ev.id
+                WHERE e.usuario_id = %s
+                ORDER BY e.fecha_compra DESC
+                LIMIT 2
+            """, (usuario_id,))
+
+            entradas = cur.fetchall()
+            return entradas
+
+
+
+        except Exception as e:
+            print(e)
+            return False

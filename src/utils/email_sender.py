@@ -1,4 +1,8 @@
 import os
+import qrcode
+from io import BytesIO
+from datetime import datetime
+
 
 def enviar_correo_bienvenida(Message,mail,destinatario, cuerpo):
     asunto = "¡Bienvenido a Eventis!"
@@ -51,3 +55,38 @@ def plantilla_bienvenida(nombre):
     </body>
     </html>
     """
+
+def generar_y_enviar_entrada_qr(usuario_email, usuario_id, evento_id, precio, estado, db,mail,Message):
+    try:
+        # 1. Insertar entrada en la BBDD
+        cur = db.connection.cursor()
+        fecha = datetime.now()
+        cur.execute("""
+            INSERT INTO entradas (usuario_id, evento_id, precio, fecha_compra, estado)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (usuario_id, evento_id, precio, fecha, estado))
+        db.connection.commit()
+
+        # Obtener ID de la entrada recién insertada
+        entrada_id = cur.lastrowid
+
+        # 2. Crear el contenido del QR
+        datos_qr = "Entrada ID: {}\nUsuario ID: {}\nEvento ID: {}".format(entrada_id,usuario_id,evento_id)
+        qr_img = qrcode.make(datos_qr)
+
+        # 3. Convertir imagen a bytes
+        img_io = BytesIO()
+        qr_img.save(img_io, 'PNG')
+        img_io.seek(0)
+
+        # 4. Enviar el correo
+        msg = Message("Tu entrada para el evento", sender='aaroncm611@gmail.com', recipients=[usuario_email])
+        msg.body = "Adjuntamos tu entrada en formato QR puedes presentarla en el evento correspondite. ¡Gracias por tu compra!"
+        msg.attach("entrada_qr.png", "image/png", img_io.read())
+        mail.send(msg)
+
+        return True
+
+    except Exception as e:
+        print("Error al generar/enviar entrada:", e)
+        return False
