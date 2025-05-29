@@ -9,7 +9,7 @@ CREATE TABLE usuarios (
     nombre VARCHAR(100),
     correo VARCHAR(100) UNIQUE,
     contraseña VARCHAR(255),
-     fecha_nacimiento DATE,
+	fecha_nacimiento DATE,
     saldo DECIMAL(10,2) DEFAULT 0,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
@@ -20,35 +20,23 @@ CREATE TABLE eventos (
     titulo VARCHAR(200),
     descripcion TEXT,
     fecha DATETIME,
+    hora_inicio time,
+    hora_fin time,
     lugar VARCHAR(200),
     precio DECIMAL(10,2), 
-    categoria VARCHAR(100)
-);
-
-
-CREATE TABLE compras (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT,
-    evento_id INT,
-    cantidad INT,
-    total DECIMAL(10,2),
-    stripe_payment_id VARCHAR(255),
-    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-    FOREIGN KEY (evento_id) REFERENCES eventos(id)
+    categoria VARCHAR(100),
+    aforo int
 );
 
 CREATE TABLE entradas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT,
     evento_id INT,
-    compra_id INT,
     precio DECIMAL(10,2),
     fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     estado ENUM('comprada', 'gratis') DEFAULT 'gratis',
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-    FOREIGN KEY (evento_id) REFERENCES eventos(id),
-    FOREIGN KEY (compra_id) REFERENCES compras(id)
+    FOREIGN KEY (evento_id) REFERENCES eventos(id)
 );
 
 CREATE TABLE mensajes_contacto (
