@@ -66,7 +66,6 @@ def evento_detalle(id):
                             4: 'Cine',
                             5: 'Otros'
                 }
-                print(evento)
                 return render_template('evento.html', evento=evento,categorias=categorias,foto=foto)
         else:
             return redirect(url_for("auth.iniciar_sesion"))
@@ -76,7 +75,7 @@ def evento_detalle(id):
 @eventos_bp.route("/eventos", methods=['GET'])
 def evento():
     if current_user.is_authenticated:
-        eventos = ModelUser.eventos(db)
+        eventos = ModelUser.evento(db)
         categorias = {
             1: 'Concierto',
             2: 'Teatro',
