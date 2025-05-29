@@ -225,12 +225,13 @@ def descargar_entrada(entrada_id):
         JOIN eventos ev ON e.evento_id = ev.id
         WHERE e.id = %s
     """, (entrada_id,))
+    
     entrada = cur.fetchone()
-
+    cur.close()
     if not entrada:
         return "Entrada no encontrada", 404
 
-    entrada_id, usuario_id, nombre_usuario, email, evento_id, nombre_evento = entrada
+    entrada_id, usuario_id, nombre_usuario, email, evento_id = entrada
 
     # Generar QR
     datos_qr = f"Entrada ID: {entrada_id}\nUsuario ID: {usuario_id}\nEvento ID: {evento_id}"

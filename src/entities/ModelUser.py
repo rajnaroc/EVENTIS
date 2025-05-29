@@ -21,7 +21,7 @@ class ModelUser:
                 saldo = data[5]
                 # Crear una instancia de User y devolverla
                 user = User(id,nombre,correo,contraseña,fecha_nacimiento,saldo)
-
+                cur.close()
                 return user
             return None
         except Exception as e:
@@ -82,7 +82,8 @@ class ModelUser:
                 if valor:
                     # Si la contraseña es correcta, crea una instancia de User y devuelve el objeto
                     user = User(id,nombre,correo,None,fecha_nacimiento,saldo)
-
+                    
+                    cur.close()
                     return user
                 
                 return flash("error password")
@@ -99,8 +100,10 @@ class ModelUser:
             data = cur.fetchall()
 
             if data:
+                cur.close()
                 return data
             
+            cur.close()
             return None
         except Exception as e:
             print(e)
@@ -117,7 +120,7 @@ class ModelUser:
             db.connection.commit()
             cur.close()
             flash("Mensaje enviado correctamente.")
-
+            
             return True
         except Exception as e:
             print(e)
@@ -130,7 +133,8 @@ class ModelUser:
             cur = db.connection.cursor()
             cur.execute("SELECT * FROM mensajes_contacto")
             data = cur.fetchall()
-            print(data)
+
+            cur.close()
             return data
             
         except Exception as e:
@@ -191,6 +195,7 @@ class ModelUser:
             cur.execute("SELECT * FROM eventos")
             data = cur.fetchall()
             print(data)
+            cur.close()
             return data
             
         except Exception as e:
@@ -219,7 +224,8 @@ class ModelUser:
 
 
             data = cur.fetchone() 
-            
+            cur.close()
+
             return data 
         except Exception as e:
             print(e)
@@ -234,8 +240,10 @@ class ModelUser:
             data = cur.fetchone()
             
             if data:
+                cur.close()
                 return True
             
+            cur.close()
             return False
         except Exception as e:
             print(e)
@@ -250,8 +258,10 @@ class ModelUser:
             data = cur.fetchone()
             
             if data:
+                cur.close()
                 return data
             
+            cur.close()
             return None
         except Exception as e:
             print(e)
@@ -275,6 +285,7 @@ class ModelUser:
                 FROM eventos e
             """)
             eventos = cur.fetchall()
+            cur.close()
             return eventos
         except Exception as e:
             print(e)
@@ -287,7 +298,8 @@ class ModelUser:
             cur = db.connection.cursor()
             cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (id,))
             fotos = cur.fetchall()
-            
+
+            cur.close()
             return [foto[0] for foto in fotos]
             
         except Exception as e:
@@ -298,13 +310,15 @@ class ModelUser:
     @classmethod
     def carrusel_img(cls,db):
         try:
-            cursor = db.connection.cursor()
+            cur = db.connection.cursor()
             
-            cursor.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
+            cur.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
             
-            imagenes = [fila[0] for fila in cursor.fetchall()]
+            imagenes = [fila[0] for fila in cur.fetchall()]
             
+            cur.close()
             return imagenes
+        
         except Exception as e:
             print(e)
             return []
@@ -361,6 +375,7 @@ class ModelUser:
             """, (usuario_id,))
 
             entradas = cur.fetchall()
+            cur.close()
             return entradas
 
         except Exception as e:
