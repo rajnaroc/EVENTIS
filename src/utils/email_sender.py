@@ -2,7 +2,12 @@ import os
 import qrcode
 from io import BytesIO
 from datetime import datetime
-
+from io import BytesIO
+import qrcode
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib.utils import ImageReader
 
 def enviar_correo_bienvenida(Message,mail,destinatario, cuerpo):
     asunto = "¡Bienvenido a Eventis!"
@@ -56,33 +61,60 @@ def plantilla_bienvenida(nombre):
     </html>
     """
 
-def generar_y_enviar_entrada_qr(usuario_email, usuario_id, evento_id, precio, estado, db,mail,Message):
+def generar_y_enviar_entrada_qr(usuario_email, usuario_id, evento_id, precio, estado, db, mail, Message):
     try:
-        # 1. Insertar entrada en la BBDD
         cur = db.connection.cursor()
+
+        # Obtener nombre del usuario
+        cur.execute("SELECT nombre FROM usuarios WHERE id = %s", (usuario_id,))
+        resultado = cur.fetchone()
+        if not resultado:
+            raise Exception("Usuario no encontrado.")
+        nombre_usuario = resultado[0]
+
+        # Insertar entrada
         fecha = datetime.now()
         cur.execute("""
             INSERT INTO entradas (usuario_id, evento_id, precio, fecha_compra, estado)
             VALUES (%s, %s, %s, %s, %s)
         """, (usuario_id, evento_id, precio, fecha, estado))
         db.connection.commit()
-
-        # Obtener ID de la entrada recién insertada
         entrada_id = cur.lastrowid
 
-        # 2. Crear el contenido del QR
-        datos_qr = "Entrada ID: {}\nUsuario ID: {}\nEvento ID: {}".format(entrada_id,usuario_id,evento_id)
+        # Generar QR
+        datos_qr = f"Entrada ID: {entrada_id}\nUsuario ID: {usuario_id}\nEvento ID: {evento_id}"
         qr_img = qrcode.make(datos_qr)
 
-        # 3. Convertir imagen a bytes
-        img_io = BytesIO()
-        qr_img.save(img_io, 'PNG')
-        img_io.seek(0)
+        # Crear PDF con datos + QR
+        pdf_io = BytesIO()
+        c = canvas.Canvas(pdf_io, pagesize=A4)
+        c.setFont("Helvetica", 12)
 
-        # 4. Enviar el correo
+        c.drawString(2 * cm, 27 * cm, f"Nombre: {nombre_usuario}")
+        c.drawString(2 * cm, 26 * cm, f"Correo: {usuario_email}")
+        c.drawString(2 * cm, 25 * cm, f"ID Entrada: {entrada_id}")
+
+        # Insertar imagen QR correctamente
+        qr_buffer = BytesIO()
+        qr_img.save(qr_buffer, format='PNG')
+        qr_buffer.seek(0)
+        qr_image = ImageReader(qr_buffer)
+        c.drawImage(qr_image, 2 * cm, 15 * cm, width=8 * cm, height=8 * cm)
+
+
+        c.showPage()
+        c.save()
+        pdf_io.seek(0)
+
+        # 5. Enviar correo con HTML y PDF adjunto
         msg = Message("Tu entrada para el evento", sender='aaroncm611@gmail.com', recipients=[usuario_email])
-        msg.body = "Adjuntamos tu entrada en formato QR puedes presentarla en el evento correspondite. ¡Gracias por tu compra!"
-        msg.attach("entrada_qr.png", "image/png", img_io.read())
+        msg.html = """
+        <h2>Hola {},</h2>
+        <p>Gracias por tu compra. Adjuntamos tu entrada en formato PDF, que incluye un código QR único.</p>
+        <p>Por favor, preséntala en el acceso al evento.</p>
+        <p>Saludos,<br><strong>Eventis</strong></p>
+        """.format(nombre_usuario)
+        msg.attach("entrada_evento.pdf", "application/pdf", pdf_io.read())
         mail.send(msg)
 
         return True

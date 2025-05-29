@@ -207,6 +207,7 @@ def comprar_entrada(evento_id,cantidad):
         )
 
     if exito:
+        print("Entrada generada y enviada por correo", "success")
         flash("Entrada generada y enviada por correo", "success")
     else:
         flash("Error al generar la entrada", "danger")
