@@ -19,7 +19,7 @@ CREATE TABLE eventos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(30),
     descripcion TEXT,
-    fecha DATETIME,
+    fecha DATE,
     hora_inicio time,
     hora_fin time,
     lugar VARCHAR(50),
