@@ -358,14 +358,13 @@ class ModelUser:
                 JOIN eventos ev ON e.evento_id = ev.id
                 WHERE e.usuario_id = %s
                 ORDER BY e.fecha_compra DESC
-                LIMIT 2
             """, (usuario_id,))
 
             entradas = cur.fetchall()
             return entradas
 
-
-
         except Exception as e:
             print(e)
             return False
+        
+    

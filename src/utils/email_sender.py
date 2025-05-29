@@ -61,7 +61,7 @@ def plantilla_bienvenida(nombre):
     </html>
     """
 
-def generar_y_enviar_entrada_qr(usuario_email, usuario_id, evento_id, precio, estado, db, mail, Message):
+def generar_y_enviar_entrada_qr(usuario_email, usuario_id, evento_id, precio, estado,db, mail, Message):
     try:
         cur = db.connection.cursor()
 

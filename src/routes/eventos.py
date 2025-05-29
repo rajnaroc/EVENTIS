@@ -200,7 +200,7 @@ def comprar_entrada(evento_id,cantidad):
             usuario_id=current_user.id,
             evento_id=evento_id, 
             precio=0.00,  
-            estado='gratis',  # o 'comprada'
+            estado='gratis',
             db=db,
             mail=mail,
             Message=Message
@@ -213,3 +213,44 @@ def comprar_entrada(evento_id,cantidad):
         flash("Error al generar la entrada", "danger")
 
     return redirect(url_for('eventos.evento_detalle', id=evento_id))
+
+@eventos_bp.route('/descargar_entrada/<int:entrada_id>')
+def descargar_entrada(entrada_id):
+    cur = db.connection.cursor()
+
+    # Obtener datos de la entrada, el usuario y el evento
+    cur.execute("""
+        SELECT e.id, e.usuario_id, u.nombre, u.correo, e.evento_id, ev.titulo
+        FROM entradas e
+        JOIN usuarios u ON e.usuario_id = u.id
+        JOIN eventos ev ON e.evento_id = ev.id
+        WHERE e.id = %s
+    """, (entrada_id,))
+    entrada = cur.fetchone()
+
+    if not entrada:
+        return "Entrada no encontrada", 404
+
+    entrada_id, usuario_id, nombre_usuario, email, evento_id, nombre_evento = entrada
+
+    # Generar QR
+    datos_qr = f"Entrada ID: {entrada_id}\nUsuario ID: {usuario_id}\nEvento ID: {evento_id}"
+    qr_img = qrcode.make(datos_qr)
+    qr_buffer = BytesIO()
+    qr_img.save(qr_buffer, format='PNG')
+    qr_buffer.seek(0)
+    qr_image = ImageReader(qr_buffer)
+
+    # Crear PDF
+    pdf_io = BytesIO()
+    c = canvas.Canvas(pdf_io, pagesize=A4)
+    c.setFont("Helvetica", 12)
+    c.drawString(2 * cm, 27 * cm, "Nombre: {}".format(nombre_usuario))
+    c.drawString(2 * cm, 26 * cm, "Correo: {}".format(email))
+    c.drawString(2 * cm, 25 * cm, "ID Entrada: {}".format(entrada_id))
+    c.drawImage(qr_image, 2 * cm, 14 * cm, width=8 * cm, height=8 * cm)
+    c.showPage()
+    c.save()
+    pdf_io.seek(0)
+
+    return send_file(pdf_io, download_name=f'entrada_{entrada_id}.pdf', as_attachment=True)
