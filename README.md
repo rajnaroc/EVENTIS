@@ -16,5 +16,6 @@ Nuestro objetivo es proporcionar una solución accesible y fácil de usar donde 
 
 - **Backend:** Flask (Python)
 - **Base de datos:** MySQL
-- **Frontend:** HTML, Tailwind
+- **Frontend:** HTML, Tailwind,JavaScript
+- **Imaganes:** Cloudinary
 
