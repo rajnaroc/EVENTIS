@@ -1,6 +1,6 @@
 # Proyecto de Gestión de Eventos
 
-Este proyecto está diseñado para ofrecer una plataforma inclusiva que permite a **todas las personas** descubrir y gestionar **eventos de todo tipo y para cualquier presupuesto**. Ya sea que estés buscando un evento de ocio, una conferencia profesional, o una actividad comunitaria, ¡este es el lugar adecuado para ti!
+Este proyecto está diseñado para ofrecer una plataforma inclusiva que permite a **todas las personas** descubrir. Ya sea que estés buscando un evento de ocio, una conferencia profesional, o una actividad comunitaria, ¡este es el lugar adecuado para ti!
 
 ## Objetivo
 
