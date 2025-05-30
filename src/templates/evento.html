@@ -4,7 +4,7 @@
 {% block body %}
 <div class="bg-gray-50 text-gray-800 font-sans">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header del evento -->
+        <!-- principio del evento -->
         <div class="mb-8 text-center">
             <span class="inline-block px-3 py-1 text-sm font-semibold bg-blue-100 text-blue-800 rounded-full mb-4">{{categorias.get(evento[8]|int, 'General')}}</span>
             <h1 class="text-4xl md:text-5xl font-bold mb-2 text-gray-900">{{ evento[1] }}</h1>
@@ -34,7 +34,7 @@
                     <img src="{{ img }}" alt="Foto del evento"
                         class="carousel-img absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out {% if not loop.first %}opacity-0{% endif %}">
                     {% endfor %}
-                    <!-- botones -->
+                    <!-- botones carrusel -->
                     <button id="prevBtn" aria-label="Anterior"
                         class="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-40 text-white p-2 rounded-full hover:bg-opacity-60 transition">
                         &#10094;
@@ -83,15 +83,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                         </svg>
                     </button>
-                    <input 
-                        type="number" 
-                        id="ticketCount" 
-                        value="1" 
-                        min="1" 
-                        max="{{ evento[7] }}" 
-                        class="w-16 h-10 text-center border-t border-b border-gray-300 bg-white text-gray-700 focus:outline-none" 
-                        aria-label="Número de entradas"
-                    >
+                    <input type="number" id="ticketCount" value="1" min="1" max="{{ evento[7] }}" class="w-16 h-10 text-center border-t border-b border-gray-300 bg-white text-gray-700 focus:outline-none" aria-label="Número de entradas">
                     <button aria-label="Aumentar entradas" onclick="incrementTickets()" class="w-10 h-10 bg-gray-200 rounded-r-lg flex items-center justify-center hover:bg-gray-300 transition">
                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -225,8 +217,9 @@
     </div>
 </div>
 <script>
-    // Precio y disponibilidad sacados del template Jinja
 
+    // Precio y disponibilidad 
+    
     let ticketCount = 1;
     const eventoid = {{ evento[0] }};
     const ticketPrice = {{ evento[7] if evento[7] > 0 else 0 }};

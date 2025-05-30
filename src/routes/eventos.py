@@ -4,7 +4,7 @@ from extension.extesion import *
 
 eventos_bp = Blueprint('eventos', __name__)
 
-# Funcion para poder crear eventos(usuario)
+# Funcion para poder crear eventos(admin)
 @eventos_bp.route('/eventos/admin', methods=['GET', 'POST'])
 def crear_evento():
     eventos = crearEventoForm()
@@ -13,8 +13,11 @@ def crear_evento():
             return render_template('crear_eventos.html', form=eventos)
         else:
             return redirect(url_for('inicio'))
+        
     if request.method == 'POST':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            
+            # recoger los valores del input
             titulo = request.form['titulo']
             descripcion = request.form['descripcion']
             fecha = request.form['fecha']
@@ -25,10 +28,12 @@ def crear_evento():
             hora_inicio = request.form['hora_inicio']
             hora_fin = request.form['hora_fin']
             
+            # coger las imagenes
             imagenes = request.files.getlist('fotos')
             
             urls_imagenes = []
-            
+            # hacemos un bucle para poder subirlas cloudinary
+
             for imagen in imagenes:
                 if imagen.filename != '':
                     try:
@@ -40,8 +45,9 @@ def crear_evento():
                         )
                         urls_imagenes.append(resultado['secure_url'])
                     except Exception as e:
-                        print(f"Error al subir imagen: {e}")
+                        print("Error al subir imagen: {e}")
 
+            # funcion para crear el evento y devolver el id 
             evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
             
             # Guardar cada imagen en la tabla imagenes_evento
@@ -90,7 +96,7 @@ def evento():
 
 
 # funcion para enseñar los eventos a editar
-@eventos_bp.route('/eventos/editar', methods=['GET', 'POST'])
+@eventos_bp.route('/eventos/editar', methods=['GET'])
 def editar_eventos():
     if request.method == 'GET':
         
@@ -102,9 +108,10 @@ def editar_eventos():
                 4: 'Cine',
                 5: 'Otros'
             }
+            # funcion para coger los eventos y enseñarlos en el panel
             eventos = ModelUser.eventos(db)
             return render_template('editar_eventos.html', eventos=eventos, categorias=categorias)
-    return redirect(url_for('general.inicio'))
+        return redirect(url_for('general.inicio'))
 
 # Funcion para editar el evento por id y enseñar todos los eventos(admin)
 @eventos_bp.route('/editar/Evento/<int:id>', methods=['GET', 'POST'])
@@ -122,13 +129,11 @@ def editar_evento(id):
                 5: 'Otros'
             }
             
-            fecha = evento[2]
-
-
+            # cargamos los datos del formulario para editarlos
             evento = crearEventoForm(data={
                 'titulo': evento[0],
                 'descripcion': evento[1],
-                'fecha': fecha,
+                'fecha': evento[2],
                 'lugar': evento[3],
                 'precio': evento[4],
                 'categoria': evento[5],  
@@ -137,11 +142,11 @@ def editar_evento(id):
                 'hora_fin': evento[8],
             })
 
-
             return render_template('panel_editar.html', form=evento, categorias=categorias, fotos=fotos)
     
     if request.method == 'POST':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            # recoger los valores del input
             titulo = request.form['titulo']
             descripcion = request.form['descripcion']
             fecha = request.form['fecha']
@@ -154,7 +159,8 @@ def editar_evento(id):
             hora_fin = request.form['hora_fin']
             
             urls_imagenes = []
-            
+
+            # hacemos un bucle para poder subirlas cloudinary
             for imagen in imagenes:
                 if imagen.filename != '':
                     try:
@@ -166,8 +172,9 @@ def editar_evento(id):
                         )
                         urls_imagenes.append(resultado['secure_url'])
                     except Exception as e:
-                        print(f"Error al subir imagen: {e}")
+                        print("Error al subir imagen: {e}")
 
+            # funcion para crear el evento y devolver el id
             evento_id = ModelUser.editar_evento( db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin)
             
             # Guardar cada imagen en la tabla imagenes_evento
@@ -193,6 +200,7 @@ def comprar_entrada(evento_id,cantidad):
     if not current_user.is_authenticated:
         return redirect(url_for('iniciar_sesion'))
 
+    # cantidad de entradas que quiera una persona y se le manda al correo
     for _ in range(cantidad):
         exito = generar_y_enviar_entrada_qr(
             usuario_email=current_user.correo,

@@ -12,7 +12,7 @@
         <a href="/" class="absolute top-6 left-6 bg-white text-black font-bold px-4 py-1 rounded shadow">Inicio</a>
         
         <h1 class="text-4xl font-bold text-center mb-8">Registrarse</h1>
-        
+        <!-- Alertas de error -->
         <form action="/registrarse" method="POST" class="space-y-6">
             {{ register.hidden_tag() }}
             {% with messages = get_flashed_messages() %}
@@ -24,6 +24,7 @@
                     </div>
                 {% endif %}
             {% endwith %}
+
             <!-- Nombre -->
             <div>
                 {{ register.nombre.label(class="block text-lg font-bold mb-1") }}

@@ -1,7 +1,7 @@
-from re import S
 from flask_wtf import FlaskForm
 from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,FloatField,IntegerField,SelectField,DateTimeField,MultipleFileField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange
+
 # forms para el login 
 class loginform(FlaskForm):
     correo = EmailField("Escribe tu correo", validators=[
@@ -83,6 +83,7 @@ class contactoform(FlaskForm):
     ])
     enviar = SubmitField("Enviar")
 
+# forms para crear eventos y editarlos
 class crearEventoForm(FlaskForm):
     titulo = StringField('Título', validators=[
         DataRequired(), Length(max=200)

@@ -9,6 +9,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 
+# funcion para mandar el correo de bienvenida al registrarse
 def enviar_correo_bienvenida(Message,mail,destinatario, cuerpo):
     asunto = "¡Bienvenido a Eventis!"
     
@@ -100,8 +101,6 @@ def generar_y_enviar_entrada_qr(usuario_email, usuario_id, evento_id, precio, es
         qr_buffer.seek(0)
         qr_image = ImageReader(qr_buffer)
         c.drawImage(qr_image, 2 * cm, 15 * cm, width=8 * cm, height=8 * cm)
-
-
         c.showPage()
         c.save()
         pdf_io.seek(0)

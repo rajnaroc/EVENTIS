@@ -6,7 +6,6 @@
 <div class="max-w-4xl min-h-screen mx-auto px-4 py-6">
     {% for entrada in compra %}
     <div class="border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200 mb-4">
-        <!-- Encabezado compacto -->
         <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
             <h3 class="text-lg font-semibold text-gray-800 truncate">#{{ entrada[0] }} {{ entrada[6] }}</h3>
             <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -14,7 +13,6 @@
             </span>
         </div>
         
-        <!-- Contenido compacto -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
             <!-- Información del evento -->
             <div class="space-y-3">

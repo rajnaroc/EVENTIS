@@ -1,3 +1,4 @@
+# config.py
 import os
 class Config:
     SECRET_KEY=os.getenv("SECRET_KEY","b47c300f604a119bbafd524c8a5e8e47")

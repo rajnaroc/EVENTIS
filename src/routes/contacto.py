@@ -16,9 +16,13 @@ def contacto():
             return redirect(url_for('auth.iniciar_sesion'))
         
     if request.method == 'POST':
+        # recoger los valores del input
         nombre = request.form['nombre']
         correo = request.form['correo']
         mensaje = request.form['mensaje']
+        # funcion para mandar el mensaje a la pagina
         if ModelUser.contacto(db,current_user.id, nombre, correo, mensaje):
             flash("Mensaje enviado correctamente.")
-            return redirect(url_for('contacto'))
+            return redirect(url_for('contacto.contacto'))
+        else:
+            return redirect(url_for('contacto.contacto')) 

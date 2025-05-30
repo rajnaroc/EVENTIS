@@ -8,7 +8,7 @@
             {{ form.hidden_tag() }}
 
             <h2 class="text-3xl text-white font-bold text-center mb-8">Editar Evento</h2>
-
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Columna Izquierda -->
                 <div class="space-y-6">
@@ -24,16 +24,19 @@
                         {{ form.descripcion(class="w-full p-3 border border-gray-600 rounded-lg placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32 resize-none", placeholder="Describa el evento en detalle...") }}
                     </div>
                     
-                    <!-- Fecha y Hora -->
+                    <!-- Fecha y Horas -->
                     <div class="grid grid-cols-2 gap-4">
+                        <!-- fecha -->
                         <div>
                             {{ form.fecha.label(class="block text-white text-lg font-medium mb-2") }}
                             {{ form.fecha(class="w-full p-3 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent") }}
                         </div>
+                        <!-- hora inicio del evento -->
                         <div>
                             {{ form.hora_inicio.label(class="block text-white text-lg font-medium mb-2") }}
                             {{ form.hora_inicio(class="w-full p-3 border border-gray-600 rounded-lg  focus:ring-2 focus:ring-blue-500 focus:border-transparent",placeholder="Ej:00:00") }}
                         </div>
+                        <!-- hora finalizacion -->
                         <div>
                             {{ form.hora_fin.label(class="block text-white text-lg font-medium mb-2") }}
                             {{ form.hora_fin(class="w-full p-3 border border-gray-600 rounded-lg  focus:ring-2 focus:ring-blue-500 focus:border-transparent",placeholder="Ej:00:00") }}
@@ -93,9 +96,7 @@
                             <div id="existing-images" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 {% for foto in fotos %}
                                 <div class="relative group">
-                                    <img src="{{foto[0]}}" 
-                                         class="h-32 w-full object-cover rounded-lg border border-gray-600" 
-                                         alt="Imagen del evento">
+                                    <img src="{{foto[0]}}" class="h-32 w-full object-cover rounded-lg border border-gray-600" alt="Imagen del evento">
                                     <button type="button" 
                                             class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                                             onclick="confirmarEliminacion('{{ foto }}')">
@@ -130,6 +131,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+
     const fileInput = document.getElementById('file-input');
     const imagePreview = document.getElementById('image-preview');
     const imageCounter = document.getElementById('image-counter');

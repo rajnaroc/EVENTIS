@@ -8,8 +8,12 @@ def iniciar_sesion():
     
     login = loginform()
     if request.method == 'POST':
+        
+        # recoger los valores del input
         correo = request.form['correo']
         contraseña = request.form['contraseña']
+
+        # funcion para iniciar sesion
         user = ModelUser.sesion(db, correo, contraseña)
         if user:
             login_user(user)
@@ -29,22 +33,32 @@ def register():
     register = registerForm()
     
     if request.method == 'POST':
+
+        # recoger los valores del input
         nombre = request.form['nombre']
         correo = request.form['correo']
         contraseña = request.form['contraseña']
         fecha_nacimiento = request.form['fecha_nacimiento']
+
         # Verificar si el correo ya está registrado
         if ModelUser.exists(db, correo):
             flash("El correo ya está registrado. Por favor, inicia sesión o utiliza otro correo.")
-            return render_template('register.html', register=register)
+            return redirect(url_for('register.html'))
+        
+        # funcion para registar al usuario 
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
             flash("Registrado correctamente")
-            enviar_correo_bienvenida(Message, mail, correo, plantilla_bienvenida(nombre))
+            
             # Enviar correo de bienvenida
+            enviar_correo_bienvenida(Message, mail, correo, plantilla_bienvenida(nombre))
+            
+            # iniciar sesion automaticamente al registrarse
             login_user(ModelUser.sesion(db, correo, contraseña))
-            return render_template('inicio.html')
+            
+            return redirect(url_for('general.inicio.html'))
         else:
-            return render_template('register.html', register=register)
+            return redirect(url_for('register.html'))
+    
     if request.method == 'GET':
         if current_user.is_authenticated:
             return redirect(url_for('inicio'))

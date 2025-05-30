@@ -4,7 +4,7 @@
 {% block body %}
 <div class="bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-        <!-- Encabezado con filtros -->
+        <!-- principio de eventos -->
         <div class="text-center mb-12">
             <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">Eventos Disponibles</h1>
             <p class="max-w-2xl mx-auto text-xl text-gray-600">Descubre las mejores experiencias en tu ciudad</p>
@@ -27,13 +27,8 @@
                 <a href="/evento/{{evento[0]}}">
                     <div class="h-48 relative flex items-center justify-center overflow-hidden">
                         <!-- Imagen que cubre todo el contenedor -->
-                        
-                        <img 
-                            src="{{ evento[10] }}" 
-                            alt="Imagen del evento" 
-                            class="absolute inset-0 w-full h-full object-cover"
-                        >
-                        <!-- Texto superpuesto con fondo semitransparente para mejor legibilidad -->
+                        <img src="{{ evento[10] }}" alt="Imagen del evento" class="absolute inset-0 w-full h-full object-cover">
+                        <!-- Texto superpuesto con fondo semitransparente -->
                         <span class="text-white text-2xl font-bold relative z-10 px-4 py-2 bg-black bg-opacity-50 rounded-lg">
                             {{ evento[1] }}
                         </span>
