@@ -23,7 +23,7 @@
                         <td class="text-left px-4 py-2 border-b">{{ mensaje.2 }}</td>
                         <td class="text-left px-4 py-2 border-b">{{ mensaje.3 }}</td>
                         <td class="text-left px-4 py-2 border-b">{{ mensaje.4 }}</td>
-                        <td class="text-left px-4 py-2 border-b">{{ mensaje.5 }}</td>
+                        <td class="text-left px-4 py-2 border-b">{{ mensaje.5.date() | format_fecha }}, {{ mensaje.5.time() | format_hora }}</td>
                         <td class="text-center px-4 py-2 border-b">
                             <a href="/eliminar/{{ mensaje.0 }}" class="text-red-500 hover:text-red-700">Eliminar</a>
                         </td>

@@ -16,12 +16,12 @@
             <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
-                    <a href=" {{ url_for('general.inicio' ) }}"><img src="../static/logo/Eventis.png" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
+                    <a href=" {{ url_for('general.inicio' ) }}"><img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
                 </div>    
             
                 <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-                    <a href="{{ url_for('eventos.evento') }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
-                    <a href="{{ url_for('contacto.contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
+                    <a href="{{ url_for('eventos.evento') }}" class="inline-block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
+                    <a href="{{ url_for('contacto.contacto' ) }}" class="inline-block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
                     <div class="relative">
                         <!-- Botón Perfil -->
                         <a href="#" onclick="document.getElementById('perfilDropdown').classList.toggle('hidden');" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil<br>({{ current_user.saldo }} €)</a>
@@ -29,12 +29,12 @@
                         <div id="perfilDropdown" class="absolute left-0 mt-2 w-48 rounded-md bg-white border border-gray-200 shadow-lg hidden z-20">
                             <a href="{{ url_for('perfil.perfil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ver perfil</a>
                             <a href="{{ url_for('perfil.historial_compras' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historial de compras</a>
-                            <a href="{{ url_for('contacto.contacto' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mensajes</a>
+                            <a href="{{ url_for('contacto.contacto_admin' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mensajes</a>
                             <a href="{{ url_for('eventos.editar_eventos' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Editar eventos</a>
                             <a href="{{ url_for('eventos.crear_evento' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eventos</a>
                         </div>
                     </div>
-                    <a href="{{ url_for('auth.logout' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Cerrar sesion</a>
+                    <a href="{{ url_for('auth.logout' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out leading-tight">Cerrar sesion</a>
                 </div>
             </nav>
         </header> 
@@ -45,7 +45,7 @@
             <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center space-x-2">
-                    <a href=" {{ url_for('general.inicio' ) }}"><img src="../static/logo/Eventis.png" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
+                    <a href=" {{ url_for('general.inicio' ) }}"><img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
                 </div>    
             
                 <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
@@ -73,7 +73,7 @@
         <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
-                <a href=" {{ url_for('general.inicio') }}"><img src="../static/logo/Eventis.png" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
+                <a href=" {{ url_for('general.inicio') }}"><img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
             </div>    
         
         <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">

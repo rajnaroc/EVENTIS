@@ -1,4 +1,5 @@
 from re import U
+from types import MethodDescriptorType
 from extension.extesion import *
 
 
@@ -262,3 +263,59 @@ def descargar_entrada(entrada_id):
     pdf_io.seek(0)
 
     return send_file(pdf_io, download_name=f'entrada_{entrada_id}.pdf', as_attachment=True)
+
+@eventos_bp.route('/buscar', methods=["GET"])
+def buscar_eventos():
+
+    categoria = request.args.get('categoria')
+    fecha_desde = request.args.get('fecha_desde')
+    fecha_hasta = request.args.get('fecha_hasta')
+    precio = request.args.get('precio')
+
+    query = """
+        SELECT e.*, 
+            (
+                SELECT ruta 
+                FROM fotos_evento f 
+                WHERE f.id_evento = e.id 
+                ORDER BY f.id ASC 
+                LIMIT 1
+            ) AS imagen
+        FROM eventos e
+        WHERE 1 = 1
+    """
+    params = []
+
+    if categoria:
+        query += " AND e.categoria = %s"
+        params.append(categoria)
+
+    if fecha_desde:
+        query += " AND e.fecha >= %s"
+        params.append(fecha_desde)
+
+    if fecha_hasta:
+        query += " AND e.fecha <= %s"
+        params.append(fecha_hasta)
+
+    if precio == "gratis":
+        query += " AND e.precio = 0"
+    elif precio == "pago":
+        query += " AND e.precio > 0"
+
+    cur = db.connection.cursor()
+    cur.execute(query, params)
+    eventos = cur.fetchall()
+    cur.close()
+
+    categorias = {
+        1: 'Concierto',
+        2: 'Teatro',
+        3: 'Deporte',
+        4: 'Cine',
+        5: 'Otros'
+    }
+    print(eventos)
+
+    return render_template("eventos.html", eventos=eventos, categorias=categorias)
+

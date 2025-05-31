@@ -26,3 +26,23 @@ def contacto():
             return redirect(url_for('contacto.contacto'))
         else:
             return redirect(url_for('contacto.contacto')) 
+        
+@contacto_bp.route('/contacto/admin', methods=['GET', 'POST'])
+def contacto_admin():
+
+    if request.method == 'GET':
+        mensajes = ModelUser.mensajes(db)
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            return render_template('admin_mensajes.html', mensajes=mensajes )
+        else:
+            return redirect(url_for('auth.iniciar_sesion'))
+        
+
+@contacto_bp.route('/eliminar/<int:id>', methods=['GET'])
+def eliminar_mensaje(id):
+    if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+        ModelUser.delete_mensaje(db, id)
+        flash('Mensaje eliminado correctamente.', 'success')
+        return redirect(url_for('contacto.contacto_admin'))
+    
+    return redirect(url_for('auth.iniciar_sesion'))

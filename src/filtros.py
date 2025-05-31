@@ -1,9 +1,20 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 
 # filtro para poner el tiempo bien
+
 def format_hora(td):
-    total_seconds = int(td.total_seconds())
+    if hasattr(td, 'total_seconds'):
+        total_seconds = int(td.total_seconds())
+    else:
+        # Si es string tipo "HH:MM:SS", parsear a timedelta
+        try:
+            h, m, s = map(int, td.split(':'))
+            td = timedelta(hours=h, minutes=m, seconds=s)
+            total_seconds = int(td.total_seconds())
+        except Exception:
+            return td  # Devuelve el string tal cual si no puede parsear
+
     hours = total_seconds // 3600
     minutes = (total_seconds % 3600) // 60
     return f"{hours:02d}:{minutes:02d}"

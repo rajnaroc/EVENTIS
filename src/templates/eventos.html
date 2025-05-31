@@ -9,7 +9,7 @@
             <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">Eventos Disponibles</h1>
             <p class="max-w-2xl mx-auto text-xl text-gray-600">Descubre las mejores experiencias en tu ciudad</p>
             
-            <!-- Barra de búsqueda y filtros (puedes implementar la funcionalidad después) -->
+            <!-- Barra de búsqueda y filtros -->
             <div class="mt-8 max-w-md mx-auto flex">
                 <input type="text" placeholder="Buscar eventos..." class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button class="bg-blue-600 text-white px-6 py-2 rounded-r-lg hover:bg-blue-700 transition duration-200">
@@ -19,9 +19,38 @@
                 </button>
             </div>
         </div>
+        <form method="GET" id="filtrosForm" action="{{ url_for('eventos.buscar_eventos') }}" class="flex flex-wrap gap-4 justify-center mb-10">
+            <!-- Categorías -->
+            <select name="categoria" class="p-2 rounded border border-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="">Todas las categorías</option>
+                {% for key, nombre in categorias.items() %}
+                    <option value="{{ key }}" {% if request.args.get('categoria') == key|string %}selected{% endif %}>{{ nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Fecha desde -->
+            <input type="date" name="fecha_desde" class="p-2 border border-gray-300 rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ request.args.get('fecha_desde') }}">
+
+            <!-- Fecha hasta -->
+            <input type="date" name="fecha_hasta" class="p-2 border border-gray-300 rounded text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ request.args.get('fecha_hasta') }}">
+
+            <!-- Precio -->
+            <select name="precio" class="p-2 rounded border border-gray-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="" {% if not request.args.get('precio') %}selected{% endif %}>Todos</option>
+                <option value="gratis" {% if request.args.get('precio') == 'gratis' %}selected{% endif %}>Gratuitos</option>
+                <option value="pago" {% if request.args.get('precio') == 'pago' %}selected{% endif %}>De pago</option>
+            </select>
+
+            <!-- Botón buscar -->
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition duration-200 transform hover:-translate-y-0.5">Buscar</button>
+            <!-- Botón Limpiar -->
+            <a href="{{ url_for('eventos.buscar_eventos') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition duration-200 ml-2 inline-block">Limpiar filtros</a>
+        </form>
+
 
         <!-- Grid de eventos -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if eventos %}
             {% for evento in eventos %}
             <div class="bg-gray-200 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <a href="/evento/{{evento[0]}}">
@@ -37,7 +66,7 @@
                 <div class="p-6">
                     <!-- Categoría -->
                     <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full mb-2">
-                        {{ categorias.get(evento[7]|int, 'General') }}
+                            {{ categorias.get(evento[8]|int, 'General') }}
                     </span>
                     
                     <!-- Título y fecha -->
@@ -86,7 +115,28 @@
             </div>
             </a>
             {% endfor %}
+            {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[60vh] w-full max-w-4xl mx-auto">
+            <div class="col-span-full flex items-center justify-center">
+                <p class="text-black text-3xl font-semibold">No hay eventos disponibles.</p>
+            </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
 {% endblock %}
+
+
+<script>
+    document.getElementById('filtrosForm').addEventListener('submit', function(event) {
+    // Antes de enviar el formulario, eliminamos inputs vacíos para que no se envíen en la URL
+    
+    const inputs = this.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        if (input.value === '') {
+            input.disabled = true;  // Deshabilitamos para que no se incluya en el GET
+        }
+    });
+});
+</script>
