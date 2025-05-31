@@ -19,3 +19,5 @@ Nuestro objetivo es proporcionar una solución accesible y fácil de usar donde 
 - **Frontend:** HTML, Tailwind,JavaScript
 - **Imaganes:** Cloudinary
 
+## Enlaces
+- **Figma**: https://www.figma.com/design/C3xmGs5Jz2mSsOmeMLwav9/Eventis?t=KNpyzPEgQsLfAKyr-1
