@@ -96,12 +96,11 @@
                             <div id="existing-images" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                                 {% for foto in fotos %}
                                 <div class="relative group">
-                                    <img src="{{foto[0]}}" class="h-32 w-full object-cover rounded-lg border border-gray-600" alt="Imagen del evento">
-                                    <button type="button" 
-                                            class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                                            onclick="confirmarEliminacion('{{ foto }}')">
+                                    <img src="{{foto[1]}}" class="h-32 w-full object-cover rounded-lg border border-gray-600" alt="Imagen del evento">
+                                    <a href="{{ url_for('eventos.eliminar_foto_evento', id=foto[0], public_id=foto[2]|urlencode) }}" class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                            >
                                         &times;
-                                    </button>
+                                    </a>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -260,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
 </script>
 
 <style>

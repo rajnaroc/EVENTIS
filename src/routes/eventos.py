@@ -1,5 +1,3 @@
-from re import U
-from types import MethodDescriptorType
 from extension.extesion import *
 
 
@@ -44,7 +42,7 @@ def crear_evento():
                             folder="eventos/",
                             resource_type="image"
                         )
-                        urls_imagenes.append(resultado['secure_url'])
+                        urls_imagenes.append({'url': resultado['secure_url'],'public_id': resultado['public_id']})
                     except Exception as e:
                         print("Error al subir imagen: {e}")
 
@@ -54,10 +52,11 @@ def crear_evento():
             # Guardar cada imagen en la tabla imagenes_evento
             cursor = db.connection.cursor()
             for url in urls_imagenes:
-                cursor.execute("INSERT INTO fotos_evento (id_evento, ruta) VALUES (%s, %s)", (evento_id, url))
+                cursor.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
             db.connection.commit()
             cursor.close()
 
+            return redirect(url_for('eventos.crear_evento'))
 # Funcion para enseñar los eventos del usuario(usuario)
 @eventos_bp.route('/evento/<int:id>', methods=['GET'])
 def evento_detalle(id):
@@ -115,7 +114,7 @@ def editar_eventos():
         return redirect(url_for('general.inicio'))
 
 # Funcion para editar el evento por id y enseñar todos los eventos(admin)
-@eventos_bp.route('/editar/Evento/<int:id>', methods=['GET', 'POST'])
+@eventos_bp.route('/editar/evento/<int:id>', methods=['GET', 'POST'])
 def editar_evento(id):
 
     if request.method == 'GET':
@@ -171,24 +170,32 @@ def editar_evento(id):
                             folder="eventos/",
                             resource_type="image"
                         )
-                        urls_imagenes.append(resultado['secure_url'])
+                        urls_imagenes.append({'url': resultado['secure_url'],'public_id': resultado['public_id']})
                     except Exception as e:
                         print("Error al subir imagen: {e}")
 
             # funcion para crear el evento y devolver el id
-            evento_id = ModelUser.editar_evento( db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin)
+            ModelUser.editar_evento( db, id, titulo, descripcion, fecha, lugar, precio, categoria, aforo,hora_inicio,hora_fin)
             
+            cur = db.connection.cursor()
+            cur.execute("SELECT id FROM eventos")
+            evento_id = cur.fetchone()
+            db.connection.commit()
+            cur.close()
+
             # Guardar cada imagen en la tabla imagenes_evento
+            cur = db.connection.cursor()
             for url in urls_imagenes:
-                ModelUser.editar_fotos_evento(db, evento_id, url)
-            flash("Evento editado correctamente.")
+                cur.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
+            db.connection.commit()
+            cur.close()
 
             return redirect(url_for('eventos.editar_eventos'))
         else:
             return redirect(url_for('general.inicio'))
 
 # Funcion para borrarlo(admin)
-@eventos_bp.route('/eliminarEvento/<int:id>', methods=['POST'])
+@eventos_bp.route('/eliminarEvento/<int:id>', methods=["GET"])
 def eliminar_evento(id):
     if current_user.is_authenticated and current_user.correo ==  "aaroncm611@gmail.com":
         ModelUser.delete_evento(db, id)
@@ -319,3 +326,23 @@ def buscar_eventos():
 
     return render_template("eventos.html", eventos=eventos, categorias=categorias)
 
+@eventos_bp.route('/eliminar_foto_evento/<int:id>/<path:public_id>//eliminar_foto_evento', methods=['GET'])
+def eliminar_foto_evento(id,public_id):
+    if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+
+        public_id = unquote(public_id)
+
+        try:
+            cur = db.connection.cursor()
+            cur.execute("DELETE FROM fotos_evento WHERE id = %s", (id,))
+            db.connection.commit()
+            cur.close()
+
+            cloudinary.uploader.destroy(public_id)
+
+            flash("Foto borrar con exito")
+
+            return redirect(url_for('eventos.editar_eventos'))
+        except Exception as e:
+            print(e)
+            return print('error Error al eliminar la foto')

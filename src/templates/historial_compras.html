@@ -4,6 +4,7 @@
 
 {% block body %}
 <div class="max-w-4xl min-h-screen mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold mb-8 text-center">Historial disponibles</h1>
     {% for entrada in compra %}
     <div class="border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200 mb-4">
         <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
@@ -70,6 +71,8 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <p class="text-gray-500 col-span-full text-center">No se encontraron entradas.</p>
     {% endfor %}
 </div>
 {% endblock %}

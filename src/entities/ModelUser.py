@@ -296,11 +296,11 @@ class ModelUser:
     def obtener_fotos_evento(cls, db, id):
         try:
             cur = db.connection.cursor()
-            cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (id,))
+            cur.execute("SELECT id,ruta,public_id FROM fotos_evento WHERE id_evento = %s", (id,))
             fotos = cur.fetchall()
 
             cur.close()
-            return [foto[0] for foto in fotos]
+            return fotos
             
         except Exception as e:
             print(e)
@@ -334,28 +334,6 @@ class ModelUser:
             db.connection.commit()
             cur.close()
             flash("Evento editado correctamente.")
-            return True
-        except Exception as e:
-            print(e)
-            return False
-    # funcion para editar fotos de un evento
-    @classmethod
-    def editar_fotos_evento(cls, db, evento_id, fotos):
-        try:
-            cur = db.connection.cursor()
-            # Eliminar fotos existentes
-            cur.execute("DELETE FROM fotos_evento WHERE id_evento = %s", (evento_id,))
-            
-            # Insertar nuevas fotos
-            for foto in fotos:
-                cur.execute(
-                    "INSERT INTO fotos_evento (id_evento, ruta) VALUES (%s, %s)",
-                    (evento_id, foto)
-                )
-            
-            db.connection.commit()
-            cur.close()
-            flash("Fotos del evento actualizadas correctamente.")
             return True
         except Exception as e:
             print(e)

@@ -16,6 +16,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 import qrcode
+from urllib.parse import unquote
 
 db = MySQL()
 mail = Mail()
