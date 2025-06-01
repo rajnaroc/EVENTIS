@@ -22,3 +22,10 @@ Nuestro objetivo es proporcionar una solución accesible y fácil de usar donde 
 ## Enlaces
 - **Figma**: https://www.figma.com/design/C3xmGs5Jz2mSsOmeMLwav9/Eventis?t=KNpyzPEgQsLfAKyr-1
 - **Render**: https://eventis-5q3s.onrender.com
+
+## 1. Clona el repositorio
+```bash
+git clone https://github.com/tu-usuario/eventis.git
+cd eventis
+python -m venv venv
+pip install -r requirements.txt
