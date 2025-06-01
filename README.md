@@ -25,7 +25,7 @@ Nuestro objetivo es proporcionar una solución accesible y fácil de usar donde 
 
 ## 1. Clona el repositorio
 ```bash
-git clone https://github.com/tu-usuario/eventis.git
+git clone https://github.com/rajnaroc/EVENTIS.git
 cd eventis
 python -m venv venv
 pip install -r requirements.txt
