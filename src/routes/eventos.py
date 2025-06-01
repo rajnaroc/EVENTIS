@@ -327,7 +327,7 @@ def buscar_eventos():
 
     return render_template("eventos.html", eventos=eventos, categorias=categorias)
 
-@eventos_bp.route('/eliminar_foto_evento/<int:id>/<path:public_id>//eliminar_foto_evento', methods=['GET'])
+@eventos_bp.route('/eliminar_foto_evento/<int:id>/<path:public_id>/eliminar_foto_evento', methods=['GET'])
 def eliminar_foto_evento(id,public_id):
     if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
 

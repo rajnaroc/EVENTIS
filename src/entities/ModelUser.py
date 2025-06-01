@@ -364,7 +364,8 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
-        
+
+    @classmethod
     def restar_entradas(db, evento_id, cantidad):
         try:
             cur = db.connection.cursor()
@@ -378,3 +379,4 @@ class ModelUser:
             print("Error al restar entradas:", e)
             return False
 
+    
