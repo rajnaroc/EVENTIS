@@ -46,7 +46,7 @@
                     <a href="{{ url_for('contacto.contacto' ) }}" class="inline-block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
                     <div class="relative">
                         <!-- Botón Perfil -->
-                        <a onclick="document.getElementById('perfilDropdown').classList.toggle('hidden');" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil<br>({{ current_user.saldo }} €)</a>
+                        <a onclick="document.getElementById('perfilDropdown').classList.toggle('hidden');" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil({{ current_user.saldo }} €)</a>
                         <!-- Menú desplegable justo debajo -->
                         <div id="perfilDropdown" class="absolute left-0 mt-2 w-48 rounded-md bg-white border border-gray-200 shadow-lg hidden z-20">
                             <a href="{{ url_for('perfil.perfil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ver perfil</a>
