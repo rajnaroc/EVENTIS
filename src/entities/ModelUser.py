@@ -35,7 +35,6 @@ class ModelUser:
             cursor = db.connection.cursor()
             cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
             
-            print(cursor.fetchone())
 
             if cursor.fetchone():
                 flash("El correo ya está registrado.")
