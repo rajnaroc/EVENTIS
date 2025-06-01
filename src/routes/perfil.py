@@ -43,4 +43,43 @@ def historial_compras():
         compra = ModelUser.historial_compras(db, current_user.id)
         return render_template('historial_compras.html', compra=compra)
     else:
-        return redirect(url_for('iniciar_sesion'))
+        return redirect(url_for('auth.iniciar_sesion'))
+    
+@perfil_bp.route('/historial')
+def tu_ruta_historial():
+
+    cur = db.connection.cursor()
+    
+    evento = request.args.get('evento', '').strip()
+    fecha = request.args.get('fecha', '').strip()
+    lugar = request.args.get('lugar', '').strip()
+
+    # Construye la consulta según filtros (ajusta según tu acceso a BD)
+    query = "SELECT * FROM entradas WHERE usuario_id = %s"
+    params = [current_user.id]
+
+    if evento:
+        query += " AND nombre_evento LIKE %s"
+        params.append(f"%{evento}%")
+    if fecha:
+        query += " AND fecha_evento = %s"
+        params.append(fecha)
+    if lugar:
+        query += " AND lugar_evento LIKE %s"
+        params.append(f"%{lugar}%")
+
+    # Ejecutar consulta con params y devolver resultados
+    compra = cur.excute(query, params)
+    db.connection.commit()
+    cur.close()
+    return render_template('historial.html', compra=compra)
+
+@perfil_bp.route('/eliminar_entrada/<int:entrada_id>', methods=['POST'])
+def eliminar_entrada(entrada_id):
+    cur = db.connection.cursor()
+    cur.execute("DELETE FROM entradas WHERE id = %s AND usuario_id = %s", (entrada_id, current_user.id))
+    db.connection.commit()
+    cur.close()
+    flash('Entrada eliminada correctamente', 'success')
+
+    return redirect(url_for('perfil.tu_ruta_historial'))

@@ -5,10 +5,44 @@
 {% block body %}
 <div class="max-w-4xl min-h-screen mx-auto px-4 py-6">
     <h1 class="text-3xl font-bold mb-8 text-center">Historial disponibles</h1>
+
+    <!-- FORMULARIO DE FILTROS -->
+        <form method="GET" action="{{ url_for('perfil.tu_ruta_historial') }}" class="mb-6 flex flex-wrap gap-4 items-end justify-center">
+            <div>
+                <label for="evento" class="block text-sm font-medium text-gray-700">Evento</label>
+                <input type="text" name="evento" id="evento" value="{{ request.args.get('evento', '') }}" class="border border-gray-300 rounded px-2 py-1">
+            </div>
+            <div>
+                <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
+                <input type="date" name="fecha" id="fecha" value="{{ request.args.get('fecha', '') }}" class="border border-gray-300 rounded px-2 py-1">
+            </div>
+            <div>
+                <label for="lugar" class="block text-sm font-medium text-gray-700">Lugar</label>
+                <input type="text" name="lugar" id="lugar" value="{{ request.args.get('lugar', '') }}" class="border border-gray-300 rounded px-2 py-1">
+            </div>
+            <div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Filtrar</button>
+            </div>
+            <a href="{{ url_for('perfil.tu_ruta_historial') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition duration-200 ml-2 inline-block">Limpiar filtros</a>
+        </form>
+
+    <!-- LISTADO DE ENTRADAS -->
     {% for entrada in compra %}
     <div class="border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200 mb-4">
         <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
+            <!-- Título de la entrada -->
             <h3 class="text-lg font-semibold text-gray-800 truncate">#{{ entrada[0] }} {{ entrada[6] }}</h3>
+            
+            <!-- Botón eliminar -->
+            <form method="POST" action="{{ url_for('perfil.eliminar_entrada', entrada_id=entrada[0]) }}" onsubmit="return confirm('¿Seguro que quieres eliminar esta entrada?');">
+                <button type="submit" class="text-red-600 hover:text-red-800" title="Eliminar entrada">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0a1 1 0 00-1 1v1h6V4a1 1 0 00-1-1m-4 0h4" />
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Estado -->
             <span class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                 {{ entrada[5] }}
             </span>
