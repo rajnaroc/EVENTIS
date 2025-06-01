@@ -60,8 +60,7 @@ def register():
             flash("Bienvenido {} usuario".format(nombre),"success")
             return redirect(url_for('general.inicio'))
         else:
-            flash
-            return redirect(url_for('register.html'))
+            return redirect(url_for('auth.register.html'))
     
     if request.method == 'GET':
         if current_user.is_authenticated:
