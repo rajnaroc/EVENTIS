@@ -10,7 +10,7 @@ Nuestro objetivo es proporcionar una solución accesible y fácil de usar donde 
 
 - **Eventos para todos los gustos:** Desde conciertos, exposiciones, festivales, hasta talleres y conferencias.
 - **Diversidad de precios:** Ofrecemos eventos de **todo tipo de precios**, desde actividades gratuitas hasta eventos exclusivos.
-- **Accesibilidad:** La plataforma está diseñada para ser intuitiva y accesible, para que cualquier persona, sin importar su experiencia técnica, pueda aprovecharla al máximo.
+- **Accesibilidad:** La plataforma está diseñada para ser sencilla y accesible, para que cualquier persona, sin importar su experiencia técnica, pueda aprovecharla al máximo.
 
 ## Tecnologías utilizadas
 
