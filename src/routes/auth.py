@@ -8,6 +8,7 @@ auth_bp = Blueprint('auth', __name__)
 def iniciar_sesion():
     
     login = loginform()
+    
     if request.method == 'POST':
         
         # recoger los valores del input
@@ -64,13 +65,16 @@ def register():
     
     if request.method == 'GET':
         if current_user.is_authenticated:
-            return redirect(url_for('inicio'))
+            return redirect(url_for('general.inicio'))
         else:
             return render_template('register.html', register=register)
 
 # funcion para cerrar la sesion(usuario)
 @auth_bp.route('/logout')
 def logout():
-    logout_user()
-    flash("Cerrada la sesion","info")
-    return redirect(url_for('general.inicio'))
+    if current_user.is_authenticated:
+        logout_user()
+        flash("Cerrada la sesion","info")
+        return redirect(url_for('general.inicio'))
+    else:
+        return redirect(url_for('general.inicio'))

@@ -5,12 +5,14 @@ general_bp = Blueprint('general', __name__)
 # Funcion para enseñar el inicio(usuario)
 @general_bp.route('/', methods=['GET'])
 def inicio():
-    cur = db.connection.cursor()
-    cur.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
-    imagenes = [fila[0] for fila in cur.fetchall()]
+    if request.method == "GET":
+        cur = db.connection.cursor()
+        cur.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
+        imagenes = [fila[0] for fila in cur.fetchall()]
 
-    cur.close()
-    return render_template('inicio.html',imagenes=imagenes)
+        cur.close()
+        return render_template('inicio.html',imagenes=imagenes)
+    
 
 # Ruta para mostrar la Política de Privacidad(usuario)
 @general_bp.route('/politicas')

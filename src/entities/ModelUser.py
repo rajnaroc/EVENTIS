@@ -32,27 +32,21 @@ class ModelUser:
     def register(cls, db, nombre, correo, contraseña, fecha_nacimiento):
         try:
             # Verificar si el correo ya existe
-            cursor = db.connection.cursor()
-            cursor.execute("SELECT * FROM usuarios WHERE correo = %s", (correo,))
-            
-
-            if cursor.fetchone():
-                flash("El correo ya está registrado.")
-                return False
+            cur = db.connection.cursor()
 
             # Hashear la contraseña
             hashed_password = User.hash_password(contraseña)
             
             print(hashed_password)
             # Insertar el nuevo usuario
-            cursor.execute(
+            cur.execute(
                 "INSERT INTO usuarios (id, nombre, correo, contraseña, fecha_nacimiento, saldo, fecha_registro) "
                 "VALUES (NULL, %s, %s, %s, %s, 0, NOW())",
                 (nombre, correo, hashed_password, fecha_nacimiento)
             )
             
             db.connection.commit()
-            cursor.close()
+            cur.close()
 
             return True
         except Exception as e:
