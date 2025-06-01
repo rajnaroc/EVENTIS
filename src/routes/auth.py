@@ -19,7 +19,7 @@ def iniciar_sesion():
         if user:
             login_user(user)
             session.permanent = True
-            return render_template('inicio.html')
+            return redirect(url_for('general.inicio'))
         else:
             return render_template('iniciar_sesion.html', login=login, error="Usuario o contraseña incorrectos")
     
