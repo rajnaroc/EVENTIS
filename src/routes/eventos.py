@@ -56,6 +56,7 @@ def crear_evento():
             db.connection.commit()
             cursor.close()
 
+            flash("Evento creado correctamente.","success") 
             return redirect(url_for('eventos.crear_evento'))
 # Funcion para enseñar los eventos del usuario(usuario)
 @eventos_bp.route('/evento/<int:id>', methods=['GET'])
@@ -189,7 +190,7 @@ def editar_evento(id):
                 cur.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
             db.connection.commit()
             cur.close()
-
+            flash("Evento editado correctamente.","success")
             return redirect(url_for('eventos.editar_eventos'))
         else:
             return redirect(url_for('general.inicio'))
@@ -220,9 +221,9 @@ def comprar_entrada(evento_id,cantidad):
             mail=mail,
             Message=Message
         )
-
+    ModelUser.restar_entradas(db, evento_id, cantidad)
+    
     if exito:
-        print("Entrada generada y enviada por correo", "success")
         flash("Entrada generada y enviada por correo", "success")
     else:
         flash("Error al generar la entrada", "danger")
@@ -340,7 +341,7 @@ def eliminar_foto_evento(id,public_id):
 
             cloudinary.uploader.destroy(public_id)
 
-            flash("Foto borrar con exito")
+            flash("Foto borrar con exito","success")
 
             return redirect(url_for('eventos.editar_eventos'))
         except Exception as e:

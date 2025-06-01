@@ -22,7 +22,7 @@ def contacto():
         mensaje = request.form['mensaje']
         # funcion para mandar el mensaje a la pagina
         if ModelUser.contacto(db,current_user.id, nombre, correo, mensaje):
-            flash("Mensaje enviado correctamente.")
+            flash("Mensaje enviado correctamente.","success")
             return redirect(url_for('contacto.contacto'))
         else:
             return redirect(url_for('contacto.contacto')) 

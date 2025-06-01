@@ -55,3 +55,10 @@ CREATE TABLE fotos_evento (
     ruta VARCHAR(255),
     FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
 );
+
+# para que se borre los eventos cuando se pasen
+CREATE EVENT IF NOT EXISTS borrar_eventos_pasados
+ON SCHEDULE EVERY 1 DAY
+DO
+  DELETE FROM eventos
+  WHERE fecha < CURDATE();

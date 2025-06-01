@@ -4,6 +4,7 @@ from routes.perfil import perfil_bp
 from routes.eventos import eventos_bp
 from routes.contacto import contacto_bp
 from routes.general import general_bp
+from routes.password import pass_bp
 
 def register_blue(app):
     # blueprints de todas las funciones
@@ -17,3 +18,5 @@ def register_blue(app):
     app.register_blueprint(contacto_bp)
     # Inicio,Política de Privacidad,Aviso Legal,Terminos y Condiciones
     app.register_blueprint(general_bp)
+    # funciones para la recuperacion de contraseña
+    app.register_blueprint(pass_bp)

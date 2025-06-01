@@ -2,7 +2,7 @@
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_mysqldb import MySQL
-from forms import crearEventoForm,contactoform,perfilform,registerForm,loginform
+from forms import crearEventoForm,contactoform,perfilform,registerForm,loginform,CambiarContraseñaForm
 from flask import Flask, render_template, redirect, url_for, request, flash,Blueprint,send_file
 from flask_login import login_user, logout_user, current_user, login_required
 from flask_mail import Message
@@ -17,6 +17,9 @@ from reportlab.lib.units import cm
 from reportlab.lib.utils import ImageReader
 import qrcode
 from urllib.parse import unquote
+from itsdangerous import URLSafeTimedSerializer
+from config import Config
+from werkzeug.security import generate_password_hash
 
 db = MySQL()
 mail = Mail()

@@ -119,7 +119,6 @@ class ModelUser:
             )
             db.connection.commit()
             cur.close()
-            flash("Mensaje enviado correctamente.")
             
             return True
         except Exception as e:
@@ -148,7 +147,7 @@ class ModelUser:
             cur.execute("DELETE FROM mensajes_contacto WHERE id = %s", (id,))
             db.connection.commit()
             cur.close()
-            flash("Mensaje eliminado correctamente.")   
+
             return True
         except Exception as e:
             print(e)
@@ -162,7 +161,8 @@ class ModelUser:
             cur.execute("DELETE FROM usuarios WHERE id = %s", (id,))
             db.connection.commit()
             cur.close()
-            flash("Usuario eliminado correctamente.")   
+    
+            
             return True
         except Exception as e:
             print(e)
@@ -180,13 +180,23 @@ class ModelUser:
             )
             db.connection.commit()
             evento_id = cur.lastrowid
-            flash("Evento creado correctamente.")   
+            
             cur.close()
             return evento_id
         except Exception as e:
             print(e)
             return False
-    
+    @classmethod
+    def update_user(cls,db, id, nombre, correo,fecha_nacimiento):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("UPDATE usuarios SET nombre = %s, correo = %s, fecha_nacimiento = %s WHERE id = %s",(nombre,correo,fecha_nacimiento,id))
+            db.commit
+            cur.close()
+
+        except Exception as e:
+            print(e)
+            return False
     # funcion para ver los eventos
     @classmethod
     def eventos(cls,db):
@@ -263,6 +273,7 @@ class ModelUser:
             
             cur.close()
             return None
+        
         except Exception as e:
             print(e)
             return None
@@ -286,6 +297,7 @@ class ModelUser:
             """)
             eventos = cur.fetchall()
             cur.close()
+
             return eventos
         except Exception as e:
             print(e)
@@ -333,7 +345,7 @@ class ModelUser:
             )
             db.connection.commit()
             cur.close()
-            flash("Evento editado correctamente.")
+    
             return True
         except Exception as e:
             print(e)
@@ -360,4 +372,16 @@ class ModelUser:
             print(e)
             return False
         
-    
+    def restar_entradas(db, evento_id, cantidad):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("UPDATE eventos SET aforo = aforo - %s WHERE id = %s AND aforo >= %s", (cantidad, evento_id, cantidad))
+            db.connection.commit()
+            cur.close()
+            return cur.rowcount > 0  
+        
+        except Exception as e:
+            db.connection.rollback()
+            print("Error al restar entradas:", e)
+            return False
+

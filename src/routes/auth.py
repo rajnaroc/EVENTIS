@@ -1,3 +1,4 @@
+from flask import session
 from extension.extesion import *
 
 auth_bp = Blueprint('auth', __name__)
@@ -17,6 +18,7 @@ def iniciar_sesion():
         user = ModelUser.sesion(db, correo, contraseña)
         if user:
             login_user(user)
+            session.permanent = True
             return render_template('inicio.html')
         else:
             return render_template('iniciar_sesion.html', login=login, error="Usuario o contraseña incorrectos")
@@ -42,12 +44,12 @@ def register():
 
         # Verificar si el correo ya está registrado
         if ModelUser.exists(db, correo):
-            flash("El correo ya está registrado. Por favor, inicia sesión o utiliza otro correo.")
-            return redirect(url_for('register.html'))
+            flash("El correo ya está registrado. Por favor, inicia sesión o utiliza otro correo.","error")
+            return redirect(url_for('auth.register'))
         
         # funcion para registar al usuario 
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
-            flash("Registrado correctamente")
+            flash("Registrado correctamente","success")
             
             # Enviar correo de bienvenida
             enviar_correo_bienvenida(Message, mail, correo, plantilla_bienvenida(nombre))
@@ -55,8 +57,10 @@ def register():
             # iniciar sesion automaticamente al registrarse
             login_user(ModelUser.sesion(db, correo, contraseña))
             
-            return redirect(url_for('general.inicio.html'))
+            flash("Bienvenido {} usuario".format(nombre),"success")
+            return redirect(url_for('general.inicio'))
         else:
+            flash
             return redirect(url_for('register.html'))
     
     if request.method == 'GET':
@@ -69,4 +73,5 @@ def register():
 @auth_bp.route('/logout')
 def logout():
     logout_user()
+    flash("Cerrada la sesion","info")
     return redirect(url_for('general.inicio'))

@@ -15,15 +15,6 @@
         <!-- Alertas de error -->
         <form action="/registrarse" method="POST" class="space-y-6">
             {{ register.hidden_tag() }}
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="bg-green-400 text-white p-4 rounded-md mb-4">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
 
             <!-- Nombre -->
             <div>

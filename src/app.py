@@ -1,5 +1,5 @@
 # src/app.py
-from flask import Flask, render_template
+from flask import Flask, render_template,session
 from config import config
 from extension.extesion import db, mail, login_manager
 from filtros import format_hora, format_fecha
@@ -26,6 +26,10 @@ def create_app():
     @app.errorhandler(404)
     def status_404(error):
         return render_template('404.html')
+    
+    @app.errorhandler(401)
+    def status_401(error):
+        return render_template('401.html')
 
     # Cargar el usuario en sesión
     @login_manager.user_loader

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Recuperar Contraseña{% endblock %}
+{% block body %}
+<div class="min-h-screen bg-cover bg-center relative">
+<div class=" bg-black bg-opacity-60 relative z-10 flex items-center justify-center min-h-screen px-4">
+    <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg">
+
+    <h1 class="text-4xl font-bold text-center mb-8">Recuperacion de Contraseña</h1>      
+        <form action="/recuperar" method="POST" class="space-y-6">
+                <div>
+                    <p class="block text-lg font-bold mb-1">Correo de recuperacio </p>
+                    {{ form.correo(placeholder="Escribe tu correo", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+                </div>
+            <button class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition" type="submit">Enviar enlace</button>
+        </form> 
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

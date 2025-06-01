@@ -23,6 +23,10 @@
         <div>
           {{ login.contraseña.label(class="block text-lg font-bold mb-1") }}
           {{ login.contraseña( placeholder="Escribe tu contraseña",class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+        </div>        
+        <div class="text-sm">
+          <span class="text-white">Has olvidado tu contraseña?</span>
+          <a href="{{ url_for('pass.recuperar' ) }}" class="text-green-400 font-semibold hover:underline">Recuperar</a>
         </div>
         
         <!-- Registro -->

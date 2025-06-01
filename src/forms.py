@@ -122,3 +122,7 @@ class crearEventoForm(FlaskForm):
         ])
     submit = SubmitField('Crear evento')
     submit_editar = SubmitField('Editar evento')
+
+class CambiarContraseñaForm(FlaskForm):
+    password = PasswordField('Nueva contraseña', validators=[DataRequired(), Length(min=6)])
+    submit = SubmitField('Cambiar contraseña')

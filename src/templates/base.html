@@ -10,6 +10,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-white min-h-screen flex flex-col text-gray-800 font-sans">
+    <div id="flash-messages" class="fixed top-4 right-4 z-50 space-y-2">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message relative px-4 py-3 rounded-lg shadow-lg text-white w-72
+                        {% if category == 'success' %} bg-green-500
+                        {% elif category == 'error' %} bg-red-500
+                        {% elif category == 'warning' %} bg-yellow-400 text-black
+                        {% elif category == 'info' %} bg-blue-500
+                        {% else %} bg-gray-600 {% endif %}">
+            <!-- Botón de cerrar -->
+            <button onclick="this.parentElement.remove()" 
+                    class="absolute top-1 right-2 text-xl font-bold hover:text-gray-200 focus:outline-none">
+                &times;
+            </button>
+            {{ message }}
+            </div>
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </div>
+
     {% if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com" %}
     <!-- Header -->
         <header class="bg-gray-300 shadow">
@@ -34,7 +56,7 @@
                             <a href="{{ url_for('eventos.crear_evento' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eventos</a>
                         </div>
                     </div>
-                    <a href="{{ url_for('auth.logout' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out leading-tight">Cerrar sesion</a>
+                    <a href="{{ url_for('auth.logout' ) }}" class="block w-max px-3 bg-red-500 py-1 rounded-md hover:bg-gray-800 text-white hover:text-white transition-opacity duration-300 ease-in-out leading-tight">Cerrar sesion</a>
                 </div>
             </nav>
         </header> 
@@ -171,6 +193,19 @@
             </div>
         </div>
     </footer>
+    <script>
+    // Ocultar automáticamente los mensajes después de 3 segundos
+    document.addEventListener('DOMContentLoaded', () => {
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(msg => {
+        setTimeout(() => {
+            msg.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+            setTimeout(() => msg.remove(), 500); // Quitar del DOM después de desvanecerse
+        }, 3000);
+        });
+    });
+    </script>
+
     {% endblock %}
 </body>
 </html>

@@ -7,7 +7,7 @@
     <div class="relative z-10 flex items-center justify-center px-4 py-8">
         <div class="bg-black bg-opacity-60 text-white p-8 rounded-xl w-full max-w-md sm:max-w-lg md:max-w-xl shadow-lg">
             <h1 class="text-4xl font-bold text-center mb-8">Perfil</h1>
-            <form action="/perfil" method="POST" class="space-y-6">
+            <form action="/perfil/editar" method="POST" class="space-y-6">
                 {{ form.hidden_tag() }}
                 <!-- Nombre -->
                 <div>
@@ -23,17 +23,7 @@
                 <div>
                     {{ form.correo.label(class="block text-lg font-bold mb-1") }}
                     {{ form.correo(placeholder="Escribe tu Correo Electrónico", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>  
-                <!-- Contraseña --> 
-                <div>
-                    {{ form.contraseña.label(class="block text-lg font-bold mb-1") }}
-                    {{ form.contraseña(placeholder="Escribe tu contraseña", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>  
-                <!-- Confirmar contraseña -->
-                <div>
-                    {{ form.confirme.label(class="block text-lg font-bold mb-1") }}
-                    {{ form.confirme(placeholder="Repite tu contraseña", class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
-                </div>  
+                </div>
                 <!-- Botón de guardar cambios -->           
                 <div class="flex justify-center">
                     <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">Guardar Cambios</button>
