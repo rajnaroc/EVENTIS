@@ -12,7 +12,7 @@ def crear_evento():
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
             return render_template('crear_eventos.html', form=eventos)
         else:
-            return redirect(url_for('inicio'))
+            return redirect(url_for('general.inicio'))
         
     if request.method == 'POST':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
@@ -59,6 +59,7 @@ def crear_evento():
 
                 flash("Evento creado correctamente.","success") 
                 return redirect(url_for('eventos.crear_evento'))
+            
             flash("Error en el valor de un input.","error") 
             return redirect(url_for('eventos.crear_evento'))
             
@@ -142,10 +143,10 @@ def editar_evento(id):
                 'fecha': evento[2],
                 'lugar': evento[3],
                 'precio': evento[4],
-                'categoria': evento[5],  
+                'categoria': str(evento[5]),  
                 'aforo': evento[6],      
-                'hora_inicio': evento[7],
-                'hora_fin': evento[8],
+                'hora_inicio': format_hora(evento[7]),
+                'hora_fin': format_hora(evento[8]),
             })
 
             return render_template('panel_editar.html', form=evento, categorias=categorias, fotos=fotos)
@@ -153,7 +154,8 @@ def editar_evento(id):
     if request.method == 'POST':
         
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
-            
+            evento = crearEventoForm()
+
             if evento.validate_on_submit():
                 # recoger los valores del input
                 titulo = request.form['titulo']
@@ -198,6 +200,7 @@ def editar_evento(id):
                     cur.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
                 db.connection.commit()
                 cur.close()
+
                 flash("Evento editado correctamente.","success")
                 return redirect(url_for('eventos.editar_eventos'))
             
@@ -368,7 +371,7 @@ def eliminar_foto_evento(id,public_id):
 
             flash("Foto borrar con exito","success")
 
-            return redirect(url_for('eventos.editar_eventos'))
+            return redirect(url_for('eventos.editar_evento'))
         except Exception as e:
             print(e)
             return print('error Error al eliminar la foto')

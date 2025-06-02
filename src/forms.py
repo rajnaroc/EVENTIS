@@ -91,11 +91,12 @@ class crearEventoForm(FlaskForm):
     descripcion = TextAreaField('Descripción', validators=[
         DataRequired()
         ])
-    fecha = DateField('Fecha del evento',format='%d-%m-%Y', validators=[
+    fecha = DateField('Fecha del evento',format='%Y-%m-%d', validators=[
         DataRequired()
         ])
     hora_inicio = StringField('Hora Inicio', validators=[
         DataRequired(), Length(max=5)
+        
         ])
     hora_fin = StringField('Hora Fin', validators=[
         DataRequired(), Length(max=5)

@@ -20,7 +20,8 @@ from urllib.parse import unquote
 from itsdangerous import URLSafeTimedSerializer
 from config import Config
 from werkzeug.security import generate_password_hash
-
+from datetime import datetime
+from filtros import format_hora,format_fecha
 db = MySQL()
 mail = Mail()
 login_manager = LoginManager()
