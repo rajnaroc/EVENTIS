@@ -366,7 +366,7 @@ class ModelUser:
             return False
 
     @classmethod
-    def restar_entradas(db, evento_id, cantidad):
+    def restar_entradas(cls,db, evento_id, cantidad):
         try:
             cur = db.connection.cursor()
             cur.execute("UPDATE eventos SET aforo = aforo - %s WHERE id = %s AND aforo >= %s", (cantidad, evento_id, cantidad))
@@ -378,5 +378,3 @@ class ModelUser:
             db.connection.rollback()
             print("Error al restar entradas:", e)
             return False
-
-    

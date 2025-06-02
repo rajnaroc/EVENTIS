@@ -112,7 +112,8 @@ class crearEventoForm(FlaskForm):
             (5, 'Otros')
         ])
     precio = FloatField('Precio (€)', validators=[
-        DataRequired(), NumberRange(min=0)
+        DataRequired(), 
+        NumberRange(min=0)
         ])
     aforo = IntegerField('Aforo máximo', validators=[
         DataRequired(), NumberRange(min=1)

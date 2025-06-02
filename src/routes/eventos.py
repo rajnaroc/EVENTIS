@@ -7,6 +7,7 @@ eventos_bp = Blueprint('eventos', __name__)
 @eventos_bp.route('/eventos/admin', methods=['GET', 'POST'])
 def crear_evento():
     eventos = crearEventoForm()
+
     if request.method == 'GET':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
             return render_template('crear_eventos.html', form=eventos)
@@ -15,49 +16,50 @@ def crear_evento():
         
     if request.method == 'POST':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
-            
-            # recoger los valores del input
-            titulo = request.form['titulo']
-            descripcion = request.form['descripcion']
-            fecha = request.form['fecha']
-            lugar = request.form['lugar']
-            precio = request.form['precio']
-            categoria = request.form['categoria']
-            aforo = request.form['aforo']
-            hora_inicio = request.form['hora_inicio']
-            hora_fin = request.form['hora_fin']
-            
-            # coger las imagenes
-            imagenes = request.files.getlist('fotos')
-            
-            urls_imagenes = []
-            # hacemos un bucle para poder subirlas cloudinary
+            if eventos.validate_on_submit():
+                # recoger los valores del input
+                titulo = request.form['titulo']
+                descripcion = request.form['descripcion']
+                fecha = request.form['fecha']
+                lugar = request.form['lugar']
+                precio = request.form['precio']
+                categoria = request.form['categoria']
+                aforo = request.form['aforo']
+                hora_inicio = request.form['hora_inicio']
+                hora_fin = request.form['hora_fin']
+                
+                # coger las imagenes
+                imagenes = request.files.getlist('fotos')
+                
+                urls_imagenes = []
+                # hacemos un bucle para poder subirlas cloudinary
 
-            for imagen in imagenes:
-                if imagen.filename != '':
-                    try:
-                        # Subir a Cloudinary
-                        resultado = cloudinary.uploader.upload(
-                            imagen,
-                            folder="eventos/",
-                            resource_type="image"
-                        )
-                        urls_imagenes.append({'url': resultado['secure_url'],'public_id': resultado['public_id']})
-                    except Exception as e:
-                        print("Error al subir imagen: {e}")
+                for imagen in imagenes:
+                    if imagen.filename != '':
+                        try:
+                            # Subir a Cloudinary
+                            resultado = cloudinary.uploader.upload(
+                                imagen,
+                                folder="eventos/",
+                                resource_type="image"
+                            )
+                            urls_imagenes.append({'url': resultado['secure_url'],'public_id': resultado['public_id']})
+                        except Exception as e:
+                            print("Error al subir imagen: {e}")
 
-            # funcion para crear el evento y devolver el id 
-            evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
+                # funcion para crear el evento y devolver el id 
+                evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
+                
+                # Guardar cada imagen en la tabla imagenes_evento
+                cursor = db.connection.cursor()
+                for url in urls_imagenes:
+                    cursor.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
+                db.connection.commit()
+                cursor.close()
+
+                flash("Evento creado correctamente.","success") 
+                return redirect(url_for('eventos.crear_evento'))
             
-            # Guardar cada imagen en la tabla imagenes_evento
-            cursor = db.connection.cursor()
-            for url in urls_imagenes:
-                cursor.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
-            db.connection.commit()
-            cursor.close()
-
-            flash("Evento creado correctamente.","success") 
-            return redirect(url_for('eventos.crear_evento'))
 # Funcion para enseñar los eventos del usuario(usuario)
 @eventos_bp.route('/evento/<int:id>', methods=['GET'])
 def evento_detalle(id):
@@ -281,7 +283,14 @@ def buscar_eventos():
     precio = request.args.get('precio')
 
     query = """
-        SELECT e.*, 
+        SELECT  e.id,
+                e.titulo,
+                e.descripcion,
+                e.fecha,
+                e.lugar,
+                e.precio,
+                e.aforo, 
+                e.categoria,
             (
                 SELECT ruta 
                 FROM fotos_evento f 
@@ -315,6 +324,7 @@ def buscar_eventos():
     cur.execute(query, params)
     eventos = cur.fetchall()
     cur.close()
+    print(eventos)
 
     categorias = {
         1: 'Concierto',

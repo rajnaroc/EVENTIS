@@ -43,8 +43,9 @@
 
             <!-- Botón buscar -->
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition duration-200 transform hover:-translate-y-0.5">Buscar</button>
+            
             <!-- Botón Limpiar -->
-            <a href="{{ url_for('eventos.buscar_eventos') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition duration-200 ml-2 inline-block">Limpiar filtros</a>
+            <a href="{{ url_for('eventos.evento') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition duration-200 ml-2 inline-block">Limpiar filtros</a>
         </form>
 
 
@@ -56,7 +57,8 @@
                 <a href="/evento/{{evento[0]}}">
                     <div class="h-48 relative flex items-center justify-center overflow-hidden">
                         <!-- Imagen que cubre todo el contenedor -->
-                        <img src="{{ evento[10] }}" alt="Imagen del evento" class="absolute inset-0 w-full h-full object-cover">
+                        {% set imagen = evento[10] if evento[10]|string else evento[8] %}
+                        <img src="{{ imagen }}" alt="Imagen del evento" class="absolute inset-0 w-full h-full object-cover">
                         <!-- Texto superpuesto con fondo semitransparente -->
                         <span class="text-white text-2xl font-bold relative z-10 px-4 py-2 bg-black bg-opacity-50 rounded-lg">
                             {{ evento[1] }}
@@ -66,9 +68,12 @@
                 <div class="p-6">
                     <!-- Categoría -->
                     <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full mb-2">
-                            {{ categorias.get(evento[8]|int, 'General') }}
+                        {% if evento[7]|int in categorias %}
+                        {{ categorias.get(evento[7]|int, 'General') }}
+                        {% else %}
+                        {{ categorias.get(evento[8]|int, 'General') }}
+                        {% endif %}
                     </span>
-                    
                     <!-- Título y fecha -->
                     <div class="mb-3">
                         <h2 class="text-xl font-bold text-gray-900 mb-1">{{ evento[1] }}</h2>

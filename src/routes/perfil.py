@@ -10,15 +10,18 @@ def perfil():
     form=perfilform(obj=current_user)
     
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        correo = request.form['correo']
-        fecha_nacimiento = request.form['fecha_nacimiento']
+        if form.validate_on_submit():
+            nombre = request.form['nombre']
+            correo = request.form['correo']
+            fecha_nacimiento = request.form['fecha_nacimiento']
         
-        if ModelUser.update_user(db, current_user.id, nombre, correo,fecha_nacimiento):
-            flash("Perfil actualizado correctamente.","success")
-            return render_template('perfil.html', user=current_user)
+            if ModelUser.update_user(db, current_user.id, nombre, correo,fecha_nacimiento):
+                flash("Perfil actualizado correctamente.","success")
+                return render_template('perfil.html', user=current_user)
+            else:
+                flash("Error al actualizar el perfil.","error")
         else:
-            flash("Error al actualizar el perfil.","error")
+            flash("Error en los inputs.","error")
 
     if request.method == "GET":
         if current_user.is_authenticated:
@@ -29,7 +32,9 @@ def perfil():
 # Funcion para eliminar la cuenta del usuario(usuario)
 @perfil_bp.route('/eliminar', methods=['POST'])
 def eliminar_cuenta():
+    
     user = ModelUser.get_by_id(db, current_user.id)
+
     if request.method == 'POST':
         if current_user.is_authenticated:
             ModelUser.delete_user(db, user.id)
