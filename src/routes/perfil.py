@@ -5,7 +5,6 @@ perfil_bp = Blueprint('perfil', __name__)
 
 # Funcion para editar el perfil(admin) y verlo
 @perfil_bp.route('/perfil/editar', methods=['GET', 'POST'])
-@login_required
 def perfil():
     form=perfilform(obj=current_user)
     

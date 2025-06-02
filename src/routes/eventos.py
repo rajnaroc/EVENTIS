@@ -124,6 +124,7 @@ def editar_evento(id):
 
     if request.method == 'GET':
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            
             evento = ModelUser.evento_solo(db, id)
             fotos = ModelUser.obtener_fotos_evento(db, id)
             categorias = {
@@ -150,7 +151,9 @@ def editar_evento(id):
             return render_template('panel_editar.html', form=evento, categorias=categorias, fotos=fotos)
     
     if request.method == 'POST':
+        
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+            
             if evento.validate_on_submit():
                 # recoger los valores del input
                 titulo = request.form['titulo']
@@ -200,13 +203,16 @@ def editar_evento(id):
             
             flash("Error en el valor de un input.","error") 
             return redirect(url_for('eventos.editar_eventos'))
+        
         else:
             return redirect(url_for('general.inicio'))
 
 # Funcion para borrarlo(admin)
 @eventos_bp.route('/eliminarEvento/<int:id>', methods=["GET"])
 def eliminar_evento(id):
+    
     if current_user.is_authenticated and current_user.correo ==  "aaroncm611@gmail.com":
+        
         ModelUser.delete_evento(db, id)
         flash("Evento eliminado correctamente.")
         return redirect(url_for('eventos.editar_eventos'))
@@ -214,6 +220,7 @@ def eliminar_evento(id):
 # gestionar el qr que se manda al correo
 @eventos_bp.route('/comprar/<int:evento_id>/<int:cantidad>', methods=['GET'])
 def comprar_entrada(evento_id,cantidad):
+    
     if not current_user.is_authenticated:
         return redirect(url_for('iniciar_sesion'))
 
@@ -240,6 +247,7 @@ def comprar_entrada(evento_id,cantidad):
 
 @eventos_bp.route('/descargar_entrada/<int:entrada_id>')
 def descargar_entrada(entrada_id):
+    
     cur = db.connection.cursor()
 
     # Obtener datos de la entrada, el usuario y el evento
@@ -253,6 +261,7 @@ def descargar_entrada(entrada_id):
     
     entrada = cur.fetchone()
     cur.close()
+    
     if not entrada:
         return "Entrada no encontrada", 404
 

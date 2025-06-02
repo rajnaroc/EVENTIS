@@ -17,10 +17,12 @@ def iniciar_sesion():
 
         # funcion para iniciar sesion
         user = ModelUser.sesion(db, correo, contraseña)
+        
         if user:
             login_user(user)
             session.permanent = True
             return redirect(url_for('general.inicio'))
+        
         else:
             return render_template('iniciar_sesion.html', login=login, error="Usuario o contraseña incorrectos")
     
@@ -60,6 +62,7 @@ def register():
             
             flash("Bienvenido {} usuario".format(nombre),"success")
             return redirect(url_for('general.inicio'))
+        
         else:
             return redirect(url_for('auth.register.html'))
     
