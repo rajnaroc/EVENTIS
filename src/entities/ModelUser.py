@@ -378,3 +378,23 @@ class ModelUser:
             db.connection.rollback()
             print("Error al restar entradas:", e)
             return False
+    
+    @classmethod
+    def obtener_fotos_con_categorias(cls, db):
+        try:
+            cur = db.connection.cursor()
+            cur.execute("""
+                SELECT e.categoria,f.ruta
+                FROM fotos_evento f
+                JOIN eventos e ON f.id_evento = e.id
+            """)
+            
+            resultados = cur.fetchall()
+            cur.close()
+
+            return resultados
+        except Exception as e:
+            print(e)
+            return []
+
+    

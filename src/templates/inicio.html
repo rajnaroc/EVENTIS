@@ -3,36 +3,28 @@
 
 
 {% block body %}
-        <!-- Categorías -->
+    <!-- Categorías -->
     <section class="max-w-6xl mx-auto px-6 py-10 ">
         <h2 class="text-2xl font-semibold mb-4">Eventos destacados</h2>
         <div class="flex flex-wrap justify-center gap-6">
-            <div class="flex flex-col items-center space-y-1 w-20">
-                <a class="flex flex-col" href="/buscar?categoria=1">
-                    <img src="" class="w-16 h-16 rounded-full border-2 border-blue-400" />
-                    <span class="text-xs text-center">Concierto</span>
-                </a>
-            </div>
-            <div class="flex flex-col items-center space-y-1 w-20">
-                <a class="flex flex-col" href="/buscar?categoria=2">
-                    <img src="" class="w-16 h-16 rounded-full border-2 border-yellow-400" />
-                    <span class="text-xs text-center">Teatro</span>
-                </a>
-            </div>
-            <div class="flex flex-col items-center space-y-1 w-20">
-                <a class="flex flex-col"  href="/buscar?categoria=3">
-                    <img src="" class="w-16 h-16 rounded-full border-2 border-pink-400" />
-                    <span class="text-xs text-center">Cine</span>
-                </a>
-            </div>
-            <div class="flex flex-col items-center space-y-1 w-20">
-                <a class="flex flex-col" href="/buscar?categoria=4">
-                    <img src="" class="w-16 h-16 rounded-full border-2 border-purple-400" />
-                    <span class="text-xs text-center">Deporte</span>
-                </a>
-            </div>
+            {% for cat_id, nombre in categorias.items() %}
+                <div class="flex flex-col items-center space-y-1 w-20">
+                    <a class="flex flex-col" href="/buscar?categoria={{ cat_id }}">
+                        <img src="{{ fotos.get(cat_id, '/static/img/default.jpg') }}" 
+                            alt="{{ nombre }}" 
+                            class="w-16 h-16 rounded-full border-2
+                                {% if cat_id == 1 %}border-blue-400
+                                {% elif cat_id == 2 %}border-yellow-400
+                                {% elif cat_id == 3 %}border-pink-400
+                                {% elif cat_id == 4 %}border-purple-400
+                                {% else %}border-gray-400{% endif %}" />
+                        <span class="text-xs text-center">{{ nombre }}</span>
+                    </a>
+                </div>
+            {% endfor %}
         </div>
     </section>
+
 
     <!-- Bienvenida -->
     <section class="max-w-3xl mx-auto px-4 mb-10">
