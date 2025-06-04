@@ -23,6 +23,7 @@ from werkzeug.security import generate_password_hash
 from datetime import datetime
 from filtros import format_hora,format_fecha
 import stripe
+from flask import abort
 db = MySQL()
 mail = Mail()
 login_manager = LoginManager()

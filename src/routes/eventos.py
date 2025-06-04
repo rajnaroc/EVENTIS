@@ -437,6 +437,14 @@ def panel_estadisticas():
 def comprar_con_pago(evento_id, cantidad):
 
     if request.method == "GET" and current_user.is_authenticated:
+
+        cur.execute("SELECT titulo, precio FROM eventos WHERE id = %s", (evento_id,))
+        evento = cur.fetchone()
+
+        if not evento:
+            return abort(404)
+
+
         # Obtener el evento y su precio
         cur = db.connection.cursor()
         cur.execute("SELECT titulo, precio FROM eventos WHERE id = %s", (evento_id,))

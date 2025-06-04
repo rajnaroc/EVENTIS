@@ -25,7 +25,7 @@ def create_app():
     # Error 404
     @app.errorhandler(404)
     def status_404(error):
-        return render_template('404.html')
+        return render_template('404.html'),404
     
     @app.errorhandler(401)
     def status_401(error):
