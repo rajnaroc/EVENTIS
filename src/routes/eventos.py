@@ -1,7 +1,9 @@
 from extension.extesion import *
-
-
+from utils.email_sender import generar_y_enviar_entrada_qr
 eventos_bp = Blueprint('eventos', __name__)
+
+
+STRIPE_PUBLIC_KEY = "pk_test_51RL9TO02dqwU0sxvLmNySRPLsbsVoEgAI12zrYZ4ZoCn8hdQsOc8x0Rj4jtGnDM4VmqlizYBb2mRlvnMGsm0Th3U00BdjdfKNC"
 
 # Funcion para poder crear eventos(admin)
 @eventos_bp.route('/eventos/admin', methods=['GET', 'POST'])
@@ -67,7 +69,6 @@ def crear_evento():
 @eventos_bp.route('/evento/<int:id>', methods=['GET'])
 def evento_detalle(id):
     if request.method == "GET":
-        if current_user.is_authenticated:
             evento = ModelUser.obtener_evento_detalle(db,id)
             foto = ModelUser.obtener_fotos_evento(db,evento[0])
             if request.method == "GET":
@@ -79,14 +80,11 @@ def evento_detalle(id):
                             5: 'Otros'
                 }
                 return render_template('evento.html', evento=evento,categorias=categorias,foto=foto)
-        else:
-            return redirect(url_for("auth.iniciar_sesion"))
 
 
 # funcion para mostrar el eventos
 @eventos_bp.route("/eventos", methods=['GET'])
 def evento():
-    if current_user.is_authenticated:
         eventos = ModelUser.evento(db)
         categorias = {
             1: 'Concierto',
@@ -97,8 +95,6 @@ def evento():
         }
         print(eventos)
         return render_template('eventos.html', eventos=eventos, categorias=categorias)
-    else:
-        return redirect(url_for('auth.iniciar_sesion'))
 
 
 # funcion para enseñar los eventos a editar
@@ -225,7 +221,7 @@ def eliminar_evento(id):
 def comprar_entrada(evento_id,cantidad):
     
     if not current_user.is_authenticated:
-        return redirect(url_for('iniciar_sesion'))
+        return redirect(url_for('auth.iniciar_sesion'))
 
     # cantidad de entradas que quiera una persona y se le manda al correo
     for _ in range(cantidad):
@@ -375,3 +371,144 @@ def eliminar_foto_evento(id,public_id):
         except Exception as e:
             print(e)
             return print('error Error al eliminar la foto')
+        
+@eventos_bp.route('/panel-estadisticas', methods=['GET'])
+def panel_estadisticas():
+    if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
+        cur = db.connection.cursor()
+
+        # Entradas vendidas por evento
+        cur.execute("""
+            SELECT e.titulo, COUNT(*) AS total_vendidas
+            FROM entradas en
+            JOIN eventos e ON en.evento_id = e.id
+            GROUP BY e.titulo
+        """)
+        resultados_ventas = cur.fetchall()
+
+        # Ingresos por evento
+        cur.execute("""
+            SELECT e.titulo, COALESCE(SUM(en.precio), 0) AS ingresos
+            FROM entradas en
+            JOIN eventos e ON en.evento_id = e.id
+            GROUP BY e.titulo
+        """)
+        resultados_ingresos = cur.fetchall()
+
+        # Ventas por fecha (últimos 30 días)
+        cur.execute("""
+            SELECT DATE(en.fecha_compra), COUNT(*)
+            FROM entradas en
+            WHERE en.fecha_compra >= CURDATE() - INTERVAL 30 DAY
+            GROUP BY DATE(en.fecha_compra)
+            ORDER BY DATE(en.fecha_compra)
+        """)
+        resultados_fecha = cur.fetchall()
+
+        cur.close()
+
+        # Preparar listas para pasar a la plantilla
+        nombres_eventos = [fila[0] for fila in resultados_ventas]
+        entradas_vendidas = [fila[1] for fila in resultados_ventas]
+
+        nombres_ingresos = [fila[0] for fila in resultados_ingresos]
+        ingresos = [float(fila[1]) for fila in resultados_ingresos]
+
+        fechas = [fila[0].strftime("%Y-%m-%d") if hasattr(fila[0], 'strftime') else str(fila[0]) for fila in resultados_fecha]
+        ventas_dia = [fila[1] for fila in resultados_fecha]
+
+        # Totales para resumen
+        total_entradas = sum(entradas_vendidas)
+        total_ingresos = sum(ingresos)
+
+        return render_template("estadisticas.html",
+                               nombres_eventos=nombres_eventos,
+                               entradas_vendidas=entradas_vendidas,
+                               nombres_ingresos=nombres_ingresos,
+                               ingresos=ingresos,
+                               fechas=fechas,
+                               ventas_dia=ventas_dia,
+                               total_entradas=total_entradas,
+                               total_ingresos=total_ingresos)
+    else:
+        return redirect(url_for('auth.iniciar_sesion'))
+    
+@eventos_bp.route('/comprar-pago/<int:evento_id>/<int:cantidad>', methods=['GET'])
+def comprar_con_pago(evento_id, cantidad):
+
+    if request.method == "GET" and current_user.is_authenticated:
+        # Obtener el evento y su precio
+        cur = db.connection.cursor()
+        cur.execute("SELECT titulo, precio FROM eventos WHERE id = %s", (evento_id,))
+        evento = cur.fetchone()
+        cur.close()
+
+        if not evento:
+            return "Evento no encontrado", 404
+
+        titulo, precio = evento
+        precio_total = int(precio * cantidad * 100)  # en céntimos
+
+        # Crear PaymentIntent
+        intent = stripe.PaymentIntent.create(
+            amount=precio_total,
+            currency='eur',
+            metadata={
+                'evento_id': evento_id,
+                'cantidad': cantidad,
+                'user_id': current_user.id,
+                'email': current_user.correo
+            }
+        )
+
+        return render_template("pago.html", 
+            stripe_public_key=STRIPE_PUBLIC_KEY,
+            client_secret=intent.client_secret,
+            evento=evento,
+            cantidad=cantidad,
+            total=precio * cantidad, 
+            evento_id=evento_id,
+            precio=precio
+        )
+    else:
+        return redirect(url_for('auth.iniciar_sesion'))
+
+
+@eventos_bp.route('/pago-exitoso')
+def pago_exitoso():
+    if current_user.is_authenticated:
+        evento_id = request.args.get('evento_id', type=int)
+        cantidad = request.args.get('cantidad', type=int)
+
+        print(evento_id)
+        print(cantidad)
+        if not evento_id or not cantidad:
+            flash("Faltan datos del pago", "danger")
+            return redirect(url_for('eventos.evento'))
+
+        cur = db.connection.cursor()
+        cur.execute("SELECT precio FROM eventos WHERE id = %s", (evento_id,))
+        resultado = cur.fetchone()
+        cur.close()
+
+        # Generar y enviar entradas como ya hacías
+        for _ in range(cantidad):
+            exito = generar_y_enviar_entrada_qr(
+                usuario_email=current_user.correo,
+                usuario_id=current_user.id,
+                evento_id=evento_id,
+                precio=resultado,  
+                estado='comprada',
+                db=db,
+                mail=mail,
+                Message=Message
+            )
+        
+        ModelUser.restar_entradas(db, evento_id, cantidad)
+
+        if exito:
+            flash("Pago exitoso. Entradas enviadas por correo.", "success")
+        else:
+            flash("Hubo un error al generar las entradas.", "danger")
+
+        return redirect(url_for('eventos.evento_detalle', id=evento_id))

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Pagar evento{% endblock %}
+{% block body %}
+    
+<div class="bg-gray-100 flex items-center justify-center min-h-screen">
+    
+    <div class="bg-white shadow-lg rounded-xl p-8 max-w-lg w-full">
+        <h1 class="text-2xl font-bold text-center mb-4">Resumen del pago</h1>
+        
+        <div class="mb-4">
+            <p><strong>Evento:</strong> {{ evento[0] }}</p>
+            <p><strong>Cantidad de entradas:</strong> {{ cantidad }}</p>
+            <p><strong>Total a pagar:</strong> {{ total }} €</p>
+        </div>
+        
+        <form id="payment-form" class="space-y-4">
+            <div id="card-element" class="p-4 border border-gray-300 rounded-md bg-gray-50"></div>
+            <div id="card-errors" role="alert" class="text-red-500 text-sm"></div>
+            <button id="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Pagar</button>
+        </form>
+    </div>
+    
+    <script>
+        const stripe = Stripe("{{ stripe_public_key }}");
+        const elements = stripe.elements();
+        
+        const card = elements.create("card", {
+            style: {
+                base: {
+                    color: "#32325d",
+                    fontFamily: "Arial, sans-serif",
+                    fontSmoothing: "antialiased",
+                    fontSize: "16px",
+                    "::placeholder": { color: "#aab7c4" }
+                },
+                invalid: {
+                    color: "#fa755a",
+                    iconColor: "#fa755a"
+                }
+            }
+        });
+        
+        card.mount("#card-element");
+        
+        const form = document.getElementById("payment-form");
+        const clientSecret = "{{ client_secret }}";
+        
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: card
+                }
+            });
+            
+            if (error) {
+                document.getElementById("card-errors").textContent = error.message;
+            } else if (paymentIntent.status === "succeeded") {
+                window.location.href = `/pago-exitoso?evento_id={{ request.args.get('evento_id') or evento_id }}&cantidad={{ cantidad }}`;
+            }
+        });
+        </script>
+</div>
+{% endblock %}
+
+

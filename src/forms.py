@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,FloatField,IntegerField,SelectField,DateTimeField,MultipleFileField
-from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange
+from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,FloatField,IntegerField,SelectField,MultipleFileField
+from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange,InputRequired
 
 # forms para el login 
 class loginform(FlaskForm):
@@ -113,8 +113,8 @@ class crearEventoForm(FlaskForm):
             (5, 'Otros')
         ])
     precio = FloatField('Precio (€)', validators=[
-        DataRequired(), 
-        NumberRange(min=0)
+        InputRequired(message="El precio es obligatorio"),  # acepta 0 como válido
+        NumberRange(min=0, message="El precio no puede ser negativo")
         ])
     aforo = IntegerField('Aforo máximo', validators=[
         DataRequired(), NumberRange(min=1)

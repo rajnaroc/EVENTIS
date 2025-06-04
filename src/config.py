@@ -1,6 +1,7 @@
 # config.py
 import os
 from datetime import timedelta
+import stripe
 
 class Config:
     SECRET_KEY=os.getenv("SECRET_KEY","b47c300f604a119bbafd524c8a5e8e47")
@@ -22,10 +23,10 @@ class ProductConfig(Config):
     CLOUDINARY_CLOUD_NAME=os.getenv("CLOUDINARY_CLOUD_NAME")
     CLOUDINARY_API_KEY=os.getenv("CLOUDINARY_API_KEY")
     CLOUDINARY_API_SECRET=os.getenv("CLOUDINARY_API_SECRET")
-    serializer  = os.getenv("SECRET_KEY","b47c300f604a119bbafd524c8a5e8e47")
-    SESSION_PERMANENT = True
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=1)
-    
+    serializer=os.getenv("SECRET_KEY","b47c300f604a119bbafd524c8a5e8e47")
+    SESSION_PERMANENT=True
+    PERMANENT_SESSION_LIFETIME=timedelta(minutes=1)
+    stripe.api_key=os.getenv("STRIPE_API_KEY")
 
 class DevelopConfig(Config):
     DEBUG=True
@@ -46,6 +47,7 @@ class DevelopConfig(Config):
     serializer  = os.getenv("SECRET_KEY","b47c300f604a119bbafd524c8a5e8e47")
     SESSION_PERMANENT = True
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=20)
+    stripe.api_key=os.getenv("STRIPE_API_KEY")
 
 config = {
     "dev" : DevelopConfig,

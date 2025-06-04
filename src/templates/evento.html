@@ -83,7 +83,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                         </svg>
                     </button>
-                    <input type="number" id="ticketCount" value="1" min="1" max="{{ evento[7] }}" class="w-16 h-10 text-center border-t border-b border-gray-300 bg-white text-gray-700 focus:outline-none" aria-label="Número de entradas">
+                    <input type="number" id="ticketCount" value="1" min="1" max="{{ evento[9] }}" class="w-16 h-10 text-center border-t border-b border-gray-300 bg-white text-gray-700 focus:outline-none" aria-label="Número de entradas">
                     <button aria-label="Aumentar entradas" onclick="incrementTickets()" class="w-10 h-10 bg-gray-200 rounded-r-lg flex items-center justify-center hover:bg-gray-300 transition">
                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -113,17 +113,23 @@
             </div>
 
             <!-- Botón de compra/participación -->
-            <button id="checkoutButton" 
-                    class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center justify-center">
-                {% if evento[7] > 0 %}
-                    Comprar entradas
-                {% else %}
-                    Confirmar participación
-                {% endif %}
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-            </button>
+            {% if evento[9] == 0 %}
+                <button disabled class="w-full py-3 px-6 bg-gray-400 text-white font-semibold rounded-lg cursor-not-allowed">
+                    Entradas agotadas
+                </button>
+            {% else %}
+                <button id="checkoutButton" 
+                        class="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 flex items-center justify-center">
+                    {% if evento[7] > 0 %}
+                        Comprar entradas
+                    {% else %}
+                        Confirmar participación
+                    {% endif %}
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </button>
+            {% endif %}
 
             <!-- Mensaje de disponibilidad -->
             <p class="text-sm text-gray-500 mt-3 text-center">
@@ -224,6 +230,7 @@
     const eventoid = {{ evento[0] }};
     const ticketPrice = {{ evento[7] if evento[7] > 0 else 0 }};
     const maxTickets = {{ evento[9] }};
+    const eventoPrecio = {{ evento[7] }};
 
     function updateDisplay() {
         const subtotal = ticketCount * ticketPrice;
@@ -261,12 +268,24 @@
     });
 
     document.getElementById('checkoutButton').addEventListener('click', function() { 
-        const ticketCount = document.getElementById('ticketCount');  // Obtener el input
-        const Count = ticketCount.value; 
-        alert(`Has seleccionado ${Count} entrada(s).`);
-        const url = `/comprar/${eventoid}/${Count}`;
-        window.location.href = url;
-    })
+        const ticketCount = document.getElementById('ticketCount');
+        const Count = ticketCount.value;
+
+        if (Count <= 0) {
+            alert("Selecciona al menos una entrada.");
+            return;
+        }
+
+        if (eventoPrecio == 0) {
+            // Entrada gratuita
+            const url = `/comprar/${eventoid}/${Count}`;
+            window.location.href = url;
+        } else {
+            // Entrada con pago
+            const url = `/comprar-pago/${eventoid}/${Count}`;
+            window.location.href = url;
+        }
+    });
 
     updateDisplay();
 

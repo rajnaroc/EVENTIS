@@ -8,6 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <!-- cdn awensome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- graficas con chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+
 </head>
 <body class="bg-white min-h-screen flex flex-col text-gray-800 font-sans">
     <div id="flash-messages" class="fixed top-4 right-4 z-50 space-y-2">
@@ -32,83 +37,90 @@
     {% endwith %}
     </div>
 
-    {% if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com" %}
-    <!-- Header -->
-        <header class="bg-gray-300 shadow">
-            <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <a href=" {{ url_for('general.inicio' ) }}"><img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
-                </div>    
-            
-                <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-                    <a href="{{ url_for('eventos.evento') }}" class="inline-block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
-                    <a href="{{ url_for('contacto.contacto' ) }}" class="inline-block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
-                    <div class="relative">
-                        <!-- Botón Perfil -->
-                        <a onclick="document.getElementById('perfilDropdown').classList.toggle('hidden');" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil({{ current_user.saldo }} €)</a>
-                        <!-- Menú desplegable justo debajo -->
-                        <div id="perfilDropdown" class="absolute left-0 mt-2 w-48 rounded-md bg-white border border-gray-200 shadow-lg hidden z-20">
-                            <a href="{{ url_for('perfil.perfil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ver perfil</a>
-                            <a href="{{ url_for('perfil.historial_compras' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historial de compras</a>
-                            <a href="{{ url_for('contacto.contacto_admin' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mensajes</a>
-                            <a href="{{ url_for('eventos.editar_eventos' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Editar eventos</a>
-                            <a href="{{ url_for('eventos.crear_evento' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Eventos</a>
-                        </div>
-                    </div>
-                    <a href="{{ url_for('auth.logout' ) }}" class="block w-max px-3 bg-red-500 py-1 rounded-md hover:bg-gray-800 text-white hover:text-white transition-opacity duration-300 ease-in-out leading-tight">Cerrar sesion</a>
-                </div>
-            </nav>
-        </header> 
-        <!-- Fin del header -->
-    {% elif current_user.is_authenticated %}
-        <!-- Header -->
-        <header class="bg-gray-300 shadow">
-            <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <a href=" {{ url_for('general.inicio' ) }}"><img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
-                </div>    
-            
-                <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-                    <a href="{{ url_for('eventos.evento') }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
-                    <a href="{{ url_for('contacto.contacto' ) }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
-                    <div class="relative">
-                        <!-- Botón Perfil -->
-                        <a href="#" onclick="document.getElementById('perfilDropdown').classList.toggle('hidden'); return false;" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Perfil({{ current_user.saldo }}€)</a>
-                        <!-- Menú desplegable justo debajo -->
-                        <div id="perfilDropdown" class="absolute left-0 mt-2 w-48 rounded-md bg-white border border-gray-200 shadow-lg hidden z-20">
-                            <a href="{{ url_for('perfil.perfil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ver perfil</a>
-                            <a href="{{ url_for('perfil.historial_compras' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historial de compras</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Editar cuenta</a>
-                        </div>
-                    </div>
-                    <a href="{{ url_for('auth.logout' ) }}" class="block w-max px-3 py-1 bg-red-500 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Cerrar sesion</a>
-                </div>
-            </nav>
-        </header> 
-        <!-- Fin del header -->
-    {% else %}
-    {% block header %}
-    <!-- Header -->
     <header class="bg-gray-300 shadow">
         <nav class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
             <!-- Logo -->
             <div class="flex items-center space-x-2">
-                <a href=" {{ url_for('general.inicio') }}"><img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web" class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain"></a>
-            </div>    
-        
-        <div id="nav-links" class="hidden w-full sm:flex sm:w-auto sm:space-x-6 mt-2 sm:mt-0 flex-col sm:flex-row text-sm sm:text-base font-medium text-center ">
-            <a href="{{ url_for('eventos.evento') }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Eventos</a>
-            <a href="{{ url_for('contacto.contacto') }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Contacto</a>
-            <a href="{{ url_for('auth.iniciar_sesion') }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Iniciar sesión</a>
-            <a href="{{ url_for('auth.register') }}" class="block w-max px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition-opacity duration-300 ease-in-out">Registrarte</a>
-        </div>
+            <a href="{{ url_for('general.inicio') }}">
+                <img src="{{ url_for('static', filename='logo/Eventis.png') }}" alt="logo web"
+                class="h-10 sm:h-12 md:h-16 lg:h-20 xl:h-24 w-auto object-contain" />
+            </a>
+            </div>
+
+            <!-- Botón hamburguesa solo en móvil -->
+            <button onclick="toggleMobileMenu()" class="sm:hidden text-black text-2xl focus:outline-none">
+            ☰
+            </button>
+
+            <!-- Menú de navegación en pantallas grandes -->
+            <div
+            class="hidden sm:flex sm:space-x-6 text-sm sm:text-base font-medium text-center items-center"
+            >
+            <a href="{{ url_for('eventos.evento') }}"
+                class="px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition">Eventos</a>
+            <a href="{{ url_for('contacto.contacto') }}"
+                class="px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition">Contacto</a>
+
+            {% if current_user.is_authenticated %}
+                <div class="relative">
+                <a href="#" onclick="togglePerfilDropdown()" class="px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition">
+                    Perfil({{ current_user.saldo }}€)
+                </a>
+                <div id="perfilDropdown"
+                    class="absolute left-0 mt-2 w-48 rounded-md bg-white border border-gray-200 shadow-lg hidden z-20">
+                    <a href="{{ url_for('perfil.perfil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Ver perfil</a>
+                    <a href="{{ url_for('perfil.historial_compras') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Historial de compras</a>
+                    {% if current_user.correo == 'aaroncm611@gmail.com' %}
+                    <a href="{{ url_for('contacto.contacto_admin') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Panel Mensajes</a>
+                    <a href="{{ url_for('eventos.editar_eventos') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Panel Editar Eventos</a>
+                    <a href="{{ url_for('eventos.crear_evento') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Panel Crear Eventos</a>
+                    <a href="{{ url_for('eventos.panel_estadisticas' ) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Panel Estadísticas</a>
+                    {% else %}
+                    {% endif %}
+                </div>
+                </div>
+                <a href="{{ url_for('auth.logout') }}"
+                class="px-3 py-1 bg-red-500 rounded-md hover:bg-gray-800 text-white transition">Cerrar sesión</a>
+            {% else %}
+                <a href="{{ url_for('auth.iniciar_sesion') }}"
+                class="px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition">Iniciar sesión</a>
+                <a href="{{ url_for('auth.register') }}"
+                class="px-3 py-1 rounded-md hover:bg-gray-800 text-black hover:text-white transition">Registrarte</a>
+            {% endif %}
+            </div>
         </nav>
+
+        <!-- Menú lateral (solo visible en móviles) -->
+        <div id="mobileMenu"
+            class="fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-40 sm:hidden">
+            <div class="p-4 flex justify-between items-center border-b">
+            <span class="text-lg font-semibold">Menú</span>
+            <button onclick="toggleMobileMenu()" class="text-xl font-bold text-black">✕</button>
+            </div>
+
+            <div class="flex flex-col p-4 space-y-4">
+            <a href="{{ url_for('eventos.evento') }}" class="text-black hover:text-blue-600">Eventos</a>
+            <a href="{{ url_for('contacto.contacto') }}" class="text-black hover:text-blue-600">Contacto</a>
+
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('perfil.perfil') }}" class="text-black hover:text-blue-600">Ver perfil</a>
+                <a href="{{ url_for('perfil.historial_compras') }}" class="text-black hover:text-blue-600">Historial de compras</a>
+                {% if current_user.correo == 'aaroncm611@gmail.com' %}
+                <a href="{{ url_for('contacto.contacto_admin') }}" class="text-black hover:text-blue-600">Panel Mensajes</a>
+                <a href="{{ url_for('eventos.editar_eventos') }}" class="text-black hover:text-blue-600">Panel Editar eventos</a>
+                <a href="{{ url_for('eventos.crear_evento') }}" class="text-black hover:text-blue-600">Panel Eventos</a>
+                <a href="#" class="text-black hover:text-blue-600">Panel Usuarios</a>
+                {% else %}
+                {% endif %}
+                <a href="{{ url_for('auth.logout') }}" class="text-red-600 hover:text-red-800">Cerrar sesión</a>
+            {% else %}
+                <a href="{{ url_for('auth.iniciar_sesion') }}" class="text-black hover:text-blue-600">Iniciar sesión</a>
+                <a href="{{ url_for('auth.register') }}" class="text-black hover:text-blue-600">Registrarte</a>
+            {% endif %}
+            </div>
+        </div>
     </header>
-    <!-- Fin del header -->
-    {% endblock %}
-    {% endif %}
+
     <!-- Contenido principal -->
     {% block body %}
     <div class="flex-1">
@@ -204,6 +216,34 @@
         }, 3000);
         });
     });
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const perfilDropdown = document.getElementById('perfilDropdown');
+
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('overlay');
+
+        const isOpen = !mobileMenu.classList.contains('translate-x-full');
+
+        if (isOpen) {
+        // Cerrar menú
+        mobileMenu.classList.add('translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        } else {
+        // Abrir menú
+        mobileMenu.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        }
+    }
+
+    function togglePerfilDropdown() {
+        const dropdown = document.getElementById('perfilDropdown');
+        dropdown.classList.toggle('hidden');
+    }
     </script>
 
     {% endblock %}
