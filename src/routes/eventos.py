@@ -480,7 +480,8 @@ def comprar_con_pago(evento_id, cantidad):
         )
     
     else:
-        return redirect(url_for('auth.iniciar_sesion'))
+
+        return redirect(url_for('general.inicio'))
 
 
 @eventos_bp.route('/pago-exitoso')
