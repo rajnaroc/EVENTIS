@@ -102,6 +102,18 @@
                     </svg>
                     Descargar
                 </a>
+                {% if entrada[5]== 'comprada' %}
+                <form method="POST" action="{{ url_for('perfil.devolver_entrada', entrada_id=entrada[0]) }}">
+                    <input type="hidden" name="entrada_id" value="{{ entrada[0] }}">
+                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded text-sm font-medium transition-colors">
+                        Solicitar devolución
+                    </button>
+                </form>
+                {% elif entrada[5] == 'reembolsado' %}
+                    <p class="text-green-600 text-sm text-center font-semibold">Reembolsado</p>
+                {% endif %}
+
+
             </div>
         </div>
     </div>

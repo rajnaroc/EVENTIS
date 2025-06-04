@@ -21,6 +21,7 @@ def iniciar_sesion():
         if user:
             login_user(user)
             session.permanent = True
+            flash("Bienvenido {} usuario".format(user.nombre),"success")
             return redirect(url_for('general.inicio'))
         
         else:
@@ -35,6 +36,7 @@ def iniciar_sesion():
 # funcion para registrar un nuevo usuario(usuario)
 @auth_bp.route('/registrarse', methods=['GET', 'POST'])
 def register():
+    
     register = registerForm()
     
     if request.method == 'POST':
@@ -75,6 +77,7 @@ def register():
 # funcion para cerrar la sesion(usuario)
 @auth_bp.route('/logout')
 def logout():
+    
     if current_user.is_authenticated:
         logout_user()
         flash("Cerrada la sesion","info")

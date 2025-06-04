@@ -7,6 +7,7 @@ contacto_bp = Blueprint('contacto', __name__)
 # Funcion para el formulario de contacto(usuario)
 @contacto_bp.route('/contacto', methods=['GET', 'POST'])
 def contacto():
+    
     form = contactoform()
 
     if request.method == 'GET':

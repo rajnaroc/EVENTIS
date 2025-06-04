@@ -1,5 +1,6 @@
 from flask import flash
 from .models.User import User
+from datetime import datetime
 
 class ModelUser:
 
@@ -364,6 +365,65 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+        
+    @classmethod
+    def procesar_devolucion(cls, db, entrada_id, usuario_id):
+        try:
+            cur = db.connection.cursor()
+
+            # Obtener datos
+            cur.execute("""
+                SELECT e.id, e.estado, ev.fecha,ev.id
+                FROM entradas e
+                JOIN eventos ev ON e.evento_id = ev.id
+                WHERE e.id = %s AND e.usuario_id = %s
+            """, (entrada_id, usuario_id))
+            entrada = cur.fetchone()
+
+            if not entrada:
+                flash("No se encontró la entrada para este usuario","info")
+                cur.close()
+                return False
+
+            estado = entrada[1]
+            fecha_evento = entrada[2]
+
+            # Convertir fecha_evento a datetime.date si viene como string
+            if isinstance(fecha_evento, str):
+                fecha_evento = datetime.strptime(fecha_evento, '%Y-%m-%d').date()
+
+            hoy = datetime.now().date()
+            diferencia = (fecha_evento - hoy).days
+            
+
+            # Condiciones para devolución
+            if estado.lower() != "comprada":
+                flash("Estado incorrecto para devolución: {}".format(estado),"error")
+                cur.close()
+                return False
+
+            if diferencia < 2:
+                flash("No se puede devolver, el evento es en {} días {}".format(diferencia,2),"error")
+                cur.close()
+                return False
+
+            # Actualizar estado
+            cur.execute("""
+                UPDATE entradas SET estado = 'reembolsado' WHERE id = %s
+            """, (entrada_id,))
+
+            cur.execute("""
+                UPDATE eventos SET aforo = aforo + 1 WHERE id = %s
+            """, (entrada[3],))
+
+            db.connection.commit()
+            cur.close()
+            return True
+
+        except Exception as e:
+            print("Error en devolución:", e)
+            return False
+
 
     @classmethod
     def restar_entradas(cls,db, evento_id, cantidad):

@@ -6,6 +6,7 @@ perfil_bp = Blueprint('perfil', __name__)
 # Funcion para editar el perfil(admin) y verlo
 @perfil_bp.route('/perfil/editar', methods=['GET', 'POST'])
 def perfil():
+    
     form=perfilform(obj=current_user)
     
     if request.method == 'POST':
@@ -43,6 +44,7 @@ def eliminar_cuenta():
         
 @perfil_bp.route('/historial', methods=['GET'])
 def historial_compras():
+    
     if current_user.is_authenticated:
         compra = ModelUser.historial_compras(db, current_user.id)
         return render_template('historial_compras.html', compra=compra)
@@ -80,10 +82,38 @@ def tu_ruta_historial():
 
 @perfil_bp.route('/eliminar_entrada/<int:entrada_id>', methods=['POST'])
 def eliminar_entrada(entrada_id):
-    cur = db.connection.cursor()
-    cur.execute("DELETE FROM entradas WHERE id = %s AND usuario_id = %s", (entrada_id, current_user.id))
-    db.connection.commit()
-    cur.close()
-    flash('Entrada eliminada correctamente', 'success')
+    
+    if current_user.is_authenticated and request.method == "POST":
+        cur = db.connection.cursor()
+        cur.execute("DELETE FROM entradas WHERE id = %s AND usuario_id = %s", (entrada_id, current_user.id))
+        db.connection.commit()
+        cur.close()
+        flash('Entrada eliminada correctamente', 'success')
 
-    return redirect(url_for('perfil.tu_ruta_historial'))
+        return redirect(url_for('perfil.tu_ruta_historial'))
+    else:
+        return redirect(url_for('auth.iniciar_sesion'))
+    
+@perfil_bp.route('/devolver_entrada/<int:entrada_id>', methods=['POST'])
+def devolver_entrada(entrada_id):
+
+    if request.method == "POST" and current_user.is_authenticated:
+
+        entrada_id = request.form.get('entrada_id')
+
+        if not entrada_id:
+            flash("Entrada no válida", "error")
+            return redirect(url_for('perfil.historial_compras'))
+
+        success = ModelUser.procesar_devolucion(db, entrada_id, current_user.id)
+
+        if success:
+            flash("Entrada devuelta con éxito", "success")
+        else:
+            flash("No se pudo procesar la devolución. Asegúrate de que cumpla las condiciones.", "error")
+
+        return redirect(url_for('perfil.historial_compras'))
+    else:
+        return redirect(url_for('auth.iniciar_sesion'))
+
+

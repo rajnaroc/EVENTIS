@@ -470,6 +470,7 @@ def comprar_con_pago(evento_id, cantidad):
             evento_id=evento_id,
             precio=precio
         )
+    
     else:
         return redirect(url_for('auth.iniciar_sesion'))
 
