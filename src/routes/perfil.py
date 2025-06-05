@@ -22,10 +22,12 @@ def perfil():
                 flash("Error al actualizar el perfil.","error")
         else:
             flash("Error en los inputs.","error")
+            return redirect(url_for("perfil.perfil"))
 
     if request.method == "GET":
-        if current_user.is_authenticated:
+        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
             return render_template('perfil.html',   form=form, user=current_user)
+        
         else:
             return redirect(url_for('iniciar_sesion'))
 

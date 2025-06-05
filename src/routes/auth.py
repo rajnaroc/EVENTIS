@@ -67,6 +67,7 @@ def register():
             return redirect(url_for('general.inicio'))
         
         else:
+            flash("Error al Registar al usuario","success")
             return redirect(url_for('auth.register.html'))
     
     if request.method == 'GET':

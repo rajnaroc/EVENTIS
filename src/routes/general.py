@@ -5,6 +5,7 @@ general_bp = Blueprint('general', __name__)
 # Funcion para enseñar el inicio(usuario)
 @general_bp.route('/', methods=['GET'])
 def inicio():
+    
     if request.method == "GET":
         cur = db.connection.cursor()
         cur.execute("SELECT ruta FROM fotos_evento ORDER BY id DESC")
