@@ -102,6 +102,7 @@ class ModelUser:
         except Exception as e:
             print(e)
 
+    # funcion para añadir el mensaje del usuario
     @classmethod
     def contacto(cls,db,usuario_id, nombre, correo, mensaje):
         try:
@@ -119,19 +120,35 @@ class ModelUser:
             print(e)
             return False
         
-    # funcion para ver los mensajes del usuario
     @classmethod
-    def mensajes(cls,db):
+    def mensajes(cls, db, pagina=1, por_pagina=10):
         try:
+            offset = (pagina - 1) * por_pagina
             cur = db.connection.cursor()
-            cur.execute("SELECT * FROM mensajes_contacto")
-            data = cur.fetchall()
+
+            # Consulta para obtener solo los mensajes de la página actual
+            cur.execute("""
+                SELECT * FROM mensajes_contacto
+                ORDER BY fecha DESC
+                LIMIT %s OFFSET %s
+            """, (por_pagina, offset))
+            mensajes = cur.fetchall()
+
+            # Consulta para contar total de mensajes
+            cur.execute("SELECT COUNT(*) FROM mensajes_contacto")
+            total_mensajes = cur.fetchone()[0]
 
             cur.close()
-            return data
-            
+
+            # Calcular total de páginas
+            total_paginas = (total_mensajes + por_pagina - 1) // por_pagina
+
+            return mensajes, total_paginas
+
         except Exception as e:
             print(e)
+            return [], 0
+
 
     # funcion para eleminar el mensaje de contacto
     @classmethod
@@ -142,21 +159,6 @@ class ModelUser:
             db.connection.commit()
             cur.close()
 
-            return True
-        except Exception as e:
-            print(e)
-            return False
-
-    # funcion para borrar el usuario de la base de datos
-    @classmethod
-    def delete_user(cls,db,id):
-        try:
-            cur = db.connection.cursor()
-            cur.execute("DELETE FROM usuarios WHERE id = %s", (id,))
-            db.connection.commit()
-            cur.close()
-    
-            
             return True
         except Exception as e:
             print(e)
@@ -180,6 +182,7 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+    # funcion para que el usuario modifique su datos
     @classmethod
     def update_user(cls,db, id, nombre, correo,fecha_nacimiento):
         try:
@@ -191,6 +194,7 @@ class ModelUser:
         except Exception as e:
             print(e)
             return False
+        
     # funcion para ver los eventos
     @classmethod
     def eventos(cls,db):
@@ -456,5 +460,78 @@ class ModelUser:
         except Exception as e:
             print(e)
             return []
+        
+    @classmethod
+    def obtener_usuarios_paginados(cls, db, pagina=1, por_pagina=10):
+        
+        offset = (pagina - 1) * por_pagina
+        
+        cur = db.connection.cursor()
+        cur.execute("""
+            SELECT id, nombre, correo, fecha_registro
+            FROM usuarios
+            WHERE id != 1
+            ORDER BY id ASC
+            LIMIT %s OFFSET %s
+        """, (por_pagina, offset))
+        usuarios = cur.fetchall()
+        
+        # Obtener total de usuarios para calcular páginas totales
+        cur.execute("SELECT COUNT(*) FROM usuarios")
+        total_usuarios = cur.fetchone()[0]
+        cur.close()
+        
+        return usuarios, total_usuarios
 
+
+    @classmethod
+    def obtener_usuario_por_id(cls,db,usuario_id):
+        
+        cur = db.connection.cursor()
+        cur.execute("""
+            SELECT id, nombre, correo, fecha_nacimiento, saldo, fecha_registro
+            FROM usuarios
+            WHERE id = %s
+        """, (usuario_id,))
+        
+        usuario = cur.fetchone()
+        cur.close()
+        
+        return usuario
     
+    @classmethod
+    def actualizar_usuario(cls,db,usuario_id, nombre, correo, fecha_nacimiento, saldo):
+        
+        cur = db.connection.cursor()
+
+        cur.execute("""
+            UPDATE usuarios
+            SET nombre=%s, correo=%s, fecha_nacimiento=%s, saldo=%s
+            WHERE id=%s
+        """, (nombre, correo, fecha_nacimiento, saldo, usuario_id))
+        db.connection.commit()
+        cur.close()
+    
+    @classmethod
+    def eliminar_usuario(cls,db,usuario_id):
+        cur = db.connection.cursor()
+        cur.execute("DELETE FROM entradas WHERE usuario_id = %s", (usuario_id,))
+
+        cur.execute("DELETE FROM usuarios WHERE id = %s", (usuario_id,))
+        db.connection.commit()
+        cur.close()
+
+    @classmethod
+    def obtener_entradas_usuario(cls,db,usuario_id):
+        cur = db.connection.cursor()
+        cur.execute( """
+            SELECT e.id, ev.titulo, e.precio, e.estado, e.fecha_compra
+            FROM entradas e
+            JOIN eventos ev ON e.evento_id = ev.id
+            WHERE e.usuario_id = %s
+            ORDER BY e.fecha_compra DESC
+        """, (usuario_id,))
+
+        entradas = cur.fetchall()
+        cur.close()
+        return entradas

@@ -1,43 +1,77 @@
 {% extends 'base.html' %}
 {% block title %}Mensajes{% endblock %}
+
 {% block body %}
-<div class="container mx-auto mt-10">
-    <h1 class="flex justify-center items-center text-2xl font-bold mb-4">Mensajes Usuario</h1>
-    <div class="min-h-screen overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-300">
+<div class="container mx-auto mt-10 px-4">
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Mensajes del Usuario</h1>
+    
+    <div class=" container mx-auto min-h-screen mt-10 px-4 flex flex-col overflow-x-auto  bg-white shadow-md rounded-lg">
+        <table class="min-w-full  divide-y divide-gray-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="text-left px-4 py-2 border-b">ID</th>
-                    <th class="text-left px-4 py-2 border-b">Nombre</th>
-                    <th class="text-left px-4 py-2 border-b">Correo</th>
-                    <th class="text-left px-4 py-2 border-b">Mensaje</th>
-                    <th class="text-left px-4 py-2 border-b">Fecha</th>
-                    <th class="text-center px-4 py-2 border-b">Eliminar</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">ID</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Nombre</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Correo</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Mensaje</th>
+                    <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Fecha</th>
+                    <th class="text-center px-6 py-3 text-sm font-semibold text-gray-700">Responder</th>
+                    <th class="text-center px-6 py-3 text-sm font-semibold text-gray-700">Eliminar</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white divide-y divide-gray-200">
                 {% if mensajes %}
                     {% for mensaje in mensajes %}
-                    <tr>
-                        <td class="text-left px-4 py-2 border-b">{{ mensaje.0 }}</td>
-                        <td class="text-left px-4 py-2 border-b">{{ mensaje.2 }}</td>
-                        <td class="text-left px-4 py-2 border-b">{{ mensaje.3 }}</td>
-                        <td class="text-left px-4 py-2 border-b">{{ mensaje.4 }}</td>
-                        <td class="text-left px-4 py-2 border-b">{{ mensaje.5.date() | format_fecha }}, {{ mensaje.5.time() | format_hora }}</td>
-                        <td class="text-center px-4 py-2 border-b">
-                            <a href="/eliminar/{{ mensaje.0 }}" class="text-red-500 hover:text-red-700">Eliminar</a>
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 text-sm text-gray-800">{{ mensaje.0 }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">{{ mensaje.2 }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800">{{ mensaje.3 }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-800 break-words max-w-xs">
+                            {{ mensaje.4 }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-800">
+                            {{ mensaje.5.date() | format_fecha }},
+                            {{ mensaje.5.time() | format_hora }}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ mensaje.3 }}&su=Respuesta a tu mensaje en Eventis&body=Hola {{ mensaje.2 }},%0A%0AGracias por tu mensaje. Te respondemos desde Eventis..." target="_blank" class="inline-block px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded hover:bg-blue-200 transition">Responder</a>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <a href="/eliminar/{{ mensaje.0 }}"
+                               class="inline-block px-3 py-1 text-sm font-medium text-red-600 bg-red-100 rounded hover:bg-red-200 transition">
+                               Eliminar
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="6" class="text-center px-4 py-4 text-gray-500">
+                        <td colspan="6" class="px-6 py-6 text-center text-gray-500 text-sm">
                             No hay mensajes por mostrar.
                         </td>
                     </tr>
                 {% endif %}
             </tbody>
         </table>
+        <div class="mt-4 flex justify-center space-x-2">
+            {% if pagina > 1 %}
+                <a href="{{ url_for('contacto.contacto_admin', page=pagina-1) }}" 
+                class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">&laquo; Anterior</a>
+            {% endif %}
+
+            {% for p in range(1, total_paginas + 1) %}
+                {% if p == pagina %}
+                <span class="px-3 py-1 bg-blue-500 text-white rounded">{{ p }}</span>
+                {% else %}
+                <a href="{{ url_for('contacto.contacto_admin', page=p) }}" 
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagina < total_paginas %}
+                <a href="{{ url_for('contacto.contacto_admin', page=pagina+1) }}" 
+                class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Siguiente &raquo;</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

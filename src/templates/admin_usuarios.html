@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Gestión de Usuarios{% endblock %}
+
+{% block body %}
+<div class="container min-h-screen mx-auto mt-10 px-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">Usuarios</h1>
+
+    <table class="min-w-full divide-y divide-gray-200 bg-white shadow rounded-lg">
+        <thead class="bg-gray-100">
+        <tr>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">ID</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nombre</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Correo</th>
+            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Fecha Registro</th>
+            <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Acciones</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+        {% for usuario in usuarios %}
+        <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 text-sm text-gray-800">{{ usuario[0] }}</td>
+            <td class="px-6 py-4 text-sm text-gray-800">{{ usuario[1] }}</td>
+            <td class="px-6 py-4 text-sm text-gray-800">{{ usuario[2] }}</td>
+            <td class="px-6 py-4 text-sm text-gray-800">{{ usuario[3]|format_fecha}}</td>
+            <td class="px-6 py-4 text-center space-x-2">
+            <a href="{{ url_for('admin.admin_usuario_detalle', usuario_id=usuario[0]) }}"
+                class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">Ver</a>
+            <a href="{{ url_for('admin.admin_usuario_editar', usuario_id=usuario[0]) }}"
+                class="px-3 py-1 text-sm bg-yellow-400 text-white rounded hover:bg-yellow-500">Editar</a>
+            <form action="{{ url_for('admin.admin_usuario_eliminar', usuario_id=usuario[0]) }}" method="POST" style="display:inline;">
+                <button type="submit"
+                        onclick="return confirm('¿Eliminar usuario?')"
+                        class="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600">Eliminar</button>
+            </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" class="px-6 py-4 text-center text-gray-500">No hay usuarios registrados.</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="mt-4 flex justify-center space-x-2">
+    {% if pagina > 1 %}
+        <a href="{{ url_for('admin.admin_usuarios', page=pagina-1) }}" 
+            class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">&#x2039; Anterior</a>
+    {% endif %}
+
+    {% for p in range(1, total_paginas + 1) %}
+        {% if p == pagina %}
+        <span class="px-3 py-1 bg-blue-500 text-white rounded">{{ p }}</span>
+        {% else %}
+        <a href="{{ url_for('admin.admin_usuarios', page=p) }}" 
+            class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">{{ p }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if pagina < total_paginas %}
+        <a href="{{ url_for('admin.admin_usuarios', page=pagina+1) }}" 
+            class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Siguiente &#x203A;</a>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

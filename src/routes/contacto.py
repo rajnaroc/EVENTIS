@@ -35,20 +35,22 @@ def contacto():
         else:
             flash("Dato no valido en los inputs","error")
             return redirect(url_for('contacto.contacto')) 
-        
+# funcion carga los mensajes del usuario        
 @contacto_bp.route('/contacto/admin', methods=['GET', 'POST'])
 def contacto_admin():
-
-    if request.method == 'GET':
+    
+    if request.method == 'GET' and current_user.correo == "aaroncm611@gmail.com":
+        pagina = request.args.get('page', 1, type=int)
         
-        mensajes = ModelUser.mensajes(db)
+        mensajes, total_paginas = ModelUser.mensajes(db, pagina=pagina, por_pagina=5)
         
         if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
-            return render_template('admin_mensajes.html', mensajes=mensajes )
-        
+            return render_template('admin_mensajes.html', mensajes=mensajes, pagina=pagina, total_paginas=total_paginas)
         else:
             return redirect(url_for('auth.iniciar_sesion'))
-        
+    else:
+        abort(404)
+
 
 @contacto_bp.route('/eliminar/<int:id>', methods=['GET'])
 def eliminar_mensaje(id):
