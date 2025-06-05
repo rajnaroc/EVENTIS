@@ -1,6 +1,24 @@
+from flask import flash
 from flask_wtf import FlaskForm
+import re
 from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,FloatField,IntegerField,SelectField,MultipleFileField
 from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange,InputRequired
+
+# funcion para poner una contraseña segura
+def password_complexity_check(form, field):
+    password = field.data
+    # Expresión regular para validar la contraseña
+    pattern = re.compile(
+        r'^(?=.*[a-z])'      # al menos una minúscula
+        r'(?=.*[A-Z])'       # al menos una mayúscula
+        r'(?=.*\d)'          # al menos un dígito
+        r'(?=.*[@$!%*?&])'   # al menos un carácter especial
+        r'[A-Za-z\d@$!%*?&]{6,12}$'  # longitud y caracteres permitidos
+    )
+    if not pattern.match(password):
+        return flash("La contraseña debe tener entre 6 y 12 caracteres,incluyendo mayúsculas, minúsculas, números y caracteres especiales (@$!%*?&).","info")
+    
+
 
 # forms para el login 
 class loginform(FlaskForm):
@@ -13,6 +31,7 @@ class loginform(FlaskForm):
         DataRequired(),
         Length(min=6,max=12)
     ])
+
     enviar = SubmitField("Iniciar sesion")
 
 # forms para el registro de un nuevo usuario
@@ -32,6 +51,7 @@ class registerForm(FlaskForm):
     contraseña = PasswordField("Escribe tu Contraseña", validators=[
         DataRequired(),
         Length(min=6,max=12),
+        password_complexity_check,
         EqualTo("confirme",message="Repite la contrasela")
     ])
     confirme = PasswordField("Repite tu Contraseña", validators=[
@@ -126,5 +146,9 @@ class crearEventoForm(FlaskForm):
     submit_editar = SubmitField('Editar evento')
 
 class CambiarContraseñaForm(FlaskForm):
-    password = PasswordField('Nueva contraseña', validators=[DataRequired(), Length(min=6)])
+    password = PasswordField('Nueva contraseña', validators=[
+        DataRequired(), 
+        Length(min=6),
+        password_complexity_check
+    ])
     submit = SubmitField('Cambiar contraseña')

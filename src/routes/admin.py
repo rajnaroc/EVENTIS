@@ -39,7 +39,6 @@ def admin_usuario_editar(usuario_id):
     
     if request.method == "GET" and current_user.correo == "aaroncm611@gmail.com":
         usuario = ModelUser.obtener_usuario_por_id(db, usuario_id)
-        flash("Editado con exito el usuario","success")
         return render_template('admin_usuario_editar.html', usuario=usuario)
     
     else:
