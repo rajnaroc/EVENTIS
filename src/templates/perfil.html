@@ -9,6 +9,7 @@
             <h1 class="text-4xl font-bold text-center mb-8">Perfil</h1>
             <form action="/perfil/editar" method="POST" class="space-y-6">
                 {{ form.hidden_tag() }}
+
                 <!-- Nombre -->
                 <div>
                     {{ form.nombre.label(class="block text-lg font-bold mb-1") }}
@@ -18,6 +19,9 @@
                 <div>
                     {{ form.fecha_nacimiento.label(class="block text-lg font-bold mb-1") }}
                     {{ form.fecha_nacimiento(class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-400") }}
+                    {% for error in form.fecha_nacimiento.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
                 </div>
                 <!-- Email -->  
                 <div>
@@ -26,7 +30,7 @@
                 </div>
                 <!-- Botón de guardar cambios -->           
                 <div class="flex justify-center">
-                    <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">Guardar Cambios</button>
+                    {{ form.enviar(class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300")}}
                 </div>
             </form>
         </div>

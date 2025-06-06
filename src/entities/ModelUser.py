@@ -188,8 +188,10 @@ class ModelUser:
         try:
             cur = db.connection.cursor()
             cur.execute("UPDATE usuarios SET nombre = %s, correo = %s, fecha_nacimiento = %s WHERE id = %s",(nombre,correo,fecha_nacimiento,id))
-            db.commit
+            db.connection.commit()
             cur.close()
+
+            return True
 
         except Exception as e:
             print(e)
@@ -516,7 +518,7 @@ class ModelUser:
     def eliminar_usuario(cls,db,usuario_id):
         cur = db.connection.cursor()
         cur.execute("DELETE FROM entradas WHERE usuario_id = %s", (usuario_id,))
-
+        cur.execute("DELETE FROM mensajes_contacto WHERE usuario_id = %s", (usuario_id,))
         cur.execute("DELETE FROM usuarios WHERE id = %s", (usuario_id,))
         db.connection.commit()
         cur.close()

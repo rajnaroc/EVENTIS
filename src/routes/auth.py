@@ -34,47 +34,39 @@ def iniciar_sesion():
         else:
             return render_template('iniciar_sesion.html', login=login)
 
-# funcion para registrar un nuevo usuario(usuario)
 @auth_bp.route('/registrarse', methods=['GET', 'POST'])
 def register():
-    
-    register = registerForm()
-    
-    if request.method == 'POST':
+    form = registerForm()
 
-        # recoger los valores del input
-        nombre = request.form['nombre']
-        correo = request.form['correo']
-        contraseña = request.form['contraseña']
-        fecha_nacimiento = request.form['fecha_nacimiento']
+    if current_user.is_authenticated:
+        return redirect(url_for('general.inicio'))
 
-        # Verificar si el correo ya está registrado
+    if form.validate_on_submit():
+        nombre = form.nombre.data
+        correo = form.correo.data
+        contraseña = form.contraseña.data
+        fecha_nacimiento = form.fecha_nacimiento.data
+
         if ModelUser.exists(db, correo):
-            flash("El correo ya está registrado. Por favor, inicia sesión o utiliza otro correo.","error")
+            flash("El correo ya está registrado. Por favor, inicia sesión o utiliza otro correo.", "error")
             return redirect(url_for('auth.register'))
-        
-        # funcion para registar al usuario 
+
         if ModelUser.register(db, nombre, correo, contraseña, fecha_nacimiento):
-            flash("Registrado correctamente","success")
-            
-            # Enviar correo de bienvenida
+            flash("Registrado correctamente", "success")
+
             enviar_correo_bienvenida(Message, mail, correo, plantilla_bienvenida(nombre))
-            
-            # iniciar sesion automaticamente al registrarse
+
             login_user(ModelUser.sesion(db, correo, contraseña))
-            
-            flash("Bienvenido {} usuario".format(nombre),"success")
-            return redirect(url_for('general.inicio'))
-        
-        else:
-            flash("Error al Registar al usuario","success")
-            return redirect(url_for('auth.register.html'))
-    
-    if request.method == 'GET':
-        if current_user.is_authenticated:
+
+            flash(f"Bienvenido {nombre} usuario", "success")
             return redirect(url_for('general.inicio'))
         else:
-            return render_template('register.html', register=register)
+            flash("Error al registrar al usuario", "error")
+            return redirect(url_for('auth.register'))
+
+    # Si GET o si hubo errores
+    return render_template('register.html', register=form)
+
 
 # funcion para cerrar la sesion(usuario)
 @auth_bp.route('/logout')

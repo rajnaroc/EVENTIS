@@ -25,6 +25,9 @@
                         </svg>
                         </button>
                     </div>
+                    {% for error in form.password.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    {% endfor %}
                     <div class="mt-4">
                         {{ form.submit(class="w-full bg-white text-black font-bold py-2 rounded-md shadow hover:bg-gray-200 transition")}}
                     </div>

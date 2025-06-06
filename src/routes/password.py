@@ -63,15 +63,17 @@ def cambiar_contraseña(token):
     form = CambiarContraseñaForm()
 
     if request.method == 'POST':
-        nueva = request.form['password']
-        hash = generate_password_hash(nueva)
+        if form.validate_on_submit():
+            nueva = request.form['password']
+            hash = generate_password_hash(nueva)
 
-        cur = db.connection.cursor()
-        cur.execute("UPDATE usuarios SET contraseña=%s WHERE correo=%s", (hash, correo))
-        db.connection.commit()
+            cur = db.connection.cursor()
+            cur.execute("UPDATE usuarios SET contraseña=%s WHERE correo=%s", (hash, correo))
+            db.connection.commit()
 
-        flash("Contraseña cambiada correctamente", "success")
-        return redirect(url_for("auth.iniciar_sesion"))
+            flash("Contraseña cambiada correctamente", "success")
+            return redirect(url_for("auth.iniciar_sesion"))
+        return render_template("cambiar.html",form=form)
     
     return render_template("cambiar.html",form=form)
 

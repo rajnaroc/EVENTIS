@@ -3,30 +3,33 @@ from extension.extesion import *
 perfil_bp = Blueprint('perfil', __name__)
 
 
-# Funcion para editar el perfil(admin) y verlo
+# Funcion para editar el perfil y verlo
 @perfil_bp.route('/perfil/editar', methods=['GET', 'POST'])
 def perfil():
     
     form=perfilform(obj=current_user)
     
     if request.method == 'POST':
+
         if form.validate_on_submit():
-            nombre = request.form['nombre']
-            correo = request.form['correo']
-            fecha_nacimiento = request.form['fecha_nacimiento']
+            nombre = form.nombre.data
+            correo = form.correo.data
+            fecha_nacimiento = form.fecha_nacimiento.data
         
             if ModelUser.update_user(db, current_user.id, nombre, correo,fecha_nacimiento):
                 flash("Perfil actualizado correctamente.","success")
-                return render_template('perfil.html', user=current_user)
+                return redirect(url_for('perfil.perfil'))
+            
             else:
                 flash("Error al actualizar el perfil.","error")
+                return redirect(url_for("perfil.perfil"))
         else:
-            flash("Error en los inputs.","error")
-            return redirect(url_for("perfil.perfil"))
+            flash("Corrige los errores del formulario", "error")
+            return render_template('perfil.html', form=form, user=current_user)
 
     if request.method == "GET":
-        if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
-            return render_template('perfil.html',   form=form, user=current_user)
+        if current_user.is_authenticated:
+            return render_template('perfil.html', form=form, user=current_user)
         
         else:
             return redirect(url_for('iniciar_sesion'))

@@ -1,24 +1,30 @@
-from flask import flash
 from flask_wtf import FlaskForm
 import re
+from datetime import date
 from wtforms import SubmitField,StringField,EmailField,PasswordField,DateField,TextAreaField,FloatField,IntegerField,SelectField,MultipleFileField
-from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange,InputRequired
+from wtforms.validators import DataRequired,Length,Email,EqualTo,NumberRange,InputRequired,ValidationError
 
-# funcion para poner una contraseña segura
+# Funcion para poner una contraseña segura
+# Función para verificar complejidad de la contraseña
 def password_complexity_check(form, field):
     password = field.data
-    # Expresión regular para validar la contraseña
     pattern = re.compile(
-        r'^(?=.*[a-z])'      # al menos una minúscula
-        r'(?=.*[A-Z])'       # al menos una mayúscula
-        r'(?=.*\d)'          # al menos un dígito
-        r'(?=.*[@$!%*?&])'   # al menos un carácter especial
-        r'[A-Za-z\d@$!%*?&]{6,12}$'  # longitud y caracteres permitidos
+        r'^(?=.*[a-z])'            # al menos una minúscula
+        r'(?=.*[A-Z])'             # al menos una mayúscula
+        r'(?=.*\d)'                # al menos un número
+        r'(?=.*[@$!%*?&])'         # al menos un carácter especial
+        r'[A-Za-z\d@$!%*?&]{6,12}$'  # solo caracteres permitidos y longitud
     )
     if not pattern.match(password):
-        return flash("La contraseña debe tener entre 6 y 12 caracteres,incluyendo mayúsculas, minúsculas, números y caracteres especiales (@$!%*?&).","info")
-    
+        raise ValidationError("La contraseña debe tener entre 6 y 12 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales (@$!%*?&).")
 
+#Funcion limitar el uso de la cuentas a 16 años o 80 años maximo
+def edad_valida(form, field):
+    hoy = date.today()
+    edad = hoy.year - field.data.year - ((hoy.month, hoy.day) < (field.data.month, field.data.day))
+
+    if edad < 16 or edad > 80:
+        raise ValidationError("Debes tener entre 16 y 80 años.")
 
 # forms para el login 
 class loginform(FlaskForm):
@@ -46,17 +52,18 @@ class registerForm(FlaskForm):
         Email()
     ])
     fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[
-        DataRequired()
+        DataRequired(),
+        edad_valida
         ])
     contraseña = PasswordField("Escribe tu Contraseña", validators=[
         DataRequired(),
         Length(min=6,max=12),
         password_complexity_check,
-        EqualTo("confirme",message="Repite la contrasela")
+        EqualTo("confirme",message="La contraseña debe ser igual al de abajo")
     ])
     confirme = PasswordField("Repite tu Contraseña", validators=[
         DataRequired(),
-        Length(min=6, max=12)
+        Length(min=6, max=12),
     ])
     
     enviar = SubmitField("Register")
@@ -73,18 +80,10 @@ class perfilform(FlaskForm):
         Email()
     ])
     fecha_nacimiento = DateField('Fecha de nacimiento', format='%Y-%m-%d', validators=[
-        DataRequired()
+        DataRequired(),
+        edad_valida
         ])
-    contraseña = PasswordField("Escribe tu Contraseña", validators=[
-        DataRequired(),
-        Length(min=6,max=12),
-        EqualTo("confirme",message="Repite la contrasela")
-    ])
-    confirme = PasswordField("Repite tu Contraseña", validators=[
-        DataRequired(),
-        Length(min=6, max=12)
-    ])
-    enviar = SubmitField("Register")
+    enviar = SubmitField("Cambiar Datos")
 
 # forms para el contacto
 class contactoform(FlaskForm):
