@@ -72,7 +72,6 @@ class ModelUser:
 
                 valor = User.check_password(hashed_contraseña,contraseña)
                 User.check_password(hashed_contraseña,contraseña)
-                print(valor)
                 if valor:
                     # Si la contraseña es correcta, crea una instancia de User y devuelve el objeto
                     user = User(id,nombre,correo,None,fecha_nacimiento,saldo)
@@ -80,7 +79,7 @@ class ModelUser:
                     cur.close()
                     return user
                 
-                return flash("error password")
+                return flash("error contraseña incorrecta","error")
             
         except Exception as e:
             print(e)

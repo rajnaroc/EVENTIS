@@ -25,7 +25,6 @@ def iniciar_sesion():
             return redirect(url_for('general.inicio'))
         
         else:
-            flash("Error en Iniciar sesion ")
             return render_template('iniciar_sesion.html', login=login)
     
     if request.method == "GET":
