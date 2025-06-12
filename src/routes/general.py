@@ -24,6 +24,7 @@ def inicio():
         for categoria, ruta_foto in ModelUser.obtener_fotos_con_categorias(db):
             fotos_por_categoria[int(categoria)] = ruta_foto
             print(fotos_por_categoria)
+
         return render_template('inicio.html',imagenes=imagenes, fotos=fotos_por_categoria,categorias=categorias)
     
 
@@ -41,3 +42,14 @@ def terminos_condiciones():
 @general_bp.route('/aviso-legal')
 def aviso_legal():
     return render_template('aviso_legal.html')
+
+@general_bp.route('/perfil/eliminar', methods=['POST'])
+def eliminar_cuenta():
+    if request.method == 'POST':
+        cur = db.connection.cursor()
+        cur.execute("DELETE FROM usuarios WHERE id = %s", (current_user.id,))
+        db.connection.commit()
+        cur.close()
+
+        flash("Cuenta eliminada con éxito", "success")
+        return redirect(url_for('general.inicio'))
