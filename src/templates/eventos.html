@@ -8,16 +8,6 @@
         <div class="text-center mb-12">
             <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">Eventos Disponibles</h1>
             <p class="max-w-2xl mx-auto text-xl text-gray-600">Descubre las mejores experiencias en tu ciudad</p>
-            
-            <!-- Barra de búsqueda y filtros -->
-            <div class="mt-8 max-w-md mx-auto flex">
-                <input type="text" placeholder="Buscar eventos..." class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button class="bg-blue-600 text-white px-6 py-2 rounded-r-lg hover:bg-blue-700 transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-            </div>
         </div>
         <form method="GET" id="filtrosForm" action="{{ url_for('eventos.buscar_eventos') }}" class="flex flex-wrap gap-4 justify-center mb-10">
             <!-- Categorías -->
@@ -144,4 +134,5 @@
         }
     });
 });
+    
 </script>

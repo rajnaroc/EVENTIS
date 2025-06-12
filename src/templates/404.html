@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
-{% block title %}Página no encontrada{% endblock %}
+{% block title %}Página no encontrada - Error 404{% endblock %}
 
 {% block body %}
-<div class=" text-white flex items-center justify-center min-h-screen p-4">
-
-    <div class="text-center">
-        <h1 class="text-7xl font-bold text-red-500 mb-4">404</h1>
-        <p class="text-2xl font-semibold mb-2">¡Vaya! Página no encontrada</p>
-        <p class="text-black mb-6">Lo sentimos, la página que estás buscando no existe o ha sido movida.</p>
-        <a href="/" class="inline-block bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">Volver al inicio</a>
+<div class="min-h-screen flex items-center justify-center p-6">
+    <div class="p-8 text-center max-w-md w-full">
+        <h1 class="text-6xl font-extrabold text-blue-600 mb-4">404</h1>
+        <img src="/static/img/404.jpg" alt="Ilustración de página no encontrada" class="mx-auto mb-6 w-full md:w-4/5 lg:w-3/4 rounded-md" >
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">No hemos encontrado esa página</h2>
+        <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium px-6 py-2 rounded-lg transition duration-300">
+            Volver al inicio
+        </a>
     </div>
 </div>
 {% endblock %}
