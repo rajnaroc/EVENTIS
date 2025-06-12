@@ -50,12 +50,12 @@ def crear_evento():
                             print("Error al subir imagen: {e}")
 
                 # funcion para crear el evento y devolver el id 
-                evento_id = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
+                id_evento = ModelUser.crear_eventos(db,titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
                 
                 # Guardar cada imagen en la tabla imagenes_evento
                 cursor = db.connection.cursor()
                 for url in urls_imagenes:
-                    cursor.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s, %s,%s)", (evento_id, url["url"],url["public_id"]))
+                    cursor.execute("INSERT INTO fotos_evento (id_evento, ruta,public_id) VALUES (%s,%s,%s)", (id_evento, url["url"],url["public_id"]))
                 db.connection.commit()
                 cursor.close()
 
@@ -124,6 +124,7 @@ def editar_evento(id):
             
             evento = ModelUser.evento_solo(db, id)
             fotos = ModelUser.obtener_fotos_evento(db, id)
+            print(fotos)
             categorias = {
                 1: 'Concierto',
                 2: 'Teatro',
@@ -209,11 +210,25 @@ def editar_evento(id):
 # Funcion para borrarlo(admin)
 @eventos_bp.route('/eliminarEvento/<int:id>', methods=["GET"])
 def eliminar_evento(id):
-    
     if current_user.is_authenticated and current_user.correo ==  "aaroncm611@gmail.com":
-        
-        ModelUser.delete_evento(db, id)
-        flash("Evento eliminado correctamente.")
+    
+        cur = db.connection.cursor()
+
+        # 1. Eliminar entradas del evento
+        cur.execute("DELETE FROM entradas WHERE evento_id = %s", (id,))
+
+        # 2. Obtener rutas de fotos para borrarlas de Cloudinary
+        cur.execute("SELECT ruta FROM fotos_evento WHERE id_evento = %s", (id,))
+        fotos = cur.fetchall()
+        for foto in fotos:
+            public_id = foto[0].rsplit('.', 1)[0]
+            cloudinary.uploader.destroy(public_id)
+
+        # 3. Borrar el evento (elimina también fotos_evento por ON DELETE CASCADE)
+        cur.execute("DELETE FROM eventos WHERE id = %s", (id,))
+        db.connection.commit()
+        cur.close()
+
         return redirect(url_for('eventos.editar_eventos'))
 
 # gestionar el qr que se manda al correo
@@ -351,7 +366,7 @@ def buscar_eventos():
 
     return render_template("eventos.html", eventos=eventos, categorias=categorias)
 
-@eventos_bp.route('/eliminar_foto_evento/<int:id>/<path:public_id>/eliminar_foto_evento', methods=['GET'])
+@eventos_bp.route('/eliminar_foto_evento/<int:id>/<path:public_id>', methods=['GET'])
 def eliminar_foto_evento(id,public_id):
     if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":
 
@@ -368,10 +383,11 @@ def eliminar_foto_evento(id,public_id):
             flash("Foto borrar con exito","success")
 
             return redirect(url_for('eventos.editar_evento'))
-        except Exception as e:
-            print(e)
-            return print('error Error al eliminar la foto')
         
+        except Exception as e:
+            flash('error Error al eliminar la foto')
+            return redirect(url_for('eventos.editar_eventos'))
+
 @eventos_bp.route('/panel-estadisticas', methods=['GET'])
 def panel_estadisticas():
     if current_user.is_authenticated and current_user.correo == "aaroncm611@gmail.com":

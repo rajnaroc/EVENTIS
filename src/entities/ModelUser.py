@@ -174,10 +174,13 @@ class ModelUser:
                 (titulo,descripcion,fecha,lugar,precio,categoria,aforo,hora_inicio,hora_fin)
             )
             db.connection.commit()
-            evento_id = cur.lastrowid
             
+            evento_id = cur.lastrowid
+            print(evento_id)
+        
             cur.close()
             return evento_id
+        
         except Exception as e:
             print(e)
             return False

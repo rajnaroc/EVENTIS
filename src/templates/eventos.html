@@ -48,6 +48,7 @@
                     <div class="h-48 relative flex items-center justify-center overflow-hidden">
                         <!-- Imagen que cubre todo el contenedor -->
                         {% set imagen = evento[10] if evento[10]|string else evento[8] %}
+                        image
                         <img src="{{ imagen }}" alt="Imagen del evento" class="absolute inset-0 w-full h-full object-cover">
                         <!-- Texto superpuesto con fondo semitransparente -->
                         <span class="text-white text-2xl font-bold relative z-10 px-4 py-2 bg-black bg-opacity-50 rounded-lg">
