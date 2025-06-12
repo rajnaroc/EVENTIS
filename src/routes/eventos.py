@@ -385,7 +385,7 @@ def eliminar_foto_evento(id,public_id):
             return redirect(url_for('eventos.editar_evento'))
         
         except Exception as e:
-            flash('error Error al eliminar la foto')
+            print(e)
             return redirect(url_for('eventos.editar_eventos'))
 
 @eventos_bp.route('/panel-estadisticas', methods=['GET'])
